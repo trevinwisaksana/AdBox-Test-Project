@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Reachability
 
 final class AdvertisementsViewController: UIViewController {
     
@@ -15,7 +16,9 @@ final class AdvertisementsViewController: UIViewController {
     let dataSource = AdvertisementViewModel()
     
     private let activityView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+    private let reachabiltyHelper = ReachabilityHelper()
     private let refreshControl = UIRefreshControl()
+    private lazy var alertController = UIAlertController()
     
     //---- Subivews ----//
     
@@ -28,6 +31,7 @@ final class AdvertisementsViewController: UIViewController {
         configureActivityView()
         configureCollectionView()
         configureDataSource()
+        configureReachability()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -35,6 +39,10 @@ final class AdvertisementsViewController: UIViewController {
         reloadTimeline()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        reachabiltyHelper.stopMonitoring()
+    }
     
     //---- Data Source ----//
     
@@ -42,11 +50,16 @@ final class AdvertisementsViewController: UIViewController {
         dataSource.delegate = self
     }
     
+    //---- Reachability ----//
+    
+    private func configureReachability() {
+        reachabiltyHelper.startMonitoring()
+        reachabiltyHelper.add(listener: self)
+    }
     
     //---- Collection View ----//
     
     private func configureCollectionView() {
-        collectionView.isHidden = true
         collectionView.register(AdvertisementCell.self)
         if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             let height = view.frame.height * 0.8
@@ -61,7 +74,6 @@ final class AdvertisementsViewController: UIViewController {
     @objc
     private func reloadTimeline() {
         dataSource.loadAdvertisements { (error) in
-            self.collectionView.isHidden = false
             
             self.activityView.stopAnimating()
             
@@ -262,6 +274,40 @@ extension AdvertisementsViewController: Likeable {
         } else {
             LikeService.saveToFavorite(adLiked)
         }
+    }
+    
+}
+
+extension AdvertisementsViewController: NetworkStatusListener {
+    
+    func networkStatusDidChange(status: Reachability.Connection) {
+        switch status {
+        case .none:
+            displayErrorMessage()
+        case .cellular, .wifi:
+            break
+        }
+    }
+    
+    private func displayErrorMessage() {
+        alertController.title = "Network Error"
+        alertController.message = "You are not connected to the internet."
+        
+        present(alertController, animated: true) {
+            self.addAlertControllerTapGesture()
+        }
+    }
+    
+    private func addAlertControllerTapGesture() {
+        let selector = #selector(alertControllerTapGestureHandler)
+        let tapGesture = UITapGestureRecognizer(target: self, action: selector)
+        let alertControllerSubview = alertController.view.superview?.subviews[1]
+        alertControllerSubview?.isUserInteractionEnabled = true
+        alertControllerSubview?.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func alertControllerTapGestureHandler() {
+        dismiss(animated: true, completion: nil)
     }
     
 }

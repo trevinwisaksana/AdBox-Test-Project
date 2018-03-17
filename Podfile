@@ -9,6 +9,7 @@ target 'Ad-Collector-Test-Project' do
   pod 'SwiftyJSON'
   pod 'Alamofire', '~> 4.7'
   pod 'SDWebImage'
+  pod 'ReachabilitySwift'
 
   target 'Ad-Collector-Test-ProjectTests' do
     inherit! :search_paths
