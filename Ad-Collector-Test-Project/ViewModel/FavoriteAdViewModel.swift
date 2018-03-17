@@ -11,13 +11,13 @@ import CoreData
 
 final class FavoriteAdViewModel {
     
+    weak var delegate: AdvertisementDataSourceDelegate?
+    
     private var content = CoreDataHelper.retrieveFavoriteAds() {
         didSet {
             delegate?.contentChange()
         }
     }
-    
-    weak var delegate: AdvertisementDataSourceDelegate?
     
     var numberOfItems: Int {
         return content.count

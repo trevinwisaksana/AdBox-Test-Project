@@ -14,6 +14,10 @@ final class FavoritesViewController: UIViewController {
     
     let dataSource = FavoriteAdViewModel()
     
+    //---- Subviews ----//
+    
+    @IBOutlet weak var tableView: UITableView!
+    
     private let emptyContentMessageLabel: UILabel = {
         let label = UILabel()
         label.text = "There are currently no favorites."
@@ -21,10 +25,6 @@ final class FavoritesViewController: UIViewController {
         label.textAlignment = .center
         return label
     }()
-    
-    //---- Subviews ----//
-    
-    @IBOutlet weak var tableView: UITableView!
     
     //---- VC Lifecycle ----//
     

@@ -35,7 +35,6 @@
 		DDD3DB18205C8BAD000A29B3 /* AdvertisementsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD3DB17205C8BAD000A29B3 /* AdvertisementsViewController.swift */; };
 		DDD3DB20205C8FAB000A29B3 /* AdvertisementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD3DB1F205C8FAA000A29B3 /* AdvertisementViewModel.swift */; };
 		DDD3DB26205C90C8000A29B3 /* AdvertisementService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD3DB25205C90C8000A29B3 /* AdvertisementService.swift */; };
-		DDD3DB29205C960D000A29B3 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD3DB28205C960D000A29B3 /* LoadingView.swift */; };
 		DDD3DB2B205CB75F000A29B3 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD3DB2A205CB75F000A29B3 /* FavoritesViewController.swift */; };
 		DDD3DB32205CB7D1000A29B3 /* Favorites.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDD3DB31205CB7D0000A29B3 /* Favorites.storyboard */; };
 		DDD3DB34205CB800000A29B3 /* Advertisements.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDD3DB33205CB800000A29B3 /* Advertisements.storyboard */; };
@@ -88,7 +87,6 @@
 		DDD3DB17205C8BAD000A29B3 /* AdvertisementsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisementsViewController.swift; sourceTree = "<group>"; };
 		DDD3DB1F205C8FAA000A29B3 /* AdvertisementViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisementViewModel.swift; sourceTree = "<group>"; };
 		DDD3DB25205C90C8000A29B3 /* AdvertisementService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisementService.swift; sourceTree = "<group>"; };
-		DDD3DB28205C960D000A29B3 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		DDD3DB2A205CB75F000A29B3 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		DDD3DB31205CB7D0000A29B3 /* Favorites.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Favorites.storyboard; sourceTree = "<group>"; };
 		DDD3DB33205CB800000A29B3 /* Advertisements.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Advertisements.storyboard; sourceTree = "<group>"; };
@@ -128,10 +126,8 @@
 		DD0F7CD0205CB962000372E4 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				DD63B480205CD64800A7837E /* AdvertisementCell.swift */,
-				DD63B482205CD80700A7837E /* AdvertisementCell.xib */,
-				DD1473E4205CFD1100FFFD3C /* FavoriteAdCell.swift */,
-				DD1473E6205CFD6B00FFFD3C /* FavoriteAdCell.xib */,
+				DD147409205DB3DC00FFFD3C /* AdvertisementCell */,
+				DD14740A205DB3E300FFFD3C /* FavoriteAdCell */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -151,6 +147,24 @@
 				DD1473FD205D80CD00FFFD3C /* AdvertisementsSectionFooter.swift */,
 			);
 			path = Footer;
+			sourceTree = "<group>";
+		};
+		DD147409205DB3DC00FFFD3C /* AdvertisementCell */ = {
+			isa = PBXGroup;
+			children = (
+				DD63B480205CD64800A7837E /* AdvertisementCell.swift */,
+				DD63B482205CD80700A7837E /* AdvertisementCell.xib */,
+			);
+			path = AdvertisementCell;
+			sourceTree = "<group>";
+		};
+		DD14740A205DB3E300FFFD3C /* FavoriteAdCell */ = {
+			isa = PBXGroup;
+			children = (
+				DD1473E4205CFD1100FFFD3C /* FavoriteAdCell.swift */,
+				DD1473E6205CFD6B00FFFD3C /* FavoriteAdCell.xib */,
+			);
+			path = FavoriteAdCell;
 			sourceTree = "<group>";
 		};
 		DDD3DAD6205C853D000A29B3 = {
@@ -216,7 +230,6 @@
 			isa = PBXGroup;
 			children = (
 				DD1473F4205D52E000FFFD3C /* AdvertisementCollectionView.swift */,
-				DDD3DB28205C960D000A29B3 /* LoadingView.swift */,
 				DD147404205D9A1B00FFFD3C /* Footer */,
 				DD1473F8205D660E00FFFD3C /* Headers */,
 				DD0F7CD0205CB962000372E4 /* Cells */,
@@ -506,7 +519,6 @@
 				DDD3DB26205C90C8000A29B3 /* AdvertisementService.swift in Sources */,
 				DDD3DB18205C8BAD000A29B3 /* AdvertisementsViewController.swift in Sources */,
 				DD1473E3205CFB4100FFFD3C /* FavoriteAdViewModel.swift in Sources */,
-				DDD3DB29205C960D000A29B3 /* LoadingView.swift in Sources */,
 				DD147402205D865000FFFD3C /* DisplaySectionViewModel.swift in Sources */,
 				DDD3DB20205C8FAB000A29B3 /* AdvertisementViewModel.swift in Sources */,
 				DDD3DB0C205C8849000A29B3 /* Advertisement.swift in Sources */,

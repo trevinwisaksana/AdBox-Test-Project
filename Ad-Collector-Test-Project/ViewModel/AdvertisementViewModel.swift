@@ -36,7 +36,7 @@ final class AdvertisementViewModel {
     
     fileprivate var carsContent: [Advertisement] {
         let carsContent = content.filter { (advertisement) -> Bool in
-            advertisement.type == "CAR"
+            advertisement.type == Constants.AdType.car
         }
         
         return carsContent
@@ -54,7 +54,7 @@ final class AdvertisementViewModel {
     
     fileprivate var realEstateContent: [Advertisement] {
         let realEstateContent = content.filter { (advertisement) -> Bool in
-            advertisement.type == "REALESTATE" && advertisement.score > 0.7
+            advertisement.type == Constants.AdType.realEstate
         }
         
         return realEstateContent
@@ -72,7 +72,7 @@ final class AdvertisementViewModel {
     
     fileprivate var bapContent: [Advertisement] {
         let bapContent = content.filter { (advertisement) -> Bool in
-            advertisement.type == "BAP"
+            advertisement.type == Constants.AdType.bap
         }
         
         return bapContent
@@ -135,8 +135,12 @@ final class AdvertisementViewModel {
     
     func loadAdvertisements(completion: @escaping (Error?) -> Void) {
         AdvertisementService.fetchAdvertisements() { (advertisements, error) in
+            if let error = error {
+                completion(error)
+                return
+            }
+            
             if advertisements.isEmpty {
-                print("Empty")
                 return
             }
             

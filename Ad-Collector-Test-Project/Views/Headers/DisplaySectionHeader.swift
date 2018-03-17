@@ -12,5 +12,4 @@ final class DisplaySectionHeader: UICollectionReusableView {
     
     @IBOutlet weak var titleLabel: UILabel!
     
-    
 }

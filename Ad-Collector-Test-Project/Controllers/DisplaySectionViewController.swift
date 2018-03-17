@@ -116,7 +116,6 @@ extension DisplaySectionViewController: Likeable {
         let adLiked = dataSource.data(atIndex: indexPath.row)
         
         if let favoritedAd = CoreDataHelper.fetchSelectedFavoriteAd(withKey: adLiked.key) {
-            // Delete if key matches the favorite ad
             CoreDataHelper.delete(ad: favoritedAd)
             CoreDataHelper.save()
         } else {

@@ -34,11 +34,11 @@ final class DisplaySectionViewModel {
         let advertisement = content[0]
         
         switch advertisement.type {
-        case "BAP":
+        case Constants.AdType.bap:
             return "Books"
-        case "REALESTATE":
+        case Constants.AdType.realEstate:
             return "Real Estate"
-        case "CAR":
+        case Constants.AdType.car:
             return "Cars"
         default:
             fatalError("Error: unexpected type.")

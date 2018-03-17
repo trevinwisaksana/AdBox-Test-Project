@@ -18,4 +18,10 @@ struct Constants {
         static let displayVC = "DisplaySectionViewController"
     }
     
+    struct AdType {
+        static let car = "CAR"
+        static let realEstate = "REALESTATE"
+        static let bap = "BAP"
+    }
+    
 }

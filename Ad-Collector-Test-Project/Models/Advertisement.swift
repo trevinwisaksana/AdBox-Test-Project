@@ -10,8 +10,6 @@ import Foundation
 import SwiftyJSON
 import CoreData
 
-typealias Ad = Advertisement
-
 final class Advertisement {
 
     var title: String
