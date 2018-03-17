@@ -121,6 +121,8 @@ extension DisplaySectionViewController: Likeable {
         } else {
             LikeService.saveToFavorite(adLiked)
         }
+        
+        contentChange()
     }
     
 }

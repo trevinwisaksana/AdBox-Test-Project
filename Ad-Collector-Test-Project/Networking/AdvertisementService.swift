@@ -20,7 +20,6 @@ struct AdvertisementService {
         
         // Checks if the a response has already by cached
         // NOTE: This is specific to this project to prevent repeated downloads of the static data
-        /*
         if  let request = Alamofire.request(url).request,
             let data = URLCache.shared.cachedResponse(for: request)?.data {
             
@@ -33,7 +32,6 @@ struct AdvertisementService {
             completion(advertisements, nil)
             return
         }
-        */
     
         Alamofire.request(url).validate().responseJSON { (response) in
             switch response.result {
@@ -46,13 +44,11 @@ struct AdvertisementService {
                 let advertisements = jsonArray.flatMap { Advertisement(with: $0) }
                 
                 // Caching the parsed data
-                /*
                 if  let request = response.request,
                     let data = response.data, let response = response.response {
                     let cachedResponse = CachedURLResponse(response: response, data: data)
                     URLCache.shared.storeCachedResponse(cachedResponse, for: request)
                 }
-                */
  
                 completion(advertisements, nil)
                 

@@ -31,11 +31,18 @@ final class FavoritesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTableView()
+        configureDataSource()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reloadTimeline()
+    }
+    
+    //---- Data Sourece ----//
+    
+    func configureDataSource() {
+        dataSource.delegate = self
     }
     
     //---- Table View ----//
