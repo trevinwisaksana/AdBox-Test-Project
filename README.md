@@ -1,6 +1,11 @@
 # AdBox Test Project
 AdBox is a simple app that displays various categories of advertisements and can locally save a users favorite ad.
 
+# Installation
+1. Head to the root directory of this project on Terminal
+2. ```pod install``` to download all the dependencies
+3. Build the project
+
 ## Description
 AdBox is structured using MVVM. It contains a ```UITabBarController``` which has two root ```UIViewControllers``` that are embedded in a ```UINavigationController```. The app utilizes ```Alamofire``` to create a ```GET``` request on the ```JSON``` file and caches it once downloaded. Utilizing ```CoreData``` the app is able to save users favorite ad locally.
 
