@@ -51,6 +51,11 @@ final class DisplaySectionViewController: UIViewController {
         }
     }
     
+    //---- Miscellaneous ----//
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
 }
 
 extension DisplaySectionViewController: UICollectionViewDelegate, UICollectionViewDataSource {

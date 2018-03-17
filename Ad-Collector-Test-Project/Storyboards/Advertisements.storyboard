@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -146,10 +147,12 @@
                                     <outlet property="delegate" destination="Jph-n8-8IJ" id="7Ac-LJ-k8I"/>
                                 </connections>
                             </collectionView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r7G-sY-gVC">
-                                <rect key="frame" x="18" y="26" width="48" height="36"/>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
-                                <state key="normal" title="Done"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r7G-sY-gVC">
+                                <rect key="frame" x="18" y="28" width="37.5" height="37"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="r7G-sY-gVC" secondAttribute="height" multiplier="1:1" id="FDh-Oc-vQu"/>
+                                </constraints>
+                                <state key="normal" image="closeButtonIcon"/>
                                 <connections>
                                     <action selector="didTapDoneButton:" destination="Jph-n8-8IJ" eventType="touchUpInside" id="uBD-8a-41p"/>
                                 </connections>
@@ -157,12 +160,13 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="r7G-sY-gVC" firstAttribute="width" secondItem="0Ob-kP-aGx" secondAttribute="width" multiplier="0.1" id="9Oj-1T-QQk"/>
                             <constraint firstItem="FvG-Vc-cEg" firstAttribute="top" secondItem="0Ob-kP-aGx" secondAttribute="top" constant="70" id="D6z-ia-KZb"/>
                             <constraint firstItem="r7G-sY-gVC" firstAttribute="leading" secondItem="i6b-re-fFb" secondAttribute="leading" constant="18" id="OIa-Wg-Op2"/>
                             <constraint firstItem="FvG-Vc-cEg" firstAttribute="bottom" secondItem="i6b-re-fFb" secondAttribute="bottom" id="Q8L-Ji-xDG"/>
                             <constraint firstItem="FvG-Vc-cEg" firstAttribute="trailing" secondItem="i6b-re-fFb" secondAttribute="trailing" id="SpZ-Dn-RmI"/>
                             <constraint firstItem="FvG-Vc-cEg" firstAttribute="leading" secondItem="i6b-re-fFb" secondAttribute="leading" id="dLj-ma-KaP"/>
-                            <constraint firstItem="FvG-Vc-cEg" firstAttribute="top" secondItem="r7G-sY-gVC" secondAttribute="bottom" constant="8" id="nd8-lA-r2M"/>
+                            <constraint firstItem="FvG-Vc-cEg" firstAttribute="top" secondItem="r7G-sY-gVC" secondAttribute="bottom" constant="5" id="nd8-lA-r2M"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="i6b-re-fFb"/>
                     </view>
@@ -201,6 +205,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="closeButtonIcon" width="48" height="48"/>
         <image name="tab_home_black" width="25" height="25"/>
     </resources>
 </document>
