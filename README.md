@@ -1,7 +1,7 @@
 # AdBox Test Project
 AdBox is a simple app that displays various categories of advertisements and can locally save a users favorite ad.
 
-# Installation
+## Installation
 1. Head to the root directory of this project on Terminal
 2. ```pod install``` to download all the dependencies
 3. Build the project
