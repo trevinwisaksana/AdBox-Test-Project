@@ -17,21 +17,6 @@ struct AdvertisementService {
     static func fetchAdvertisements(completion: @escaping ([Advertisement], Error?) -> Void) {
         
         guard let url = baseURL else { return }
-        
-        // Checks if the a response has already by cached
-        // NOTE: This is specific to this project to prevent repeated downloads of the static data
-        if  let request = Alamofire.request(url).request,
-            let data = URLCache.shared.cachedResponse(for: request)?.data {
-            
-            guard let jsonArray = JSON(data)["items"].array else {
-                return
-            }
-            
-            let advertisements = jsonArray.flatMap { Advertisement(with: $0) }
-            
-            completion(advertisements, nil)
-            return
-        }
     
         Alamofire.request(url).validate().responseJSON { (response) in
             switch response.result {
@@ -56,6 +41,28 @@ struct AdvertisementService {
                 completion([Advertisement](), error)
             }
         }
+    }
+    
+    static func retrieveCachedAds() -> [Advertisement] {
+        guard let url = baseURL else {
+            return [Advertisement]()
+        }
+        
+        // Checks if the a response has already by cached
+        // NOTE: This is specific to this project to prevent repeated downloads of the static data
+        if  let request = Alamofire.request(url).request,
+            let data = URLCache.shared.cachedResponse(for: request)?.data {
+            
+            guard let jsonArray = JSON(data)["items"].array else {
+                return [Advertisement]()
+            }
+            
+            let advertisements = jsonArray.flatMap { Advertisement(with: $0) }
+            
+            return advertisements
+        }
+        
+        return [Advertisement]()
     }
     
 }
