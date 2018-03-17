@@ -149,6 +149,10 @@ final class AdvertisementViewModel {
         }
     }
     
+    func loadCachedAdvertisements() {
+        content = AdvertisementService.retrieveCachedAds()
+    }
+    
     func passData(fromSection section: Int) -> [Advertisement] {
         switch section {
         case 1:

@@ -32,11 +32,12 @@ final class AdvertisementsViewController: UIViewController {
         configureCollectionView()
         configureDataSource()
         configureReachability()
+        reloadTimeline()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        reloadTimeline()
+        dataSource.loadCachedAdvertisements()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -74,7 +75,6 @@ final class AdvertisementsViewController: UIViewController {
     @objc
     private func reloadTimeline() {
         dataSource.loadAdvertisements { (error) in
-            
             self.activityView.stopAnimating()
             
             if self.refreshControl.isRefreshing {
