@@ -10,13 +10,45 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Ad-Collector-Test-Project/Services/AdvertisementService.swift"
-            timestampString = "543131877.995656"
+            timestampString = "543160579.547861"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "18"
-            endingLineNumber = "18"
-            landmarkName = "fetchAdvertisements(completion:)"
+            startingLineNumber = "67"
+            endingLineNumber = "67"
+            landmarkName = "retrieveCachedAds(completion:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static Ad_Collector_Test_Project.AdvertisementService.retrieveCachedAds(completion: (Swift.Array&lt;Ad_Collector_Test_Project.Advertisement&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "Ad-Collector-Test-Project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/trevinwisaksana/Projects/Operation%20Detour/Job%20Interview%20Test%20Project/Ad-Collector-Test-Project/Ad-Collector-Test-Project/Services/AdvertisementService.swift"
+                  timestampString = "543160579.6771131"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "67"
+                  endingLineNumber = "67"
+                  offsetFromSymbolStart = "1346">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (Swift.Array&lt;Ad_Collector_Test_Project.Advertisement&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in static Ad_Collector_Test_Project.AdvertisementService.retrieveCachedAds(completion: (Swift.Array&lt;Ad_Collector_Test_Project.Advertisement&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "Ad-Collector-Test-Project"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/trevinwisaksana/Projects/Operation%20Detour/Job%20Interview%20Test%20Project/Ad-Collector-Test-Project/Ad-Collector-Test-Project/Services/AdvertisementService.swift"
+                  timestampString = "543160579.681456"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "68"
+                  endingLineNumber = "68"
+                  offsetFromSymbolStart = "29">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

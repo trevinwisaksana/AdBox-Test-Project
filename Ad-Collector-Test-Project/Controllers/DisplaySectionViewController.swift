@@ -44,7 +44,7 @@ final class DisplaySectionViewController: UIViewController {
         collectionView.register(AdvertisementCell.self)
         if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             let height = view.frame.height * 0.8
-            flowLayout.estimatedItemSize = CGSize(width: 50, height: 50)
+            flowLayout.estimatedItemSize = CGSize(width: 50, height: height)
             flowLayout.minimumLineSpacing = 2
         }
     }

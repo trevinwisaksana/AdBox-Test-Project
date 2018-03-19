@@ -65,14 +65,17 @@ final class AdvertisementsViewController: UIViewController {
     
     private func configureCollectionView() {
         collectionView.register(AdvertisementCell.self)
-        if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            let height = view.frame.height * 0.8
-            flowLayout.estimatedItemSize = CGSize(width: 50, height: height)
-            flowLayout.minimumLineSpacing = 2
-        }
-        
+        configureCollectionViewLayout()
         refreshControl.addTarget(self, action: #selector(reloadTimeline), for: .valueChanged)
         collectionView.addSubview(refreshControl)
+    }
+    
+    private func configureCollectionViewLayout() {
+        if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            flowLayout.estimatedItemSize = CGSize(width: 50, height: 100)
+            flowLayout.headerReferenceSize = CGSize(width: 50, height: 60)
+            flowLayout.footerReferenceSize = CGSize(width: 50, height: 50)
+        }
     }
     
     @objc
@@ -215,10 +218,14 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         if section == 0 {
-            return CGSize(width: collectionView.bounds.width, height: 0.0 )
+            return CGSize(width: collectionView.bounds.width, height: 0.0)
         } else {
             return CGSize(width: collectionView.bounds.width, height: 50)
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.bounds.width, height: 60)
     }
    
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {

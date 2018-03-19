@@ -108,7 +108,7 @@
             <connections>
                 <outlet property="likeButton" destination="euO-0n-5kH" id="G1o-Ks-Djw"/>
                 <outlet property="locationLabel" destination="pzx-JC-dqU" id="Qaa-W1-BE0"/>
-                <outlet property="photo" destination="HNm-VC-cD0" id="C23-1H-Ekd"/>
+                <outlet property="photoImageView" destination="HNm-VC-cD0" id="iGy-bh-4cM"/>
                 <outlet property="priceLabel" destination="up9-Oe-hcT" id="Hhi-42-JE0"/>
                 <outlet property="titleLabel" destination="K9q-5m-ivO" id="NPE-wA-ZjX"/>
                 <outlet property="widthConstraint" destination="kx9-oQ-inI" id="grq-SZ-JfM"/>

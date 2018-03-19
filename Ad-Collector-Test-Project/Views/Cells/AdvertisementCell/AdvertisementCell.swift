@@ -15,7 +15,7 @@ protocol Likeable: class {
 
 final class AdvertisementCell: UICollectionViewCell {
     
-    @IBOutlet weak var photo: UIImageView!
+    @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
@@ -43,9 +43,9 @@ final class AdvertisementCell: UICollectionViewCell {
         let imageURL = URL(string: "https://images.finncdn.no/dynamic/480x360c/\(url)")
         
         let placeholderImage = UIImage(named: Constants.Image.placeholderImage)
-        photo.sd_setImage(with: imageURL, placeholderImage: placeholderImage, options: .scaleDownLargeImages, completed: nil)
+        photoImageView.sd_setImage(with: imageURL, placeholderImage: placeholderImage, options: .scaleDownLargeImages, completed: nil)
         
-        photo.layer.cornerRadius = 5
+        photoImageView.layer.cornerRadius = 5
     }
     
     @IBAction func didTapLikeButton(_ sender: UIButton) {
