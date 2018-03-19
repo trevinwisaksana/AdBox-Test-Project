@@ -22,6 +22,10 @@ final class AdvertisementViewModel {
         }
     }
     
+    var contentIsEmpty: Bool {
+        return content.isEmpty
+    }
+    
     //---- Most Popular Content ----//
     
     fileprivate var mostPopularContent: [Advertisement] {
@@ -149,8 +153,15 @@ final class AdvertisementViewModel {
         }
     }
     
-    func loadCachedAdvertisements() {
-        content = AdvertisementService.retrieveCachedAds()
+    func loadCachedAdvertisements(completion: @escaping (Error?) -> Void) {
+        AdvertisementService.retrieveCachedAds { (advertisement, error) in
+            if let error = error {
+                completion(error)
+            }
+            
+            self.content = advertisement
+            completion(nil)
+        }
     }
     
     func passData(fromSection section: Int) -> [Advertisement] {

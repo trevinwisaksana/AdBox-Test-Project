@@ -18,7 +18,6 @@ final class DisplaySectionViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     
-    
     //---- VC Lifecycle ----//
     
     override func viewDidLoad() {
@@ -33,7 +32,6 @@ final class DisplaySectionViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    
     //---- Data Source ----//
     
     private func configureDataSource() {
@@ -46,7 +44,7 @@ final class DisplaySectionViewController: UIViewController {
         collectionView.register(AdvertisementCell.self)
         if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             let height = view.frame.height * 0.8
-            flowLayout.estimatedItemSize = CGSize(width: 100, height: height)
+            flowLayout.estimatedItemSize = CGSize(width: 50, height: 50)
             flowLayout.minimumLineSpacing = 2
         }
     }
@@ -121,13 +119,11 @@ extension DisplaySectionViewController: Likeable {
         let adLiked = dataSource.data(atIndex: indexPath.row)
         
         if let favoritedAd = CoreDataHelper.fetchSelectedFavoriteAd(withKey: adLiked.key) {
-            CoreDataHelper.delete(ad: favoritedAd)
-            CoreDataHelper.save()
+            LikeService.remove(favoritedAd)
         } else {
             LikeService.saveToFavorite(adLiked)
         }
         
-        contentChange()
     }
     
 }

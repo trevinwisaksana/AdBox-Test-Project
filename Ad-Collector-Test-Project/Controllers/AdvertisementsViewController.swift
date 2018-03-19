@@ -32,12 +32,15 @@ final class AdvertisementsViewController: UIViewController {
         configureCollectionView()
         configureDataSource()
         configureReachability()
-        reloadTimeline()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        dataSource.loadCachedAdvertisements()
+        dataSource.loadCachedAdvertisements { (error) in
+            if self.activityView.isAnimating {
+                self.activityView.stopAnimating()
+            }
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -64,7 +67,7 @@ final class AdvertisementsViewController: UIViewController {
         collectionView.register(AdvertisementCell.self)
         if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             let height = view.frame.height * 0.8
-            flowLayout.estimatedItemSize = CGSize(width: 100, height: height)
+            flowLayout.estimatedItemSize = CGSize(width: 50, height: height)
             flowLayout.minimumLineSpacing = 2
         }
         
@@ -75,8 +78,6 @@ final class AdvertisementsViewController: UIViewController {
     @objc
     private func reloadTimeline() {
         dataSource.loadAdvertisements { (error) in
-            self.activityView.stopAnimating()
-            
             if self.refreshControl.isRefreshing {
                 self.refreshControl.endRefreshing()
             }
@@ -97,10 +98,19 @@ final class AdvertisementsViewController: UIViewController {
 extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 4
+        if dataSource.contentIsEmpty {
+            return 0
+        } else {
+            return 4
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        if dataSource.contentIsEmpty {
+            return 0
+        }
+        
         switch section {
         case 0:
             return dataSource.numberOfPopularContent
@@ -269,8 +279,7 @@ extension AdvertisementsViewController: Likeable {
         }
         
         if let key = adLiked?.key, let favoritedAd = CoreDataHelper.fetchSelectedFavoriteAd(withKey: key) {
-            CoreDataHelper.delete(ad: favoritedAd)
-            CoreDataHelper.save()
+            LikeService.remove(favoritedAd)
         } else {
             LikeService.saveToFavorite(adLiked)
         }

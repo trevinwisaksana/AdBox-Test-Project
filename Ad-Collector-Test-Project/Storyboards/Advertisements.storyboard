@@ -148,7 +148,7 @@
                                 </connections>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r7G-sY-gVC">
-                                <rect key="frame" x="18" y="28" width="37.5" height="37"/>
+                                <rect key="frame" x="18" y="17.5" width="37.5" height="37.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="r7G-sY-gVC" secondAttribute="height" multiplier="1:1" id="FDh-Oc-vQu"/>
                                 </constraints>
@@ -166,7 +166,7 @@
                             <constraint firstItem="FvG-Vc-cEg" firstAttribute="bottom" secondItem="i6b-re-fFb" secondAttribute="bottom" id="Q8L-Ji-xDG"/>
                             <constraint firstItem="FvG-Vc-cEg" firstAttribute="trailing" secondItem="i6b-re-fFb" secondAttribute="trailing" id="SpZ-Dn-RmI"/>
                             <constraint firstItem="FvG-Vc-cEg" firstAttribute="leading" secondItem="i6b-re-fFb" secondAttribute="leading" id="dLj-ma-KaP"/>
-                            <constraint firstItem="FvG-Vc-cEg" firstAttribute="top" secondItem="r7G-sY-gVC" secondAttribute="bottom" constant="5" id="nd8-lA-r2M"/>
+                            <constraint firstItem="FvG-Vc-cEg" firstAttribute="top" secondItem="r7G-sY-gVC" secondAttribute="bottom" constant="15" id="fLX-Sr-tgj"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="i6b-re-fFb"/>
                     </view>
@@ -205,7 +205,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="closeButtonIcon" width="48" height="48"/>
+        <image name="closeButtonIcon" width="50" height="50"/>
         <image name="tab_home_black" width="25" height="25"/>
     </resources>
 </document>

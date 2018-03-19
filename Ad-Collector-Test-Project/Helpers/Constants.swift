@@ -24,4 +24,8 @@ struct Constants {
         static let bap = "BAP"
     }
     
+    struct Image {
+        static let placeholderImage = "placeholderImage"
+    }
+    
 }

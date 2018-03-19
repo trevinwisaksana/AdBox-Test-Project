@@ -15,12 +15,6 @@ final class AdvertisementCollectionView: UICollectionView {
     var animatedCellIndexPath = [IndexPath]()
     var didAnimateCellEntry = false
     
-    var shouldHideFooter: Bool = false {
-        didSet {
-            self.collectionViewLayout.invalidateLayout()
-        }
-    }
-    
     //---- Animation ----//
     
     func animateCellEntry(for cell: UICollectionViewCell, at indexPath: IndexPath) {

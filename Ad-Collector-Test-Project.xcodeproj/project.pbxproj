@@ -23,6 +23,7 @@
 		DD147406205D9A3000FFFD3C /* DisplaySectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD147405205D9A3000FFFD3C /* DisplaySectionHeader.swift */; };
 		DD147408205DACEF00FFFD3C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD147407205DACEF00FFFD3C /* Constants.swift */; };
 		DD14740D205DBB8F00FFFD3C /* ReachabilityHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD14740C205DBB8F00FFFD3C /* ReachabilityHelper.swift */; };
+		DD5A9868205F71BC005C00D1 /* Int+Commas.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5A9867205F71BC005C00D1 /* Int+Commas.swift */; };
 		DD63B47F205CD4B800A7837E /* UICollectionView+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD63B47E205CD4B800A7837E /* UICollectionView+Utility.swift */; };
 		DD63B481205CD64800A7837E /* AdvertisementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD63B480205CD64800A7837E /* AdvertisementCell.swift */; };
 		DD63B483205CD80700A7837E /* AdvertisementCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD63B482205CD80700A7837E /* AdvertisementCell.xib */; };
@@ -72,6 +73,7 @@
 		DD147405205D9A3000FFFD3C /* DisplaySectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySectionHeader.swift; sourceTree = "<group>"; };
 		DD147407205DACEF00FFFD3C /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		DD14740C205DBB8F00FFFD3C /* ReachabilityHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReachabilityHelper.swift; sourceTree = "<group>"; };
+		DD5A9867205F71BC005C00D1 /* Int+Commas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Commas.swift"; sourceTree = "<group>"; };
 		DD63B47E205CD4B800A7837E /* UICollectionView+Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Utility.swift"; sourceTree = "<group>"; };
 		DD63B480205CD64800A7837E /* AdvertisementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisementCell.swift; sourceTree = "<group>"; };
 		DD63B482205CD80700A7837E /* AdvertisementCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AdvertisementCell.xib; sourceTree = "<group>"; };
@@ -198,7 +200,7 @@
 				DDD3DB0A205C882B000A29B3 /* Models */,
 				DDD3DB21205C8FAE000A29B3 /* ViewModel */,
 				DDD3DB24205C9070000A29B3 /* Helpers */,
-				DDD3DB0F205C8903000A29B3 /* Networking */,
+				DDD3DB0F205C8903000A29B3 /* Services */,
 				DDD3DB16205C8A09000A29B3 /* Extensions */,
 				DDD3DB35205CB807000A29B3 /* Storyboards */,
 				DDD3DAE9205C853D000A29B3 /* Assets.xcassets */,
@@ -222,8 +224,8 @@
 			isa = PBXGroup;
 			children = (
 				DDD3DB17205C8BAD000A29B3 /* AdvertisementsViewController.swift */,
-				DDD3DB2A205CB75F000A29B3 /* FavoritesViewController.swift */,
 				DD1473FF205D84C000FFFD3C /* DisplaySectionViewController.swift */,
+				DDD3DB2A205CB75F000A29B3 /* FavoritesViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -247,13 +249,13 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		DDD3DB0F205C8903000A29B3 /* Networking */ = {
+		DDD3DB0F205C8903000A29B3 /* Services */ = {
 			isa = PBXGroup;
 			children = (
 				DDD3DB25205C90C8000A29B3 /* AdvertisementService.swift */,
 				DD1473EF205D205E00FFFD3C /* LikeService.swift */,
 			);
-			path = Networking;
+			path = Services;
 			sourceTree = "<group>";
 		};
 		DDD3DB16205C8A09000A29B3 /* Extensions */ = {
@@ -261,6 +263,7 @@
 			children = (
 				DD63B47E205CD4B800A7837E /* UICollectionView+Utility.swift */,
 				DDD3DB14205C8A02000A29B3 /* UITableView+Utility.swift */,
+				DD5A9867205F71BC005C00D1 /* Int+Commas.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -519,6 +522,7 @@
 				DD147406205D9A3000FFFD3C /* DisplaySectionHeader.swift in Sources */,
 				DD1473EC205D094100FFFD3C /* FavoriteAd.xcdatamodeld in Sources */,
 				DDD3DAE3205C853D000A29B3 /* AppDelegate.swift in Sources */,
+				DD5A9868205F71BC005C00D1 /* Int+Commas.swift in Sources */,
 				DD147400205D84C000FFFD3C /* DisplaySectionViewController.swift in Sources */,
 				DDD3DB26205C90C8000A29B3 /* AdvertisementService.swift in Sources */,
 				DDD3DB18205C8BAD000A29B3 /* AdvertisementsViewController.swift in Sources */,

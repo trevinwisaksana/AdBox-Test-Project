@@ -29,10 +29,10 @@ struct LikeService {
         CoreDataHelper.save()
     }
     
-    static func removeFavorite(_ data: FavoriteAd) {
-        if let favoritedAd = CoreDataHelper.fetchSelectedFavoriteAd(withKey: data.key) {
-            UserDefaults.standard.set(false, forKey: "\(data.key)")
-            CoreDataHelper.delete(ad: favoritedAd)
+    static func remove(_ data: FavoriteAd) {
+        if let key = data.key {
+            UserDefaults.standard.removeObject(forKey: "\(key)")
+            CoreDataHelper.delete(ad: data)
             CoreDataHelper.save()
         }
     }

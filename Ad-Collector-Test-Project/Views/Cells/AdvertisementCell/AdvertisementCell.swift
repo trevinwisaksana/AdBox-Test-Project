@@ -34,14 +34,17 @@ final class AdvertisementCell: UICollectionViewCell {
         adKey = data.key
         titleLabel.text = data.title
         locationLabel.text = data.location
-        priceLabel.text = "kr \(Int(data.price))"
+        priceLabel.text = "kr " + Int(data.price).decimalStyleString
         
         configureImage(withURL: data.photoURL)
     }
     
     private func configureImage(withURL url: String) {
         let imageURL = URL(string: "https://images.finncdn.no/dynamic/480x360c/\(url)")
-        photo.sd_setImage(with: imageURL, completed: nil)
+        
+        let placeholderImage = UIImage(named: Constants.Image.placeholderImage)
+        photo.sd_setImage(with: imageURL, placeholderImage: placeholderImage, options: .scaleDownLargeImages, completed: nil)
+        
         photo.layer.cornerRadius = 5
     }
     
