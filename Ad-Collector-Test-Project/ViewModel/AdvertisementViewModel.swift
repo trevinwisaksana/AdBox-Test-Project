@@ -38,6 +38,7 @@ final class AdvertisementViewModel {
     
     //---- Cars Content -----//
     
+    // Used to be passed to the DisplaySectionVC
     fileprivate var carsContent: [Advertisement] {
         let carsContent = content.filter { (advertisement) -> Bool in
             advertisement.type == Constants.AdType.car
@@ -46,6 +47,7 @@ final class AdvertisementViewModel {
         return carsContent
     }
     
+    // Used to be passed to the AdvertisementsVC
     fileprivate var popularCarsContent: [Advertisement] {
         let popularCarsContent = carsContent.filter { (advertisement) -> Bool in
             advertisement.score > 0.32
@@ -56,6 +58,7 @@ final class AdvertisementViewModel {
     
     //---- Real Estate Content ----//
     
+    // Used to be passed to the DisplaySectionVC
     fileprivate var realEstateContent: [Advertisement] {
         let realEstateContent = content.filter { (advertisement) -> Bool in
             advertisement.type == Constants.AdType.realEstate
@@ -64,6 +67,7 @@ final class AdvertisementViewModel {
         return realEstateContent
     }
     
+    // Used to be passed to the AdvertisementsVC
     fileprivate var popularRealEstateContent: [Advertisement] {
         let popularRealEstateContent = realEstateContent.filter { (advertisement) -> Bool in
             advertisement.score > 0.7
@@ -74,6 +78,7 @@ final class AdvertisementViewModel {
     
     //---- BAP Content ----//
     
+    // Used to be passed to the DisplaySectionVC
     fileprivate var bapContent: [Advertisement] {
         let bapContent = content.filter { (advertisement) -> Bool in
             advertisement.type == Constants.AdType.bap
@@ -82,6 +87,7 @@ final class AdvertisementViewModel {
         return bapContent
     }
     
+    // Used to be passed to the AdvertisementsVC
     fileprivate var popularBapContent: [Advertisement] {
         let popularBapContent = bapContent.filter { (advertisement) -> Bool in
             advertisement.score > 0.8
