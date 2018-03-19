@@ -34,6 +34,8 @@ final class FavoriteAdCell: UITableViewCell {
             let placeholderImage = UIImage(named: Constants.Image.placeholderImage)
             photoImageView.sd_setImage(with: imageURL, placeholderImage: placeholderImage, options: .scaleDownLargeImages, completed: nil)
         }
+        
+        photoImageView.layer.cornerRadius = 5
     }
     
     @IBAction func didTapLikeButton(_ sender: UIButton) {

@@ -36,7 +36,7 @@ final class AdvertisementsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        dataSource.loadCachedAdvertisements { (error) in
+        dataSource.loadCachedAdvertisements { (_) in
             if self.activityView.isAnimating {
                 self.activityView.stopAnimating()
             }
