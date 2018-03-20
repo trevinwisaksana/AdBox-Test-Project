@@ -15,6 +15,15 @@ protocol AdvertisementDataSourceDelegate: class {
 final class AdvertisementViewModel {
     
     weak var delegate: AdvertisementDataSourceDelegate?
+    var advertisementService: AdvertisementService
+    var likeService: LikeService
+    
+    //---- Initializer ----//
+    
+    init(adService: AdvertisementService, likeService: LikeService) {
+        self.advertisementService = adService
+        self.likeService = likeService
+    }
     
     fileprivate var content = [Advertisement]() {
         didSet {
@@ -144,7 +153,7 @@ final class AdvertisementViewModel {
     //---- Load Operation ----//
     
     func loadAdvertisements(completion: @escaping (Error?) -> Void) {
-        AdvertisementService.fetchAdvertisements() { (advertisements, error) in
+        advertisementService.fetchAdvertisements() { (advertisements, error) in
             if let error = error {
                 completion(error)
                 return
@@ -160,7 +169,7 @@ final class AdvertisementViewModel {
     }
     
     func loadCachedAdvertisements(completion: @escaping (Error?) -> Void) {
-        AdvertisementService.retrieveCachedAds { (advertisement, error) in
+        advertisementService.retrieveCachedAds { (advertisement, error) in
             if let error = error {
                 completion(error)
             }
@@ -181,6 +190,16 @@ final class AdvertisementViewModel {
         default:
             fatalError("Error: unexpected section.")
         }
+    }
+    
+    //---- Like Service ----//
+    
+    func removeLike(for ad: FavoriteAd) {
+        likeService.remove(ad)
+    }
+    
+    func likeAdvertisement(for ad: Advertisement?) {
+        likeService.saveToFavorite(ad)
     }
     
 }

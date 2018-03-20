@@ -12,7 +12,7 @@ final class FavoritesViewController: UIViewController {
     
     //---- Properties ----//
     
-    let dataSource = FavoriteAdViewModel()
+    let dataSource = FavoriteAdViewModel(service: LikeService())
     
     //---- Subviews ----//
     
@@ -120,7 +120,7 @@ extension FavoritesViewController: Dislikeable {
         
         let adDisliked = dataSource.data(atIndex: indexPath.row)
         
-        LikeService.remove(adDisliked)
+        dataSource.removeLike(for: adDisliked)
         
         reloadTimeline()
     }

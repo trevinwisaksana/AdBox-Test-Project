@@ -10,7 +10,7 @@ import Foundation
 
 class LikeService {
     
-    class func saveToFavorite(_ data: Advertisement?) {
+    func saveToFavorite(_ data: Advertisement?) {
         
         guard let data = data else {
             return
@@ -29,7 +29,7 @@ class LikeService {
         CoreDataHelper.save()
     }
     
-    class func remove(_ data: FavoriteAd) {
+    func remove(_ data: FavoriteAd) {
         if let key = data.key {
             UserDefaults.standard.removeObject(forKey: "\(key)")
             CoreDataHelper.delete(ad: data)

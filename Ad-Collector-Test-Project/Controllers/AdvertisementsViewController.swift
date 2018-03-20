@@ -13,7 +13,7 @@ final class AdvertisementsViewController: UIViewController {
     
     //---- Properties ----//
     
-    let dataSource = AdvertisementViewModel()
+    let dataSource = AdvertisementViewModel(adService: AdvertisementService(), likeService: LikeService())
     
     private let activityView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     private let reachabiltyHelper = ReachabilityHelper()
@@ -286,9 +286,9 @@ extension AdvertisementsViewController: Likeable {
         }
         
         if let key = adLiked?.key, let favoritedAd = CoreDataHelper.fetchSelectedFavoriteAd(withKey: key) {
-            LikeService.remove(favoritedAd)
+            dataSource.removeLike(for: favoritedAd)
         } else {
-            LikeService.saveToFavorite(adLiked)
+            dataSource.likeAdvertisement(for: adLiked)
         }
     }
     

@@ -12,7 +12,7 @@ final class DisplaySectionViewController: UIViewController {
     
     //---- Properties ----//
     
-    let dataSource = DisplaySectionViewModel()
+    let dataSource = DisplaySectionViewModel(service: LikeService())
     
     //---- Subviews ----//
     
@@ -119,9 +119,9 @@ extension DisplaySectionViewController: Likeable {
         let adLiked = dataSource.data(atIndex: indexPath.row)
         
         if let favoritedAd = CoreDataHelper.fetchSelectedFavoriteAd(withKey: adLiked.key) {
-            LikeService.remove(favoritedAd)
+            dataSource.removeLike(for: favoritedAd)
         } else {
-            LikeService.saveToFavorite(adLiked)
+            dataSource.likeAdvertisement(for: adLiked)
         }
         
     }

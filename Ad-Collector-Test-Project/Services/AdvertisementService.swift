@@ -12,9 +12,9 @@ import SwiftyJSON
 
 class AdvertisementService {
     
-    private static let baseURL = URL(string: "https://gist.githubusercontent.com/3lvis/3799feea005ed49942dcb56386ecec2b/raw/63249144485884d279d55f4f3907e37098f55c74/discover.json")
+    private let baseURL = URL(string: "https://gist.githubusercontent.com/3lvis/3799feea005ed49942dcb56386ecec2b/raw/63249144485884d279d55f4f3907e37098f55c74/discover.json")
     
-    class func fetchAdvertisements(completion: @escaping ([Advertisement], Error?) -> Void) {
+    func fetchAdvertisements(completion: @escaping ([Advertisement], Error?) -> Void) {
         
         guard let url = baseURL else { return }
     
@@ -43,7 +43,7 @@ class AdvertisementService {
         }
     }
     
-    class func retrieveCachedAds(completion: @escaping ([Advertisement], Error?) -> Void) {
+    func retrieveCachedAds(completion: @escaping ([Advertisement], Error?) -> Void) {
         guard let url = baseURL else {
             completion([Advertisement](), nil)
             return

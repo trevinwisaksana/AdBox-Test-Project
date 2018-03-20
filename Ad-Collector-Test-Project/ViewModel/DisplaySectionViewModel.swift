@@ -10,6 +10,12 @@ import Foundation
 
 final class DisplaySectionViewModel {
     
+    var likeService: LikeService
+    
+    init(service: LikeService) {
+        self.likeService = service
+    }
+    
     fileprivate var content = [Advertisement]() {
         didSet {
             delegate?.contentChange()
@@ -45,4 +51,12 @@ final class DisplaySectionViewModel {
         }
     }
     
+    func removeLike(for ad: FavoriteAd) {
+        likeService.remove(ad)
+    }
+    
+    func likeAdvertisement(for ad: Advertisement) {
+        likeService.saveToFavorite(ad)
+    }
+
 }

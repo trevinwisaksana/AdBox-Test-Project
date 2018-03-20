@@ -11,13 +11,27 @@ import CoreData
 
 final class FavoriteAdViewModel {
     
+    //---- Properties ----//
+    
     weak var delegate: AdvertisementDataSourceDelegate?
+    
+    var likeService: LikeService
+    
+    //---- Initializer ----//
+    
+    init(service: LikeService) {
+        self.likeService = service
+    }
+    
+    //---- Data Source ----//
     
     private var content = CoreDataHelper.retrieveFavoriteAds() {
         didSet {
             delegate?.contentChange()
         }
     }
+    
+    //---- Data Source Properties ----//
     
     var numberOfItems: Int {
         return content.count
@@ -33,6 +47,10 @@ final class FavoriteAdViewModel {
     
     func fetchFavoriteAds() {
         content = CoreDataHelper.retrieveFavoriteAds()
+    }
+    
+    func removeLike(for ad: FavoriteAd) {
+        likeService.remove(ad)
     }
     
 }
