@@ -31,8 +31,6 @@ final class FavoriteAdViewModel {
         }
     }
     
-    //---- Data Source Properties ----//
-    
     var numberOfItems: Int {
         return content.count
     }
@@ -48,6 +46,8 @@ final class FavoriteAdViewModel {
     func fetchFavoriteAds() {
         content = CoreDataHelper.retrieveFavoriteAds()
     }
+    
+    //---- Like Service ----//
     
     func removeLike(for ad: FavoriteAd) {
         likeService.remove(ad)

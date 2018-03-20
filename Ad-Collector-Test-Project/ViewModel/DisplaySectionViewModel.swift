@@ -10,19 +10,25 @@ import Foundation
 
 final class DisplaySectionViewModel {
     
+    //---- Properties ----//
+    
+    weak var delegate: AdvertisementDataSourceDelegate?
+    
     var likeService: LikeService
+    
+    //---- Initializer ----//
     
     init(service: LikeService) {
         self.likeService = service
     }
+    
+    //---- Data Source ----//
     
     fileprivate var content = [Advertisement]() {
         didSet {
             delegate?.contentChange()
         }
     }
-    
-    weak var delegate: AdvertisementDataSourceDelegate?
     
     var numberOfItems: Int {
         return content.count
@@ -50,6 +56,8 @@ final class DisplaySectionViewModel {
             fatalError("Error: unexpected type.")
         }
     }
+    
+    //---- Like Service ----//
     
     func removeLike(for ad: FavoriteAd) {
         likeService.remove(ad)

@@ -14,7 +14,10 @@ protocol AdvertisementDataSourceDelegate: class {
 
 final class AdvertisementViewModel {
     
+    //---- Properties ----//
+    
     weak var delegate: AdvertisementDataSourceDelegate?
+    
     var advertisementService: AdvertisementService
     var likeService: LikeService
     
