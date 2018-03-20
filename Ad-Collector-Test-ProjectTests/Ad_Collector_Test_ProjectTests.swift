@@ -17,6 +17,8 @@ class Ad_Collector_Test_ProjectTests: XCTestCase {
     
     // MARK: - Dummy Services
     
+    var dummyDataFactory = DummyDataFactory()
+    
     var dummyAdvertisementService: DummyAdvertisementService!
     var dummyLikeService: LikeService!
     
@@ -35,8 +37,22 @@ class Ad_Collector_Test_ProjectTests: XCTestCase {
     func testFetchEmptyAdvertisement() {
         dummyAdvertisementService = DummyAdvertisementService(data: [Advertisement]())
         dummyLikeService = LikeService()
+        
         advertisementViewModel = AdvertisementViewModel(adService: dummyAdvertisementService, likeService: dummyLikeService)
+        
         XCTAssertTrue(advertisementViewModel.contentIsEmpty)
+    }
+    
+    func testFetchAdvertisementData() {
+        dummyAdvertisementService = DummyAdvertisementService(data: dummyDataFactory.dummyAdvertisements())
+        dummyLikeService = LikeService()
+        
+        advertisementViewModel = AdvertisementViewModel(adService: dummyAdvertisementService, likeService: dummyLikeService)
+        
+        advertisementViewModel.loadAdvertisements { (_) in
+            XCTAssertFalse(self.advertisementViewModel.contentIsEmpty)
+            XCTAssertEqual(self.advertisementViewModel.numberOfItems, 946)
+        }
     }
     
 }

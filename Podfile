@@ -14,6 +14,7 @@ target 'Ad-Collector-Test-Project' do
   target 'Ad-Collector-Test-ProjectTests' do
     inherit! :search_paths
     # Pods for testing
+    pod 'SwiftyJSON'
   end
 
 end

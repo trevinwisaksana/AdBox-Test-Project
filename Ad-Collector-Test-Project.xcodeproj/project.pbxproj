@@ -29,6 +29,9 @@
 		DD63B483205CD80700A7837E /* AdvertisementCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD63B482205CD80700A7837E /* AdvertisementCell.xib */; };
 		DD739E7F206091DC00C4DBAB /* DummyAdvertisementService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD739E7E206091DC00C4DBAB /* DummyAdvertisementService.swift */; };
 		DD739E81206096C000C4DBAB /* DummyLikeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD739E80206096C000C4DBAB /* DummyLikeService.swift */; };
+		DD739E832060993B00C4DBAB /* discover.json in Resources */ = {isa = PBXBuildFile; fileRef = DD739E822060993A00C4DBAB /* discover.json */; };
+		DD739E85206099A000C4DBAB /* DummyDataFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD739E84206099A000C4DBAB /* DummyDataFactory.swift */; };
+		DD739E8620609B6E00C4DBAB /* discover.json in Resources */ = {isa = PBXBuildFile; fileRef = DD739E822060993A00C4DBAB /* discover.json */; };
 		DDD3DAE3205C853D000A29B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD3DAE2205C853D000A29B3 /* AppDelegate.swift */; };
 		DDD3DAE8205C853D000A29B3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDD3DAE6205C853D000A29B3 /* Main.storyboard */; };
 		DDD3DAEA205C853D000A29B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDD3DAE9205C853D000A29B3 /* Assets.xcassets */; };
@@ -81,6 +84,8 @@
 		DD63B482205CD80700A7837E /* AdvertisementCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AdvertisementCell.xib; sourceTree = "<group>"; };
 		DD739E7E206091DC00C4DBAB /* DummyAdvertisementService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyAdvertisementService.swift; sourceTree = "<group>"; };
 		DD739E80206096C000C4DBAB /* DummyLikeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyLikeService.swift; sourceTree = "<group>"; };
+		DD739E822060993A00C4DBAB /* discover.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = discover.json; sourceTree = "<group>"; };
+		DD739E84206099A000C4DBAB /* DummyDataFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyDataFactory.swift; sourceTree = "<group>"; };
 		DDD3DADF205C853D000A29B3 /* Ad-Collector-Test-Project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Ad-Collector-Test-Project.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDD3DAE2205C853D000A29B3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DDD3DAE7205C853D000A29B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -218,9 +223,11 @@
 		DDD3DAF6205C853D000A29B3 /* Ad-Collector-Test-ProjectTests */ = {
 			isa = PBXGroup;
 			children = (
+				DD739E822060993A00C4DBAB /* discover.json */,
 				DDD3DAF7205C853D000A29B3 /* Ad_Collector_Test_ProjectTests.swift */,
 				DD739E80206096C000C4DBAB /* DummyLikeService.swift */,
 				DD739E7E206091DC00C4DBAB /* DummyAdvertisementService.swift */,
+				DD739E84206099A000C4DBAB /* DummyDataFactory.swift */,
 				DDD3DAF9205C853D000A29B3 /* Info.plist */,
 			);
 			path = "Ad-Collector-Test-ProjectTests";
@@ -406,6 +413,7 @@
 				DDD3DAEA205C853D000A29B3 /* Assets.xcassets in Resources */,
 				DDD3DB34205CB800000A29B3 /* Advertisements.storyboard in Resources */,
 				DD63B483205CD80700A7837E /* AdvertisementCell.xib in Resources */,
+				DD739E8620609B6E00C4DBAB /* discover.json in Resources */,
 				DD1473E7205CFD6B00FFFD3C /* FavoriteAdCell.xib in Resources */,
 				DDD3DB32205CB7D1000A29B3 /* Favorites.storyboard in Resources */,
 				DDD3DAE8205C853D000A29B3 /* Main.storyboard in Resources */,
@@ -416,6 +424,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD739E832060993B00C4DBAB /* discover.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -552,6 +561,7 @@
 				DD739E81206096C000C4DBAB /* DummyLikeService.swift in Sources */,
 				DD739E7F206091DC00C4DBAB /* DummyAdvertisementService.swift in Sources */,
 				DDD3DAF8205C853D000A29B3 /* Ad_Collector_Test_ProjectTests.swift in Sources */,
+				DD739E85206099A000C4DBAB /* DummyDataFactory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

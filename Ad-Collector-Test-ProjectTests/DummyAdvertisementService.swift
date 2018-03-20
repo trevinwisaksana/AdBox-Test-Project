@@ -27,9 +27,3 @@ class DummyAdvertisementService: AdvertisementService {
     }
     
 }
-
-extension DummyAdvertisementService {
-    
-    // var fakeData = Advertisement(with: <#T##JSON#>)
-    
-}
