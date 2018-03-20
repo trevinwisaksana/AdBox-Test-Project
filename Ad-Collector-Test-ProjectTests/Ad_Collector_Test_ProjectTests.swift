@@ -55,4 +55,16 @@ class Ad_Collector_Test_ProjectTests: XCTestCase {
         }
     }
     
+    func testFetchCachedAdvertisementData() {
+        dummyAdvertisementService = DummyAdvertisementService(data: dummyDataFactory.dummyAdvertisements())
+        dummyLikeService = LikeService()
+        
+        advertisementViewModel = AdvertisementViewModel(adService: dummyAdvertisementService, likeService: dummyLikeService)
+        
+        advertisementViewModel.loadCachedAdvertisements { (_) in
+            XCTAssertFalse(self.advertisementViewModel.contentIsEmpty)
+            XCTAssertEqual(self.advertisementViewModel.numberOfItems, 946)
+        }
+    }
+    
 }
