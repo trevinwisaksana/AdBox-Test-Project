@@ -22,63 +22,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="zI4-fw-DAI" customClass="AdvertisementCollectionView" customModule="Ad_Collector_Test_Project" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="84" width="375" height="583"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="y8T-7s-iwJ">
-                                    <size key="itemSize" width="375" height="239"/>
-                                    <size key="headerReferenceSize" width="50" height="70"/>
-                                    <size key="footerReferenceSize" width="50" height="50"/>
-                                    <inset key="sectionInset" minX="0.0" minY="10" maxX="0.0" maxY="10"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="y8T-7s-iwJ">
+                                    <size key="itemSize" width="205" height="239"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells/>
-                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="AdvertisementsSectionHeader" id="GeA-50-Sjy" customClass="AdvertisementsSectionHeader" customModule="Ad_Collector_Test_Project" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Section Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FRV-lj-TNW">
-                                            <rect key="frame" x="19" y="21" width="337" height="41"/>
-                                            <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="34"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="FRV-lj-TNW" firstAttribute="leading" secondItem="GeA-50-Sjy" secondAttribute="leadingMargin" constant="11" id="ZpF-Mc-7ZQ"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="FRV-lj-TNW" secondAttribute="trailing" constant="11" id="eY3-pF-vfV"/>
-                                        <constraint firstItem="FRV-lj-TNW" firstAttribute="bottom" secondItem="GeA-50-Sjy" secondAttribute="bottomMargin" id="nsw-et-k4t"/>
-                                    </constraints>
-                                    <connections>
-                                        <outlet property="titleLabel" destination="FRV-lj-TNW" id="Ktf-fT-Ggt"/>
-                                    </connections>
-                                </collectionReusableView>
-                                <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="AdvertisementsSectionFooter" id="rvK-vM-VBf" customClass="AdvertisementsSectionFooter" customModule="Ad_Collector_Test_Project" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="90" width="375" height="50"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UGg-SX-QyV">
-                                            <rect key="frame" x="18" y="8" width="77" height="34"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                            <state key="normal" title="See more"/>
-                                            <connections>
-                                                <action selector="didTapSeeMoreButton:" destination="rvK-vM-VBf" eventType="touchUpInside" id="avs-fh-mg8"/>
-                                            </connections>
-                                        </button>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B50-R3-nMt">
-                                            <rect key="frame" x="0.0" y="49" width="375" height="1"/>
-                                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="1" id="F2Y-jb-yv1"/>
-                                            </constraints>
-                                        </view>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstAttribute="bottom" secondItem="B50-R3-nMt" secondAttribute="bottom" id="KAV-3q-rMA"/>
-                                        <constraint firstAttribute="trailing" secondItem="B50-R3-nMt" secondAttribute="trailing" id="Mvq-k0-Rne"/>
-                                        <constraint firstItem="UGg-SX-QyV" firstAttribute="centerY" secondItem="rvK-vM-VBf" secondAttribute="centerY" id="SJe-BG-zvc"/>
-                                        <constraint firstItem="UGg-SX-QyV" firstAttribute="centerX" secondItem="rvK-vM-VBf" secondAttribute="centerX" multiplier="0.3" id="pSi-9l-gSE"/>
-                                        <constraint firstItem="B50-R3-nMt" firstAttribute="leading" secondItem="rvK-vM-VBf" secondAttribute="leading" id="r4G-p6-hni"/>
-                                    </constraints>
-                                </collectionReusableView>
                                 <connections>
                                     <outlet property="dataSource" destination="F3x-6T-tIk" id="9pa-qZ-EeK"/>
                                     <outlet property="delegate" destination="F3x-6T-tIk" id="KcV-ZH-0F4"/>
@@ -89,7 +41,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="zI4-fw-DAI" firstAttribute="bottom" secondItem="Cfh-d8-n93" secondAttribute="bottom" id="CtV-vd-LsZ"/>
-                            <constraint firstItem="zI4-fw-DAI" firstAttribute="top" secondItem="Cfh-d8-n93" secondAttribute="top" constant="20" id="XLE-ml-jQp"/>
+                            <constraint firstItem="zI4-fw-DAI" firstAttribute="top" secondItem="Cfh-d8-n93" secondAttribute="top" id="XLE-ml-jQp"/>
                             <constraint firstItem="zI4-fw-DAI" firstAttribute="leading" secondItem="Cfh-d8-n93" secondAttribute="leading" id="gvi-js-pTR"/>
                             <constraint firstItem="zI4-fw-DAI" firstAttribute="trailing" secondItem="Cfh-d8-n93" secondAttribute="trailing" id="hIv-0j-lzQ"/>
                         </constraints>

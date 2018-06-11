@@ -76,10 +76,8 @@ final class AdvertisementsViewController: UIViewController {
     
     private func configureCollectionViewLayout() {
         if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowLayout.estimatedItemSize = CGSize(width: 205, height: 265)
-            flowLayout.headerReferenceSize = CGSize(width: 50, height: 60)
-            flowLayout.footerReferenceSize = CGSize(width: 50, height: 50)
-            flowLayout.minimumLineSpacing = 0
+            flowLayout.estimatedItemSize = CGSize(width: 180, height: 270)
+            flowLayout.itemSize = CGSize(width: 180, height: 270)
         }
     }
     
@@ -95,7 +93,7 @@ final class AdvertisementsViewController: UIViewController {
     //---- Switch ----//
     
     @IBAction func didToggleSwitch(_ sender: UISwitch) {
-        let storyboard = UIStoryboard(name: "Favorites", bundle: .main)
+        let storyboard = UIStoryboard(name: Constants.Storyboard.favorites, bundle: .main)
         
         guard let favoritesVC = storyboard.instantiateInitialViewController() else {
             return
@@ -120,11 +118,7 @@ final class AdvertisementsViewController: UIViewController {
 extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if dataSource.contentIsEmpty {
-            return 0
-        } else {
-            return 4
-        }
+        return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -140,66 +134,27 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
         cell.configure(advertisement)
         
         return cell
-        
-        let section = indexPath.section    
     }
     
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
-        let section = indexPath.section
-        
-        switch kind {
-        case UICollectionElementKindSectionHeader:
-            
-            let sectionHeader: AdvertisementsSectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
-            
-            switch section {
-            case 0:
-                sectionHeader.titleLabel.text = "Trending"
-            case 1:
-                sectionHeader.titleLabel.text = "Cars"
-            case 2:
-                sectionHeader.titleLabel.text = "Books"
-            case 3:
-                sectionHeader.titleLabel.text = "Real Estate"
-            default:
-                fatalError("Error: unexpected indexPath.")
-            }
-            
-            return sectionHeader
-            
-        case UICollectionElementKindSectionFooter:
-            
-            let sectionFooter: AdvertisementsSectionFooter = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
-            sectionFooter.delegate = self
-            sectionFooter.section = section
-            
-            return sectionFooter
-            
-        default:
-            fatalError("Error: unexpected view kind.")
-        }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.bounds.width * 0.45, height: collectionView.bounds.height * 0.38)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        if section == 0 {
-            return CGSize(width: collectionView.bounds.width, height: 0.0)
-        } else {
-            return CGSize(width: collectionView.bounds.width, height: 50)
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.bounds.width, height: 50)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         self.collectionView.animateCellEntry(for: cell, at: indexPath)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
+    }
+
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        
+//    }
     
 }
 
@@ -208,22 +163,8 @@ extension AdvertisementsViewController: AdvertisementDataSourceDelegate {
     func contentChange() {
         collectionView.reloadData()
     }
-    
 }
 
-extension AdvertisementsViewController: DisplayMoreAdsDelegate {
-    
-    func pass(section: Int) {
-        let storyboard = UIStoryboard(name: Constants.Storyboard.advertisements, bundle: .main)
-        let displaySectionVC = storyboard.instantiateViewController(withIdentifier: Constants.Identifier.displayVC) as! DisplaySectionViewController
-        
-        let sectionData = dataSource.passData(fromSection: section)
-        displaySectionVC.dataSource.loadContent(sectionData)
-        
-        present(displaySectionVC, animated: true, completion: nil)
-    }
-    
-}
 
 extension AdvertisementsViewController: Likeable {
     
@@ -239,22 +180,9 @@ extension AdvertisementsViewController: Likeable {
             return
         }
         
-        var adLiked: Advertisement?
+        let adLiked = dataSource.contentData(atIndex: indexPath.row)
         
-        switch indexPath.section {
-        case 0:
-            adLiked = dataSource.mostPopularContentData(atIndex: indexPath.row)
-        case 1:
-            adLiked = dataSource.carsContentData(atIndex: indexPath.row)
-        case 2:
-            adLiked = dataSource.bapContentData(atIndex: indexPath.row)
-        case 3:
-            adLiked = dataSource.realEstateContentData(atIndex: indexPath.row)
-        default:
-            break
-        }
-        
-        if let key = adLiked?.key, let favoritedAd = CoreDataHelper.fetchSelectedFavoriteAd(withKey: key) {
+        if let favoritedAd = CoreDataHelper.fetchSelectedFavoriteAd(withKey: adLiked.key) {
             dataSource.removeLike(for: favoritedAd)
         } else {
             dataSource.likeAdvertisement(for: adLiked)

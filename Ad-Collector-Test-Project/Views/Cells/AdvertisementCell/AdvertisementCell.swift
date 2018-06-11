@@ -68,7 +68,7 @@ final class AdvertisementCell: UICollectionViewCell {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
         let screenWidth = UIScreen.main.bounds.size.width / 2
-//        widthConstraint.constant = screenWidth
+        widthConstraint.constant = screenWidth
     }
     
     override func prepareForReuse() {
