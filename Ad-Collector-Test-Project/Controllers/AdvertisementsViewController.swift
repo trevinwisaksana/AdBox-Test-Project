@@ -152,10 +152,6 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
         return UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
     }
 
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        
-//    }
-    
 }
 
 extension AdvertisementsViewController: AdvertisementDataSourceDelegate {
@@ -163,8 +159,8 @@ extension AdvertisementsViewController: AdvertisementDataSourceDelegate {
     func contentChange() {
         collectionView.reloadData()
     }
+    
 }
-
 
 extension AdvertisementsViewController: Likeable {
     
