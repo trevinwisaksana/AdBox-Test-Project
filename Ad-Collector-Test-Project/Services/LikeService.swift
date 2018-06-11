@@ -11,7 +11,6 @@ import Foundation
 class LikeService {
     
     func saveToFavorite(_ data: Advertisement?) {
-        
         guard let data = data else {
             return
         }

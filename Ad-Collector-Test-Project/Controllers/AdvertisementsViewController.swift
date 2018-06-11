@@ -105,8 +105,6 @@ final class AdvertisementsViewController: UIViewController {
         refresh()
     }
     
-    @IBAction func unwind(segue: UIStoryboardSegue) {}
-    
     //---- Activity View ----//
     
     func configureActivityView() {
@@ -167,7 +165,7 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.bounds.width * 0.45, height: collectionView.bounds.height * 0.38)
+        return CGSize(width: collectionView.bounds.width * 0.45, height: collectionView.bounds.height * 0.36)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
