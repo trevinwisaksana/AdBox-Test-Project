@@ -42,10 +42,15 @@ final class DisplaySectionViewController: UIViewController {
     
     private func configureCollectionView() {
         collectionView.register(AdvertisementCell.self)
+        configureCollectionViewLayout()
+    }
+    
+    private func configureCollectionViewLayout() {
         if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            let height = view.frame.height * 0.8
-            flowLayout.estimatedItemSize = CGSize(width: 50, height: height)
-            flowLayout.minimumLineSpacing = 2
+            flowLayout.estimatedItemSize = CGSize(width: 205, height: 260)
+            flowLayout.headerReferenceSize = CGSize(width: 50, height: 60)
+            flowLayout.footerReferenceSize = CGSize(width: 50, height: 50)
+            flowLayout.minimumLineSpacing = 0
         }
     }
     
@@ -90,6 +95,10 @@ extension DisplaySectionViewController: UICollectionViewDelegate, UICollectionVi
         default:
             fatalError("Error: unexpected indexPath.")
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
     }
     
 }

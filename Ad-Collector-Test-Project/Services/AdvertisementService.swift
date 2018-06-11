@@ -26,7 +26,7 @@ class AdvertisementService {
                     return
                 }
                 
-                let advertisements = jsonArray.flatMap { Advertisement(with: $0) }
+                let advertisements = jsonArray.compactMap { Advertisement(with: $0) }
                 
                 // Caching the parsed data
                 if  let request = response.request,
@@ -58,7 +58,7 @@ class AdvertisementService {
                     return
                 }
                 
-                let advertisements = jsonArray.flatMap { Advertisement(with: $0) }
+                let advertisements = jsonArray.compactMap { Advertisement(with: $0) }
                 
                 completion(advertisements, nil)
                 return

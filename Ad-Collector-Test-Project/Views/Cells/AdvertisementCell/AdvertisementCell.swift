@@ -20,6 +20,9 @@ final class AdvertisementCell: UICollectionViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var likeButton: UIButton!
+    @IBOutlet weak var photoContainerView: UIView!
+    @IBOutlet weak var priceLabelContainerView: UIView!
+    
     
     @IBOutlet weak var widthConstraint: NSLayoutConstraint!
     
@@ -34,7 +37,7 @@ final class AdvertisementCell: UICollectionViewCell {
         adKey = data.key
         titleLabel.text = data.title
         locationLabel.text = data.location
-        priceLabel.text = "kr " + Int(data.price).decimalStyleString
+        priceLabel.text = Int(data.price).decimalStyleString
         
         configureImage(withURL: data.photoURL)
     }
@@ -46,6 +49,8 @@ final class AdvertisementCell: UICollectionViewCell {
         photoImageView.sd_setImage(with: imageURL, placeholderImage: placeholderImage, options: .scaleDownLargeImages, completed: nil)
         
         photoImageView.layer.cornerRadius = 5
+        photoContainerView.layer.cornerRadius = 5
+        priceLabelContainerView.layer.cornerRadius = 5
     }
     
     @IBAction func didTapLikeButton(_ sender: UIButton) {
@@ -61,8 +66,9 @@ final class AdvertisementCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         contentView.translatesAutoresizingMaskIntoConstraints = false
-        let screenWidth = UIScreen.main.bounds.size.width
-        widthConstraint.constant = screenWidth
+        
+        let screenWidth = UIScreen.main.bounds.size.width / 2
+//        widthConstraint.constant = screenWidth
     }
     
     override func prepareForReuse() {

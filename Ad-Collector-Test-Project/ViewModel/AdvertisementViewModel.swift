@@ -42,11 +42,15 @@ final class AdvertisementViewModel {
     
     fileprivate var mostPopularContent: [Advertisement] {
         let popularContent = content.filter { (advertisement) -> Bool in
-            advertisement.score > 0.9
+            advertisement.score > 0.8
         }
         
         return popularContent
     }
+    
+    //---- Liked advertisement ----//
+    
+    fileprivate var favoriteAdvertisements = CoreDataHelper.retrieveFavoriteAds()
     
     //---- Cars Content -----//
     
@@ -62,7 +66,7 @@ final class AdvertisementViewModel {
     // Used to be passed to the AdvertisementsVC
     fileprivate var popularCarsContent: [Advertisement] {
         let popularCarsContent = carsContent.filter { (advertisement) -> Bool in
-            advertisement.score > 0.32
+            advertisement.score > 0.28
         }
         
         return popularCarsContent

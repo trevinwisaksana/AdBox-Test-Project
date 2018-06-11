@@ -24,6 +24,8 @@ final class AdvertisementsViewController: UIViewController {
     
     @IBOutlet weak var collectionView: AdvertisementCollectionView!
     
+    @IBOutlet weak var favoriteSwitch: UIBarButtonItem!
+    
     //---- VC Lifecycle ----//
     
     override func viewDidLoad() {
@@ -72,9 +74,10 @@ final class AdvertisementsViewController: UIViewController {
     
     private func configureCollectionViewLayout() {
         if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowLayout.estimatedItemSize = CGSize(width: 50, height: 100)
+            flowLayout.estimatedItemSize = CGSize(width: 205, height: 265)
             flowLayout.headerReferenceSize = CGSize(width: 50, height: 60)
             flowLayout.footerReferenceSize = CGSize(width: 50, height: 50)
+            flowLayout.minimumLineSpacing = 0
         }
     }
     
@@ -85,6 +88,12 @@ final class AdvertisementsViewController: UIViewController {
                 self.refreshControl.endRefreshing()
             }
         }
+    }
+    
+    //---- Switch ----//
+    
+    @IBAction func didToggleSwitch(_ sender: UISwitch) {
+        
     }
     
     //---- Activity View ----//
@@ -225,9 +234,13 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.bounds.width, height: 60)
+        return CGSize(width: collectionView.bounds.width, height: 50)
     }
-   
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         self.collectionView.animateCellEntry(for: cell, at: indexPath)
     }
