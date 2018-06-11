@@ -24,9 +24,9 @@ struct CoreDataHelper {
     }()
     
     static func newFavoriteAd() -> FavoriteAd {
-        let FavoriteAd = NSEntityDescription.insertNewObject(forEntityName: "FavoriteAd", into: context) as! FavoriteAd
+        let favoriteAd = NSEntityDescription.insertNewObject(forEntityName: "FavoriteAd", into: context) as! FavoriteAd
         
-        return FavoriteAd
+        return favoriteAd
     }
     
     static func save()  {
