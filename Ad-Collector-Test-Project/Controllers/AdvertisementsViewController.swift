@@ -46,11 +46,11 @@ final class AdvertisementsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        dataSource.loadCachedAdvertisements { (_) in
+        dataSource.loadAdvertisements(completion: { (_) in
             if self.activityView.isAnimating {
                 self.activityView.stopAnimating()
             }
-        }
+        })
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -81,10 +81,14 @@ final class AdvertisementsViewController: UIViewController {
     
     @objc
     private func reloadTimeline() {
-        dataSource.loadAdvertisements { (error) in
-            if self.refreshControl.isRefreshing {
-                self.refreshControl.endRefreshing()
-            }
+        if dataSource.switchToggleIsOn {
+            dataSource.fetchLikedAdvertisements()
+        } else {
+            dataSource.loadAdvertisements(completion: { (_) in
+                if self.refreshControl.isRefreshing {
+                    self.refreshControl.endRefreshing()
+                }
+            })
         }
     }
     
@@ -121,7 +125,6 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
         if dataSource.switchToggleIsOn {
             
             if dataSource.favoriteAdsIsEmpty {
@@ -136,13 +139,12 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
             return dataSource.numberOfFavoriteAds
             
         } else {
+            collectionView.backgroundView = nil
             return dataSource.numberOfContents
         }
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         if dataSource.switchToggleIsOn {
             let favoriteAd = dataSource.favoriteAd(atIndex: indexPath.row)
             
@@ -162,7 +164,6 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
             
             return cell
         }
-    
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -207,10 +208,10 @@ extension AdvertisementsViewController: Likeable {
         
         let adLiked = dataSource.contentData(atIndex: indexPath.row)
         
-        if let favoritedAd = CoreDataHelper.fetchSelectedFavoriteAd(withKey: adLiked.key) {
-            dataSource.removeLike(for: favoritedAd)
+        if let _ = CoreDataHelper.fetchSelectedFavoriteAd(withKey: adLiked.key) {
+            dataSource.unlikeAdvertisement(at: indexPath)
         } else {
-            dataSource.likeAdvertisement(for: adLiked)
+            dataSource.likeAdvertisement(at: indexPath)
         }
         
         refresh()

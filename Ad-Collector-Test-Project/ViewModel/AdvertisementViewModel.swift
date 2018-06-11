@@ -30,14 +30,14 @@ final class AdvertisementViewModel {
         self.likeService = likeService
     }
     
-    fileprivate var content = [Advertisement]() {
+    fileprivate var advertisements = [Advertisement]() {
         didSet {
             delegate?.refresh()
         }
     }
     
     var contentIsEmpty: Bool {
-        return content.isEmpty
+        return advertisements.isEmpty
     }
     
     var favoriteAdsIsEmpty: Bool {
@@ -55,7 +55,7 @@ final class AdvertisementViewModel {
     //---- Array Count ----//
     
     var numberOfContents: Int {
-        return content.count
+        return advertisements.count
     }
     
     var numberOfFavoriteAds: Int {
@@ -65,7 +65,7 @@ final class AdvertisementViewModel {
     //---- Indexing ----//
     
     func contentData(atIndex index: Int) -> Advertisement {
-        return content[index]
+        return advertisements[index]
     }
     
     func favoriteAd(atIndex index: Int) -> FavoriteAd {
@@ -85,7 +85,7 @@ final class AdvertisementViewModel {
                 return
             }
             
-            self.content = advertisements
+            self.advertisements = advertisements
             completion(nil)
         }
     }
@@ -96,7 +96,7 @@ final class AdvertisementViewModel {
                 completion(error)
             }
             
-            self.content = advertisement
+            self.advertisements = advertisement
             completion(nil)
         }
     }
@@ -107,11 +107,14 @@ final class AdvertisementViewModel {
         favoriteAdvertisements = likeService.retrieveFavoriteAds()
     }
     
-    func removeLike(for ad: FavoriteAd) {
+    func unlikeAdvertisement(at indexPath: IndexPath) {
+        let ad = favoriteAdvertisements[indexPath.row]
         likeService.remove(ad)
+        favoriteAdvertisements.remove(at: indexPath.row)
     }
     
-    func likeAdvertisement(for ad: Advertisement?) {
+    func likeAdvertisement(at indexPath: IndexPath) {
+        let ad = advertisements[indexPath.row]
         likeService.saveToFavorite(ad)
     }
     
