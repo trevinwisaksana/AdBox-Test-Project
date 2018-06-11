@@ -10,8 +10,7 @@ import Foundation
 import SwiftyJSON
 import CoreData
 
-
-final class Advertisement {
+struct Advertisement {
 
     var title: String
     var price: Int
