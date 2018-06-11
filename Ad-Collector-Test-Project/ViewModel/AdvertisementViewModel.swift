@@ -21,6 +21,8 @@ final class AdvertisementViewModel {
     var advertisementService: AdvertisementService
     var likeService: LikeService
     
+    var switchToggleIsOn = false
+    
     //---- Initializer ----//
     
     init(adService: AdvertisementService, likeService: LikeService) {
@@ -115,7 +117,7 @@ final class AdvertisementViewModel {
     
     //---- Array Count ----//
     
-    var numberOfItems: Int {
+    var numberOfContents: Int {
         return content.count
     }
     

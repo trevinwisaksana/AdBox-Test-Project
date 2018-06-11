@@ -24,7 +24,7 @@ final class AdvertisementsViewController: UIViewController {
     
     @IBOutlet weak var collectionView: AdvertisementCollectionView!
     
-    @IBOutlet weak var favoriteSwitch: UIBarButtonItem!
+    @IBOutlet weak var favoriteSwitch: UISwitch!
     
     //---- VC Lifecycle ----//
     
@@ -38,6 +38,8 @@ final class AdvertisementsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        favoriteSwitch.isOn = false
+        
         dataSource.loadCachedAdvertisements { (_) in
             if self.activityView.isAnimating {
                 self.activityView.stopAnimating()
@@ -93,8 +95,16 @@ final class AdvertisementsViewController: UIViewController {
     //---- Switch ----//
     
     @IBAction func didToggleSwitch(_ sender: UISwitch) {
+        let storyboard = UIStoryboard(name: "Favorites", bundle: .main)
         
+        guard let favoritesVC = storyboard.instantiateInitialViewController() else {
+            return
+        }
+        
+        present(favoritesVC, animated: false, completion: nil)
     }
+    
+    @IBAction func unwind(segue: UIStoryboardSegue) {}
     
     //---- Activity View ----//
     
@@ -118,74 +128,20 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        if dataSource.contentIsEmpty {
-            return 0
-        }
-        
-        switch section {
-        case 0:
-            return dataSource.numberOfPopularContent
-        case 1:
-            return dataSource.numberOfCarContent
-        case 2:
-            return dataSource.numberOfBapContent
-        case 3:
-            return dataSource.numberOfRealEstateContent
-        default:
-            fatalError("Error: unexpected indexPath.")
-        }
+        return dataSource.numberOfContents
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let section = indexPath.section
+        let advertisement = dataSource.contentData(atIndex: indexPath.row)
         
-        switch section {
-        case 0:
-            
-            let popularAd = dataSource.mostPopularContentData(atIndex: indexPath.row)
-            
-            let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.delegate = self
-            cell.configure(popularAd)
-            
-            return cell
-            
-        case 1:
-            
-            let carAd = dataSource.carsContentData(atIndex: indexPath.row)
-            
-            let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.delegate = self
-            cell.configure(carAd)
-            
-            return cell
-            
-        case 2:
-            
-            let bapAd = dataSource.bapContentData(atIndex: indexPath.row)
-            
-            let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.delegate = self
-            cell.configure(bapAd)
-            
-            return cell
-            
-        case 3:
-            
-            let realEstateAd = dataSource.realEstateContentData(atIndex: indexPath.row)
-            
-            let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.delegate = self
-            cell.configure(realEstateAd)
-            
-            return cell
-            
-        default:
-            fatalError("Error: unexpected indexPath.")
-        }
+        let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
+        cell.delegate = self
+        cell.configure(advertisement)
         
+        return cell
+        
+        let section = indexPath.section    
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {

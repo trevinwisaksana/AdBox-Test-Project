@@ -39,6 +39,11 @@ final class FavoritesViewController: UIViewController {
         reloadTimeline()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(false)
+        
+    }
+    
     //---- Data Sourece ----//
     
     func configureDataSource() {
@@ -54,6 +59,12 @@ final class FavoritesViewController: UIViewController {
     @objc
     private func reloadTimeline() {
         dataSource.fetchFavoriteAds()
+    }
+    
+    //---- Switch ----//
+    
+    @IBAction func didToggleSwitch(_ sender: UISwitch) {
+        
     }
     
 }
