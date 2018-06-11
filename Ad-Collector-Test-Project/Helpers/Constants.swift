@@ -15,6 +15,10 @@ struct Constants {
         static let favorites = "Favorites"
     }
     
+    struct Entity {
+        static let favoriteAd = "FavoriteAd"
+    }
+    
     struct Identifier {
         static let displayVC = "DisplaySectionViewController"
     }

@@ -18,9 +18,9 @@ class LikeService {
         
         let newFavoriteAd = CoreDataHelper.newFavoriteAd()
         
-        newFavoriteAd.isFavorite = true
+        newFavoriteAd.isLiked = true
         newFavoriteAd.location = data.location
-        newFavoriteAd.photoURL = data.photoURL
+        newFavoriteAd.posterURL = data.photoURL
         newFavoriteAd.title = data.title
         
         newFavoriteAd.price = Double(data.price)

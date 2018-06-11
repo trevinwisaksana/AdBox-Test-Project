@@ -10,6 +10,7 @@ import Foundation
 import SwiftyJSON
 import CoreData
 
+
 final class Advertisement {
 
     var title: String

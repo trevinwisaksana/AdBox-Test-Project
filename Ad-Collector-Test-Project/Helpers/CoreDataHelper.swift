@@ -24,7 +24,7 @@ struct CoreDataHelper {
     }()
     
     static func newFavoriteAd() -> FavoriteAd {
-        let favoriteAd = NSEntityDescription.insertNewObject(forEntityName: "FavoriteAd", into: context) as! FavoriteAd
+        let favoriteAd = NSEntityDescription.insertNewObject(forEntityName: Constants.Entity.favoriteAd, into: context) as! FavoriteAd
         
         return favoriteAd
     }
@@ -44,7 +44,7 @@ struct CoreDataHelper {
     
     static func retrieveFavoriteAds() -> [FavoriteAd] {
         do {
-            let fetchRequest = NSFetchRequest<FavoriteAd>(entityName: "FavoriteAd")
+            let fetchRequest = NSFetchRequest<FavoriteAd>(entityName: Constants.Entity.favoriteAd)
             let results = try context.fetch(fetchRequest)
             return results
         } catch let error {
@@ -55,7 +55,7 @@ struct CoreDataHelper {
     
     static func fetchSelectedFavoriteAd(withKey key: String) -> FavoriteAd? {
         do {
-            let fetchRequest = NSFetchRequest<FavoriteAd>(entityName: "FavoriteAd")
+            let fetchRequest = NSFetchRequest<FavoriteAd>(entityName: Constants.Entity.favoriteAd)
             let results = try context.fetch(fetchRequest)
             
             var output: FavoriteAd?

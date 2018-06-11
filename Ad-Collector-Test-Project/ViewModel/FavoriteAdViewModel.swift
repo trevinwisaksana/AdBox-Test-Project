@@ -27,7 +27,7 @@ final class FavoriteAdViewModel {
     
     private var content = CoreDataHelper.retrieveFavoriteAds() {
         didSet {
-            delegate?.contentChange()
+            delegate?.refresh()
         }
     }
     

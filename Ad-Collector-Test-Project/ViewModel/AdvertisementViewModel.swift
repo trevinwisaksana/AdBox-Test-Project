@@ -9,7 +9,7 @@
 import Foundation
 
 protocol AdvertisementDataSourceDelegate: class {
-    func contentChange()
+    func refresh()
 }
 
 final class AdvertisementViewModel {
@@ -32,7 +32,7 @@ final class AdvertisementViewModel {
     
     fileprivate var content = [Advertisement]() {
         didSet {
-            delegate?.contentChange()
+            delegate?.refresh()
         }
     }
     
@@ -42,7 +42,11 @@ final class AdvertisementViewModel {
     
     //---- Liked advertisement ----//
     
-    fileprivate var favoriteAdvertisements = CoreDataHelper.retrieveFavoriteAds()
+    fileprivate var favoriteAdvertisements = [FavoriteAd]() {
+        didSet {
+            delegate?.refresh()
+        }
+    }
   
     //---- Array Count ----//
     
@@ -94,6 +98,10 @@ final class AdvertisementViewModel {
     }
     
     //---- Like Service ----//
+    
+    func fetchLikedAdvertisements() {
+        favoriteAdvertisements = CoreDataHelper.retrieveFavoriteAds()
+    }
     
     func removeLike(for ad: FavoriteAd) {
         likeService.remove(ad)

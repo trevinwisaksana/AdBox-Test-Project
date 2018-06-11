@@ -27,10 +27,10 @@ final class FavoriteAdCell: UITableViewCell {
         descriptionLabel.text = data.title
         priceLabel.text = "kr " + Int(data.price).decimalStyleString
         locationLabel.text = data.location
-        likeButton.isSelected = data.isFavorite
+        likeButton.isSelected = data.isLiked
         
-        if let photoURL = data.photoURL {
-            let imageURL = URL(string: "https://images.finncdn.no/dynamic/480x360c/\(photoURL)")
+        if let posterURL = data.posterURL {
+            let imageURL = URL(string: "https://images.finncdn.no/dynamic/480x360c/\(posterURL)")
             let placeholderImage = UIImage(named: Constants.Image.placeholderImage)
             photoImageView.sd_setImage(with: imageURL, placeholderImage: placeholderImage, options: .scaleDownLargeImages, completed: nil)
         }

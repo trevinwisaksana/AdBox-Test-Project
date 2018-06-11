@@ -93,13 +93,14 @@ final class AdvertisementsViewController: UIViewController {
     //---- Switch ----//
     
     @IBAction func didToggleSwitch(_ sender: UISwitch) {
-        let storyboard = UIStoryboard(name: Constants.Storyboard.favorites, bundle: .main)
-        
-        guard let favoritesVC = storyboard.instantiateInitialViewController() else {
-            return
+        if sender.isOn {
+            dataSource.switchToggleIsOn = true
+            dataSource.fetchLikedAdvertisements()
+        } else {
+            dataSource.switchToggleIsOn = false
         }
         
-        present(favoritesVC, animated: false, completion: nil)
+        refresh()
     }
     
     @IBAction func unwind(segue: UIStoryboardSegue) {}
@@ -122,18 +123,35 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource.numberOfContents
+        if dataSource.switchToggleIsOn {
+            return dataSource.numberOfFavoriteAds
+        } else {
+            return dataSource.numberOfContents
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let advertisement = dataSource.contentData(atIndex: indexPath.row)
-        
-        let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
-        cell.delegate = self
-        cell.configure(advertisement)
-        
-        return cell
+        if dataSource.switchToggleIsOn {
+            let favoriteAd = dataSource.favoriteAd(atIndex: indexPath.row)
+            
+            let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
+            cell.delegate = self
+            
+            cell.configure(favoriteAd)
+            
+            return cell
+            
+        } else {
+            let advertisement = dataSource.contentData(atIndex: indexPath.row)
+            
+            let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
+            cell.delegate = self
+            cell.configure(advertisement)
+            
+            return cell
+        }
+    
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -156,7 +174,7 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
 
 extension AdvertisementsViewController: AdvertisementDataSourceDelegate {
     
-    func contentChange() {
+    func refresh() {
         collectionView.reloadData()
     }
     

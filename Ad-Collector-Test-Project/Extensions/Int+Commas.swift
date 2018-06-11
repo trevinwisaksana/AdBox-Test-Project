@@ -16,5 +16,18 @@ extension Int {
         let formattedNumber = numberFormatter.string(from: NSNumber(value: self))
         return formattedNumber ?? String(self)
     }
+    
+    var truncattedStyleString: String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = NumberFormatter.Style.decimal
+        
+        if self >= 100000 {
+            return "\(self / 1000),-"
+        } else {
+            let formattedNumber = numberFormatter.string(from: NSNumber(value: self))
+            return formattedNumber ?? String(self)
+        }
+        
+    }
    
 }

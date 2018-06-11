@@ -109,7 +109,7 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension FavoritesViewController: AdvertisementDataSourceDelegate {
     
-    func contentChange() {
+    func refresh() {
         tableView.reloadData()
     }
     
