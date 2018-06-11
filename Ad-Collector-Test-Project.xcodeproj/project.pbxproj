@@ -17,7 +17,6 @@
 		DD1473F5205D52E000FFFD3C /* AdvertisementCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1473F4205D52E000FFFD3C /* AdvertisementCollectionView.swift */; };
 		DD1473F7205D65DB00FFFD3C /* AdvertisementsSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1473F6205D65DB00FFFD3C /* AdvertisementsSectionHeader.swift */; };
 		DD1473FE205D80CD00FFFD3C /* AdvertisementsSectionFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1473FD205D80CD00FFFD3C /* AdvertisementsSectionFooter.swift */; };
-		DD147400205D84C000FFFD3C /* DisplaySectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1473FF205D84C000FFFD3C /* DisplaySectionViewController.swift */; };
 		DD147402205D865000FFFD3C /* DisplaySectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD147401205D865000FFFD3C /* DisplaySectionViewModel.swift */; };
 		DD147406205D9A3000FFFD3C /* DisplaySectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD147405205D9A3000FFFD3C /* DisplaySectionHeader.swift */; };
 		DD147408205DACEF00FFFD3C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD147407205DACEF00FFFD3C /* Constants.swift */; };
@@ -72,7 +71,6 @@
 		DD1473F4205D52E000FFFD3C /* AdvertisementCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisementCollectionView.swift; sourceTree = "<group>"; };
 		DD1473F6205D65DB00FFFD3C /* AdvertisementsSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisementsSectionHeader.swift; sourceTree = "<group>"; };
 		DD1473FD205D80CD00FFFD3C /* AdvertisementsSectionFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisementsSectionFooter.swift; sourceTree = "<group>"; };
-		DD1473FF205D84C000FFFD3C /* DisplaySectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySectionViewController.swift; sourceTree = "<group>"; };
 		DD147401205D865000FFFD3C /* DisplaySectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySectionViewModel.swift; sourceTree = "<group>"; };
 		DD147405205D9A3000FFFD3C /* DisplaySectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySectionHeader.swift; sourceTree = "<group>"; };
 		DD147407205DACEF00FFFD3C /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -237,7 +235,6 @@
 			isa = PBXGroup;
 			children = (
 				DDD3DB17205C8BAD000A29B3 /* AdvertisementsViewController.swift */,
-				DD1473FF205D84C000FFFD3C /* DisplaySectionViewController.swift */,
 				DDD3DB2A205CB75F000A29B3 /* FavoritesViewController.swift */,
 			);
 			path = Controllers;
@@ -538,7 +535,6 @@
 				DD147406205D9A3000FFFD3C /* DisplaySectionHeader.swift in Sources */,
 				DDD3DAE3205C853D000A29B3 /* AppDelegate.swift in Sources */,
 				DD5A9868205F71BC005C00D1 /* Int+Commas.swift in Sources */,
-				DD147400205D84C000FFFD3C /* DisplaySectionViewController.swift in Sources */,
 				DDD3DB26205C90C8000A29B3 /* AdvertisementService.swift in Sources */,
 				DDD3DB18205C8BAD000A29B3 /* AdvertisementsViewController.swift in Sources */,
 				DD1473E3205CFB4100FFFD3C /* FavoriteAdViewModel.swift in Sources */,

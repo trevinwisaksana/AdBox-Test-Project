@@ -29,7 +29,7 @@ class DummyDataFactory {
             return [Advertisement]()
         }
         
-        let advertisements = jsonArray.flatMap { Advertisement(with: $0) }
+        let advertisements = jsonArray.compactMap { Advertisement(with: $0) }
         return advertisements
     }
     
