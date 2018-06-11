@@ -36,8 +36,10 @@ class LikeService {
         }
     }
     
-    func retrieveFavoriteAds() -> [FavoriteAd] {
-        return CoreDataHelper.retrieveFavoriteAds()
+    func retrieveFavoriteAds(completion: @escaping ([FavoriteAd], Error?) -> Void) {
+        CoreDataHelper.retrieveFavoriteAds(completion: { (favoriteAds, error) in
+            completion(favoriteAds, error)
+        })
     }
     
 }

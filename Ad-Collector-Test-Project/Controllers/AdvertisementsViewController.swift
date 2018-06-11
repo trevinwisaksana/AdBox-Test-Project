@@ -46,11 +46,7 @@ final class AdvertisementsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        dataSource.loadAdvertisements(completion: { (_) in
-            if self.activityView.isAnimating {
-                self.activityView.stopAnimating()
-            }
-        })
+        dataSource.loadAdvertisements()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -84,11 +80,7 @@ final class AdvertisementsViewController: UIViewController {
         if dataSource.switchToggleIsOn {
             dataSource.fetchLikedAdvertisements()
         } else {
-            dataSource.loadAdvertisements(completion: { (_) in
-                if self.refreshControl.isRefreshing {
-                    self.refreshControl.endRefreshing()
-                }
-            })
+            dataSource.loadAdvertisements()
         }
     }
     
@@ -185,6 +177,14 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
 extension AdvertisementsViewController: AdvertisementDataSourceDelegate {
     
     func refresh() {
+        if self.refreshControl.isRefreshing {
+            self.refreshControl.endRefreshing()
+        }
+        
+        if self.activityView.isAnimating {
+            self.activityView.stopAnimating()
+        }
+        
         collectionView.reloadData()
     }
     
@@ -193,11 +193,6 @@ extension AdvertisementsViewController: AdvertisementDataSourceDelegate {
 extension AdvertisementsViewController: Likeable {
     
     func didTapLikeButton(_ likeButton: UIButton, on cell: AdvertisementCell) {
-        
-        defer {
-            likeButton.isUserInteractionEnabled = true
-        }
-        
         likeButton.isUserInteractionEnabled = false
         
         guard let indexPath = collectionView.indexPath(for: cell) else {
@@ -213,6 +208,8 @@ extension AdvertisementsViewController: Likeable {
         }
         
         refresh()
+        
+        likeButton.isUserInteractionEnabled = true
     }
     
 }

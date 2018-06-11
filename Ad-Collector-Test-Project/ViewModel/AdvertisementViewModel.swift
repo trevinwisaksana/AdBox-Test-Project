@@ -74,10 +74,10 @@ final class AdvertisementViewModel {
     
     //---- Load Operation ----//
     
-    func loadAdvertisements(completion: @escaping (Error?) -> Void) {
+    func loadAdvertisements() {
         advertisementService.fetchAdvertisements() { (advertisements, error) in
             if let error = error {
-                completion(error)
+                // TODO: Error handle
                 return
             }
             
@@ -86,7 +86,6 @@ final class AdvertisementViewModel {
             }
             
             self.advertisements = advertisements
-            completion(nil)
         }
     }
     
@@ -104,7 +103,11 @@ final class AdvertisementViewModel {
     //---- Like Service ----//
     
     func fetchLikedAdvertisements() {
-        favoriteAdvertisements = likeService.retrieveFavoriteAds()
+        likeService.retrieveFavoriteAds(completion: { (favoriteAds, error) in
+            if error == nil {
+                self.favoriteAdvertisements = favoriteAds
+            }
+        })
     }
     
     func unlikeAdvertisement(at indexPath: IndexPath) {

@@ -42,14 +42,16 @@ struct CoreDataHelper {
         save()
     }
     
-    static func retrieveFavoriteAds() -> [FavoriteAd] {
-        do {
-            let fetchRequest = NSFetchRequest<FavoriteAd>(entityName: Constants.Entity.favoriteAd)
-            let results = try context.fetch(fetchRequest)
-            return results
-        } catch let error {
-            print("Could not fetch \(error.localizedDescription)")
-            return[]
+    static func retrieveFavoriteAds(completion: @escaping ([FavoriteAd], Error?) -> Void?) {
+        context.perform {
+            do {
+                let fetchRequest = NSFetchRequest<FavoriteAd>(entityName: Constants.Entity.favoriteAd)
+                let results = try context.fetch(fetchRequest)
+                completion(results, nil)
+            } catch let error {
+                print("Could not fetch \(error.localizedDescription)")
+                completion([FavoriteAd](), error)
+            }
         }
     }
     
