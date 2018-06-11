@@ -10,14 +10,12 @@
 		8087E933264C9C9EB5F4B918 /* Pods_Ad_Collector_Test_ProjectTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2466AA3FB016DF46F1E154D /* Pods_Ad_Collector_Test_ProjectTests.framework */; };
 		A4D3D9795658656DC5E16841 /* Pods_Ad_Collector_Test_Project.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98E143A1FDAB6171E3F8558D /* Pods_Ad_Collector_Test_Project.framework */; };
 		DD1473DC205CE5B700FFFD3C /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1473DB205CE5B600FFFD3C /* CoreDataHelper.swift */; };
-		DD1473E3205CFB4100FFFD3C /* FavoriteAdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1473E2205CFB4100FFFD3C /* FavoriteAdViewModel.swift */; };
 		DD1473E5205CFD1100FFFD3C /* FavoriteAdCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1473E4205CFD1100FFFD3C /* FavoriteAdCell.swift */; };
 		DD1473E7205CFD6B00FFFD3C /* FavoriteAdCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD1473E6205CFD6B00FFFD3C /* FavoriteAdCell.xib */; };
 		DD1473F0205D205E00FFFD3C /* LikeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1473EF205D205E00FFFD3C /* LikeService.swift */; };
 		DD1473F5205D52E000FFFD3C /* AdvertisementCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1473F4205D52E000FFFD3C /* AdvertisementCollectionView.swift */; };
 		DD1473F7205D65DB00FFFD3C /* AdvertisementsSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1473F6205D65DB00FFFD3C /* AdvertisementsSectionHeader.swift */; };
 		DD1473FE205D80CD00FFFD3C /* AdvertisementsSectionFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1473FD205D80CD00FFFD3C /* AdvertisementsSectionFooter.swift */; };
-		DD147402205D865000FFFD3C /* DisplaySectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD147401205D865000FFFD3C /* DisplaySectionViewModel.swift */; };
 		DD147406205D9A3000FFFD3C /* DisplaySectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD147405205D9A3000FFFD3C /* DisplaySectionHeader.swift */; };
 		DD147408205DACEF00FFFD3C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD147407205DACEF00FFFD3C /* Constants.swift */; };
 		DD14740D205DBB8F00FFFD3C /* ReachabilityHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD14740C205DBB8F00FFFD3C /* ReachabilityHelper.swift */; };
@@ -41,7 +39,6 @@
 		DDD3DB18205C8BAD000A29B3 /* AdvertisementsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD3DB17205C8BAD000A29B3 /* AdvertisementsViewController.swift */; };
 		DDD3DB20205C8FAB000A29B3 /* AdvertisementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD3DB1F205C8FAA000A29B3 /* AdvertisementViewModel.swift */; };
 		DDD3DB26205C90C8000A29B3 /* AdvertisementService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD3DB25205C90C8000A29B3 /* AdvertisementService.swift */; };
-		DDD3DB2B205CB75F000A29B3 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD3DB2A205CB75F000A29B3 /* FavoritesViewController.swift */; };
 		DDD3DB32205CB7D1000A29B3 /* Favorites.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDD3DB31205CB7D0000A29B3 /* Favorites.storyboard */; };
 		DDD3DB34205CB800000A29B3 /* Advertisements.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDD3DB33205CB800000A29B3 /* Advertisements.storyboard */; };
 /* End PBXBuildFile section */
@@ -64,14 +61,12 @@
 		B2466AA3FB016DF46F1E154D /* Pods_Ad_Collector_Test_ProjectTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Ad_Collector_Test_ProjectTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAE0997348B6C1E670219965 /* Pods-Ad-Collector-Test-Project.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ad-Collector-Test-Project.release.xcconfig"; path = "Pods/Target Support Files/Pods-Ad-Collector-Test-Project/Pods-Ad-Collector-Test-Project.release.xcconfig"; sourceTree = "<group>"; };
 		DD1473DB205CE5B600FFFD3C /* CoreDataHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
-		DD1473E2205CFB4100FFFD3C /* FavoriteAdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteAdViewModel.swift; sourceTree = "<group>"; };
 		DD1473E4205CFD1100FFFD3C /* FavoriteAdCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteAdCell.swift; sourceTree = "<group>"; };
 		DD1473E6205CFD6B00FFFD3C /* FavoriteAdCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FavoriteAdCell.xib; sourceTree = "<group>"; };
 		DD1473EF205D205E00FFFD3C /* LikeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeService.swift; sourceTree = "<group>"; };
 		DD1473F4205D52E000FFFD3C /* AdvertisementCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisementCollectionView.swift; sourceTree = "<group>"; };
 		DD1473F6205D65DB00FFFD3C /* AdvertisementsSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisementsSectionHeader.swift; sourceTree = "<group>"; };
 		DD1473FD205D80CD00FFFD3C /* AdvertisementsSectionFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisementsSectionFooter.swift; sourceTree = "<group>"; };
-		DD147401205D865000FFFD3C /* DisplaySectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySectionViewModel.swift; sourceTree = "<group>"; };
 		DD147405205D9A3000FFFD3C /* DisplaySectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySectionHeader.swift; sourceTree = "<group>"; };
 		DD147407205DACEF00FFFD3C /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		DD14740C205DBB8F00FFFD3C /* ReachabilityHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReachabilityHelper.swift; sourceTree = "<group>"; };
@@ -98,7 +93,6 @@
 		DDD3DB17205C8BAD000A29B3 /* AdvertisementsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisementsViewController.swift; sourceTree = "<group>"; };
 		DDD3DB1F205C8FAA000A29B3 /* AdvertisementViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisementViewModel.swift; sourceTree = "<group>"; };
 		DDD3DB25205C90C8000A29B3 /* AdvertisementService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertisementService.swift; sourceTree = "<group>"; };
-		DDD3DB2A205CB75F000A29B3 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		DDD3DB31205CB7D0000A29B3 /* Favorites.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Favorites.storyboard; sourceTree = "<group>"; };
 		DDD3DB33205CB800000A29B3 /* Advertisements.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Advertisements.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -235,7 +229,6 @@
 			isa = PBXGroup;
 			children = (
 				DDD3DB17205C8BAD000A29B3 /* AdvertisementsViewController.swift */,
-				DDD3DB2A205CB75F000A29B3 /* FavoritesViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -282,8 +275,6 @@
 			isa = PBXGroup;
 			children = (
 				DDD3DB1F205C8FAA000A29B3 /* AdvertisementViewModel.swift */,
-				DD1473E2205CFB4100FFFD3C /* FavoriteAdViewModel.swift */,
-				DD147401205D865000FFFD3C /* DisplaySectionViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -529,7 +520,6 @@
 				DD1473DC205CE5B700FFFD3C /* CoreDataHelper.swift in Sources */,
 				DD147408205DACEF00FFFD3C /* Constants.swift in Sources */,
 				DD14740D205DBB8F00FFFD3C /* ReachabilityHelper.swift in Sources */,
-				DDD3DB2B205CB75F000A29B3 /* FavoritesViewController.swift in Sources */,
 				DD1473F0205D205E00FFFD3C /* LikeService.swift in Sources */,
 				DD1473E5205CFD1100FFFD3C /* FavoriteAdCell.swift in Sources */,
 				DD147406205D9A3000FFFD3C /* DisplaySectionHeader.swift in Sources */,
@@ -537,8 +527,6 @@
 				DD5A9868205F71BC005C00D1 /* Int+Commas.swift in Sources */,
 				DDD3DB26205C90C8000A29B3 /* AdvertisementService.swift in Sources */,
 				DDD3DB18205C8BAD000A29B3 /* AdvertisementsViewController.swift in Sources */,
-				DD1473E3205CFB4100FFFD3C /* FavoriteAdViewModel.swift in Sources */,
-				DD147402205D865000FFFD3C /* DisplaySectionViewModel.swift in Sources */,
 				DDD3DB20205C8FAB000A29B3 /* AdvertisementViewModel.swift in Sources */,
 				DDD3DB0C205C8849000A29B3 /* Advertisement.swift in Sources */,
 				DDD3DB15205C8A03000A29B3 /* UITableView+Utility.swift in Sources */,
