@@ -40,6 +40,10 @@ final class AdvertisementViewModel {
         return content.isEmpty
     }
     
+    var favoriteAdsIsEmpty: Bool {
+        return favoriteAdvertisements.isEmpty
+    }
+    
     //---- Liked advertisement ----//
     
     fileprivate var favoriteAdvertisements = [FavoriteAd]() {
@@ -100,7 +104,7 @@ final class AdvertisementViewModel {
     //---- Like Service ----//
     
     func fetchLikedAdvertisements() {
-        favoriteAdvertisements = CoreDataHelper.retrieveFavoriteAds()
+        favoriteAdvertisements = likeService.retrieveFavoriteAds()
     }
     
     func removeLike(for ad: FavoriteAd) {

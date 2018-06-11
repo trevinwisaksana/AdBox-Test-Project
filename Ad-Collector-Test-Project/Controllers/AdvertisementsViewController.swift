@@ -26,6 +26,14 @@ final class AdvertisementsViewController: UIViewController {
     
     @IBOutlet weak var favoriteSwitch: UISwitch!
     
+    private let emptyContentMessageLabel: UILabel = {
+        let label = UILabel()
+        label.text = "There are currently no favorites."
+        label.textColor = UIColor.black
+        label.textAlignment = .center
+        return label
+    }()
+    
     //---- VC Lifecycle ----//
     
     override func viewDidLoad() {
@@ -38,8 +46,6 @@ final class AdvertisementsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        favoriteSwitch.isOn = false
-        
         dataSource.loadCachedAdvertisements { (_) in
             if self.activityView.isAnimating {
                 self.activityView.stopAnimating()
@@ -69,16 +75,8 @@ final class AdvertisementsViewController: UIViewController {
     
     private func configureCollectionView() {
         collectionView.register(AdvertisementCell.self)
-        configureCollectionViewLayout()
         refreshControl.addTarget(self, action: #selector(reloadTimeline), for: .valueChanged)
         collectionView.addSubview(refreshControl)
-    }
-    
-    private func configureCollectionViewLayout() {
-        if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowLayout.estimatedItemSize = CGSize(width: 180, height: 270)
-            flowLayout.itemSize = CGSize(width: 180, height: 270)
-        }
     }
     
     @objc
@@ -123,11 +121,24 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
         if dataSource.switchToggleIsOn {
+            
+            if dataSource.favoriteAdsIsEmpty {
+                let frame = CGRect(x: 0, y: 0, width: collectionView.bounds.size.width, height: collectionView.bounds.size.height)
+                emptyContentMessageLabel.frame = frame
+                emptyContentMessageLabel.center = collectionView.center
+                collectionView.backgroundView = emptyContentMessageLabel
+            } else {
+                collectionView.backgroundView = nil
+            }
+            
             return dataSource.numberOfFavoriteAds
+            
         } else {
             return dataSource.numberOfContents
         }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -201,6 +212,8 @@ extension AdvertisementsViewController: Likeable {
         } else {
             dataSource.likeAdvertisement(for: adLiked)
         }
+        
+        refresh()
     }
     
 }

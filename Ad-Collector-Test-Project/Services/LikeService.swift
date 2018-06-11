@@ -37,4 +37,8 @@ class LikeService {
         }
     }
     
+    func retrieveFavoriteAds() -> [FavoriteAd] {
+        return CoreDataHelper.retrieveFavoriteAds()
+    }
+    
 }
