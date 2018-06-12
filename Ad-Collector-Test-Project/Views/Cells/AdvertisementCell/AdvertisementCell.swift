@@ -26,34 +26,20 @@ final class AdvertisementCell: UICollectionViewCell {
     weak var delegate: Likeable?
     private var adKey: String?
     
-    // TODO: Use one data model
     func configure(_ advertisement: Advertisement) {
-        
-        // TODO: Remove persistence logic from view layer
-        if let isFavorite = UserDefaults.standard.object(forKey: "\(advertisement.key)") as! Bool? {
-            likeButton.isSelected = isFavorite
-        }
-        
+        likeButton.isSelected = advertisement.isLiked
         adKey = advertisement.key
         titleLabel.text = advertisement.title
         locationLabel.text = advertisement.location
         priceLabel.text = Int(advertisement.price).truncattedStyleString
         
-        configureImage(withURL: advertisement.photoURL)
-    }
-    
-    // TODO: Redundant because of two data models
-    func configure(_ favoriteAd: FavoriteAd) {  
-        adKey = favoriteAd.key
-        likeButton.isSelected = favoriteAd.isLiked
-        titleLabel.text = favoriteAd.title
-        locationLabel.text = favoriteAd.location
+        priceLabelContainerView.roundCorner(radius: 5)
         
-        priceLabel.text = Int(favoriteAd.price).truncattedStyleString
-        
-        if let posterURL = favoriteAd.posterURL {
+        if let posterURL = advertisement.posterURL {
             configureImage(withURL: posterURL)
         }
+        
+        configureDoubleTapGesture()
     }
     
     private func configureImage(withURL url: String) {
@@ -62,25 +48,24 @@ final class AdvertisementCell: UICollectionViewCell {
         let placeholderImage = UIImage(named: Constants.Image.placeholderImage)
         photoImageView.sd_setImage(with: imageURL, placeholderImage: placeholderImage, options: .scaleDownLargeImages, completed: nil)
         
-        photoImageView.layer.cornerRadius = 5
         photoContainerView.layer.cornerRadius = 5
-        priceLabelContainerView.layer.cornerRadius = 5
     }
     
     @IBAction func didTapLikeButton(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
-        
-        // TODO: Remove persistence logic from view layer
-        if let key = adKey {
-            UserDefaults.standard.set(sender.isSelected, forKey: "\(key)")
-        }
-        
         delegate?.didTapLikeButton(sender, on: self)
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        likeButton.isSelected = false
+    private func configureDoubleTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didDoubleTapPhotoImageView(_:)))
+        tapGesture.numberOfTapsRequired = 2
+        photoImageView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc
+    func didDoubleTapPhotoImageView(_ sender: UITapGestureRecognizer) {
+        likeButton.isSelected = !likeButton.isSelected
+        delegate?.didTapLikeButton(UIButton(), on: self)
     }
     
 }

@@ -22,7 +22,10 @@ extension Int {
         numberFormatter.numberStyle = NumberFormatter.Style.decimal
         
         if self >= 100000 {
-            return "\(self / 1000),-"
+            
+            let value = numberFormatter.string(from: NSNumber(value: self / 1000)) ?? String(self)
+            
+            return "\(value)" + ",-"
         } else {
             let formattedNumber = numberFormatter.string(from: NSNumber(value: self))
             return formattedNumber ?? String(self)

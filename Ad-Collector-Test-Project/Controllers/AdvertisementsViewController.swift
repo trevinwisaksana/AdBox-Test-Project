@@ -13,7 +13,7 @@ final class AdvertisementsViewController: UIViewController {
     
     //---- Properties ----//
     
-    let dataSource = AdvertisementViewModel(adService: AdvertisementService(), likeService: LikeService())
+    let viewModel = AdvertisementViewModel(adService: AdvertisementService(), likeService: LikeService())
     
     private let activityView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     private let reachabiltyHelper = ReachabilityHelper()
@@ -23,16 +23,7 @@ final class AdvertisementsViewController: UIViewController {
     //---- Subivews ----//
     
     @IBOutlet weak var collectionView: AdvertisementCollectionView!
-    
     @IBOutlet weak var favoriteSwitch: UISwitch!
-    
-    private let emptyContentMessageLabel: UILabel = {
-        let label = UILabel()
-        label.text = "There are currently no favorites."
-        label.textColor = UIColor.black
-        label.textAlignment = .center
-        return label
-    }()
     
     //---- VC Lifecycle ----//
     
@@ -46,7 +37,7 @@ final class AdvertisementsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        dataSource.loadAdvertisements()
+        viewModel.loadCachedAdvertisements()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -57,7 +48,7 @@ final class AdvertisementsViewController: UIViewController {
     //---- Data Source ----//
     
     private func configureDataSource() {
-        dataSource.delegate = self
+        viewModel.delegate = self
     }
     
     //---- Reachability ----//
@@ -77,10 +68,10 @@ final class AdvertisementsViewController: UIViewController {
     
     @objc
     private func reloadTimeline() {
-        if dataSource.isDisplayingFavorites {
-            dataSource.fetchLikedAdvertisements()
+        if viewModel.isDisplayingFavorites {
+            viewModel.fetchFavoriteAdvertisements()
         } else {
-            dataSource.loadAdvertisements()
+            viewModel.loadAdvertisements()
         }
     }
     
@@ -88,10 +79,10 @@ final class AdvertisementsViewController: UIViewController {
     
     @IBAction func didToggleSwitch(_ sender: UISwitch) {
         if sender.isOn {
-            dataSource.isDisplayingFavorites = true
-            dataSource.fetchLikedAdvertisements()
+            viewModel.isDisplayingFavorites = true
+            viewModel.fetchFavoriteAdvertisements()
         } else {
-            dataSource.isDisplayingFavorites = false
+            viewModel.isDisplayingFavorites = false
         }
         
         refresh()
@@ -115,45 +106,36 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if dataSource.isDisplayingFavorites {
-            
-            if dataSource.favoriteAdsIsEmpty {
-                // TODO: This method is called many times, move this implementation
-                let frame = CGRect(x: 0, y: 0, width: collectionView.bounds.size.width, height: collectionView.bounds.size.height)
-                emptyContentMessageLabel.frame = frame
-                emptyContentMessageLabel.center = collectionView.center
-                collectionView.backgroundView = emptyContentMessageLabel
-            } else {
-                collectionView.backgroundView = nil
-            }
-            
-            return dataSource.numberOfFavoriteAds
-            
+        
+        if viewModel.isDisplayingFavorites && viewModel.likedAdvertisementIsEmpty {
+            collectionView.setEmptyMessage()
         } else {
-            collectionView.backgroundView = nil
-            return dataSource.numberOfContents
+            collectionView.restore()
         }
+        
+        if viewModel.isDisplayingFavorites {
+            return viewModel.favoriteAdvertisementCount
+        } else {
+            return viewModel.advertisementCount
+        }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if dataSource.isDisplayingFavorites {
-            let favoriteAd = dataSource.favoriteAd(atIndex: indexPath.row)
-            
-            let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.delegate = self
-            cell.configure(favoriteAd)
-            
-            return cell
-            
+        
+        var advertisement: Advertisement
+        
+        if viewModel.isDisplayingFavorites {
+            advertisement = viewModel.likedAdvertisement(atIndex: indexPath.row)
         } else {
-            let advertisement = dataSource.contentData(atIndex: indexPath.row)
-            
-            let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.delegate = self
-            cell.configure(advertisement)
-            
-            return cell
+            advertisement = viewModel.advertisement(atIndex: indexPath.row)
         }
+        
+        let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
+        cell.delegate = self
+        cell.configure(advertisement)
+        
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -174,18 +156,27 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
 
 }
 
-extension AdvertisementsViewController: AdvertisementDataSourceDelegate {
+extension AdvertisementsViewController: AdvertisementViewModelDelegate {
     
     func refresh() {
-        if self.refreshControl.isRefreshing {
-            self.refreshControl.endRefreshing()
+        DispatchQueue.main.async {
+            if self.refreshControl.isRefreshing {
+                self.refreshControl.endRefreshing()
+            }
+            
+            if self.activityView.isAnimating {
+                self.activityView.stopAnimating()
+            }
+            
+            self.collectionView.reloadData()
         }
-        
-        if self.activityView.isAnimating {
-            self.activityView.stopAnimating()
+    }
+    
+    func showError(message: ErrorResults) {
+        switch message {
+        case .failedToFetchData:
+            print("Failed to fetch data.")
         }
-        
-        collectionView.reloadData()
     }
     
 }
@@ -193,22 +184,11 @@ extension AdvertisementsViewController: AdvertisementDataSourceDelegate {
 extension AdvertisementsViewController: Likeable {
     
     func didTapLikeButton(_ likeButton: UIButton, on cell: AdvertisementCell) {
-        // TODO: Show spinner if loading or cancel the fetch request
-//        likeButton.isUserInteractionEnabled = false
-        
         guard let indexPath = collectionView.indexPath(for: cell) else {
             return
         }
-    
-        dataSource.setLikeForAdvertisement(at: indexPath)
         
-        if dataSource.isDisplayingFavorites {
-            refresh()
-        }
-        
-//        defer {
-//            likeButton.isUserInteractionEnabled = true
-//        }
+        viewModel.updateLikeStatus(forItemAt: indexPath)
     }
     
 }
@@ -236,7 +216,7 @@ extension AdvertisementsViewController: NetworkStatusListener {
     private func addAlertControllerTapGesture() {
         let selector = #selector(alertControllerTapGestureHandler)
         let tapGesture = UITapGestureRecognizer(target: self, action: selector)
-        let alertControllerSubview = alertController.view.superview?.subviews[1]
+        let alertControllerSubview = alertController.view.superview?.subviews.first
         alertControllerSubview?.isUserInteractionEnabled = true
         alertControllerSubview?.addGestureRecognizer(tapGesture)
     }
