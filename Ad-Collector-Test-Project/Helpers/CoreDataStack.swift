@@ -10,9 +10,10 @@ import Foundation
 import UIKit
 import CoreData
 
-struct CoreDataHelper {
+final class CoreDataStack {
+    static let shared = CoreDataStack()
     
-    static let context: NSManagedObjectContext = {
+    lazy var context: NSManagedObjectContext = {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             fatalError()
         }
@@ -23,13 +24,13 @@ struct CoreDataHelper {
         return context
     }()
     
-    static func newFavoriteAd() -> FavoriteAd {
+    func newFavoriteAd() -> FavoriteAd {
         let favoriteAd = NSEntityDescription.insertNewObject(forEntityName: Constants.Entity.favoriteAd, into: context) as! FavoriteAd
         
         return favoriteAd
     }
     
-    static func save()  {
+    func save()  {
         do {
             try context.save()
         } catch let error {
@@ -37,16 +38,16 @@ struct CoreDataHelper {
         }
     }
     
-    static func delete(ad: FavoriteAd){
-        context.delete(ad)
+    func delete(_ adveritsement: FavoriteAd){
+        context.delete(adveritsement)
         save()
     }
     
-    static func retrieveFavoriteAds(completion: @escaping ([FavoriteAd], Error?) -> Void?) {
+    func retrieveFavoriteAds(completion: @escaping ([FavoriteAd], Error?) -> Void?) {
         context.perform {
             do {
                 let fetchRequest = NSFetchRequest<FavoriteAd>(entityName: Constants.Entity.favoriteAd)
-                let results = try context.fetch(fetchRequest)
+                let results = try self.context.fetch(fetchRequest)
                 completion(results, nil)
             } catch let error {
                 print("Could not fetch \(error.localizedDescription)")
@@ -55,7 +56,7 @@ struct CoreDataHelper {
         }
     }
     
-    static func fetchSelectedFavoriteAd(withKey key: String) -> FavoriteAd? {
+    func fetchSelectedFavoriteAd(withKey key: String) -> FavoriteAd? {
         do {
             let fetchRequest = NSFetchRequest<FavoriteAd>(entityName: Constants.Entity.favoriteAd)
             let results = try context.fetch(fetchRequest)

@@ -110,15 +110,38 @@ final class AdvertisementViewModel {
         })
     }
     
+    func setLikeForAdvertisement(at indexPath: IndexPath) {
+        
+        var advertisementKey: String?
+        
+        if switchToggleIsOn {
+            advertisementKey = favoriteAd(atIndex: indexPath.row).key
+        } else {
+            advertisementKey = contentData(atIndex: indexPath.row).key
+        }
+        
+        guard let key = advertisementKey else {
+            return
+        }
+        
+        if let _ = CoreDataStack.shared.fetchSelectedFavoriteAd(withKey: key) {
+            unlikeAdvertisement(at: indexPath)
+        } else {
+            
+            likeAdvertisement(at: indexPath)
+        }
+        
+    }
+    
     func unlikeAdvertisement(at indexPath: IndexPath) {
         let ad = favoriteAdvertisements[indexPath.row]
-        likeService.remove(ad)
+        likeService.unlike(ad)
         favoriteAdvertisements.remove(at: indexPath.row)
     }
     
     func likeAdvertisement(at indexPath: IndexPath) {
         let ad = advertisements[indexPath.row]
-        likeService.saveToFavorite(ad)
+        likeService.like(ad)
     }
     
 }

@@ -197,24 +197,8 @@ extension AdvertisementsViewController: Likeable {
         guard let indexPath = collectionView.indexPath(for: cell) else {
             return
         }
-        
-        var advertisementKey: String?
-        
-        if dataSource.switchToggleIsOn {
-            advertisementKey = dataSource.favoriteAd(atIndex: indexPath.row).key
-        } else {
-            advertisementKey = dataSource.contentData(atIndex: indexPath.row).key
-        }
-        
-        guard let key = advertisementKey else {
-            return
-        }
-        
-        if let _ = CoreDataHelper.fetchSelectedFavoriteAd(withKey: key) {
-            dataSource.unlikeAdvertisement(at: indexPath)
-        } else {
-            dataSource.likeAdvertisement(at: indexPath)
-        }
+    
+        dataSource.setLikeForAdvertisement(at: indexPath)
         
         if dataSource.switchToggleIsOn {
             refresh()
