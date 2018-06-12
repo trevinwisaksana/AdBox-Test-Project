@@ -39,14 +39,7 @@ final class AdvertisementsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        dataSource.loadCachedAdvertisements { [unowned self] (_) in
-            
-            DispatchQueue.main.async {
-                if self.activityView.isAnimating {
-                    self.activityView.stopAnimating()
-                }
-            }
-        }
+        dataSource.loadCachedAdvertisements()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -80,13 +73,7 @@ final class AdvertisementsViewController: UIViewController {
         if dataSource.isDisplayingFavorites {
             dataSource.fetchFavoriteAdvertisements()
         } else {
-            dataSource.loadAdvertisements { (error) in
-                DispatchQueue.main.async {
-                    if self.refreshControl.isRefreshing {
-                        self.refreshControl.endRefreshing()
-                    }
-                }
-            }
+            dataSource.loadAdvertisements()
         }
     }
     
@@ -122,18 +109,15 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if dataSource.isDisplayingFavorites {
-            
-            if dataSource.likedAdvertisementIsEmpty {
-                collectionView.setEmptyMessage()
-            } else {
-                collectionView.restore()
-            }
-            
-            return dataSource.favoriteAdvertisementCount
-            
+        if dataSource.isDisplayingFavorites && dataSource.likedAdvertisementIsEmpty {
+            collectionView.setEmptyMessage()
         } else {
-            collectionView.backgroundView = nil
+            collectionView.restore()
+        }
+        
+        if dataSource.isDisplayingFavorites {
+            return dataSource.favoriteAdvertisementCount
+        } else {
             return dataSource.advertisementCount
         }
         
@@ -165,7 +149,6 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        // TODO: Fix animation
         self.collectionView.animateCellEntry(for: cell, at: indexPath)
     }
     
@@ -179,6 +162,14 @@ extension AdvertisementsViewController: AdvertisementDataSourceDelegate {
     
     func refresh() {
         DispatchQueue.main.async {
+            if self.refreshControl.isRefreshing {
+                self.refreshControl.endRefreshing()
+            }
+            
+            if self.activityView.isAnimating {
+                self.activityView.stopAnimating()
+            }
+            
             self.collectionView.reloadData()
         }
     }
@@ -188,7 +179,6 @@ extension AdvertisementsViewController: AdvertisementDataSourceDelegate {
 extension AdvertisementsViewController: Likeable {
     
     func didTapLikeButton(_ likeButton: UIButton, on cell: AdvertisementCell) {
-        // TODO: Show spinner if loading or cancel the fetch request
         guard let indexPath = collectionView.indexPath(for: cell) else {
             return
         }

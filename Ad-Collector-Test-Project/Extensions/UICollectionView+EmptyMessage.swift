@@ -1,5 +1,5 @@
 //
-//  UICollectionView+ErrorMessage.swift
+//  UICollectionView+EmptyMessage.swift
 //  Ad-Collector-Test-Project
 //
 //  Created by Trevin Wisaksana on 12/06/2018.

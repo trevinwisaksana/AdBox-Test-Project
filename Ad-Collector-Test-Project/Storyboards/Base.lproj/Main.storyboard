@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -18,23 +19,77 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="ghq-l0-gRp" kind="relationship" relationship="rootViewController" id="Ujd-JS-g19"/>
+                        <segue destination="IIM-3j-dmY" kind="relationship" relationship="rootViewController" id="VOP-38-3tF"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="m2R-SI-o88" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-804" y="565"/>
         </scene>
-        <!--Advertisements-->
-        <scene sceneID="8Xu-TQ-Tdr">
+        <!--Advertisements View Controller-->
+        <scene sceneID="LH3-99-ov3">
             <objects>
-                <viewControllerPlaceholder storyboardName="Advertisements" id="ghq-l0-gRp" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="xki-iZ-Fz9"/>
-                    <navigationItem key="navigationItem" id="mHj-C1-RD5"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ZfU-vh-peO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="IIM-3j-dmY" customClass="AdvertisementsViewController" customModule="Ad_Collector_Test_Project" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="QbK-Ba-OgI">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="EBb-F3-ShX" customClass="AdvertisementCollectionView" customModule="Ad_Collector_Test_Project" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="0.0" id="8az-Sb-yOS">
+                                    <size key="itemSize" width="205" height="230"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                                <connections>
+                                    <outlet property="dataSource" destination="IIM-3j-dmY" id="R3p-0h-xii"/>
+                                    <outlet property="delegate" destination="IIM-3j-dmY" id="SaS-ZW-hrI"/>
+                                    <outlet property="prefetchDataSource" destination="IIM-3j-dmY" id="nzS-nd-Z2G"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="EBb-F3-ShX" firstAttribute="bottom" secondItem="MuK-qS-wJa" secondAttribute="bottom" id="4cD-5h-G6a"/>
+                            <constraint firstItem="EBb-F3-ShX" firstAttribute="leading" secondItem="MuK-qS-wJa" secondAttribute="leading" id="Qpa-AE-wha"/>
+                            <constraint firstItem="EBb-F3-ShX" firstAttribute="trailing" secondItem="MuK-qS-wJa" secondAttribute="trailing" id="nGG-wH-OOR"/>
+                            <constraint firstItem="EBb-F3-ShX" firstAttribute="top" secondItem="MuK-qS-wJa" secondAttribute="top" id="xPb-66-Zzn"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="MuK-qS-wJa"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="rA2-vc-82v">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="6pI-wG-ax8">
+                            <button key="customView" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="EJR-Z7-Bi7">
+                                <rect key="frame" x="16" y="5" width="113" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
+                                <state key="normal" title="Kun favoritter">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="PXu-jE-G7g">
+                            <switch key="customView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="LaY-AF-E3G">
+                                <rect key="frame" x="308" y="6.5" width="51" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="didToggleSwitch:" destination="IIM-3j-dmY" eventType="valueChanged" id="SCA-lm-0es"/>
+                                </connections>
+                            </switch>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="collectionView" destination="EBb-F3-ShX" id="dNA-OW-mb7"/>
+                        <outlet property="favoriteSwitch" destination="LaY-AF-E3G" id="BAc-yr-I9S"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="U8h-Y8-5lq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-189" y="564"/>
+            <point key="canvasLocation" x="62" y="564"/>
         </scene>
     </scenes>
 </document>

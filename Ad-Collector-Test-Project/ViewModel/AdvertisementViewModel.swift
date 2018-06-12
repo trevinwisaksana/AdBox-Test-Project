@@ -74,26 +74,25 @@ final class AdvertisementViewModel {
     
     //---- Load Operation ----//
     
-    func loadAdvertisements(completion: @escaping (Error?) -> Void) {
+    func loadAdvertisements() {
         advertisementService.updateAdvertisements() { (advertisements, error) in
             if let error = error {
-                completion(error)
+                // TODO: Error handle
                 return
             }
             
             self.advertisements = advertisements
-            completion(nil)
         }
     }
     
-    func loadCachedAdvertisements(completion: @escaping (Error?) -> Void) {
+    func loadCachedAdvertisements() {
         advertisementService.retrieveCachedAds { (advertisements, error) in
             if let error = error {
-                completion(error)
+                // TODO: Error handle
+                return
             }
             
             self.advertisements = advertisements
-            completion(nil)
         }
     }
     

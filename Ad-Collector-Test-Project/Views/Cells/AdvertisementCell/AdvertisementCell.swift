@@ -26,7 +26,6 @@ final class AdvertisementCell: UICollectionViewCell {
     weak var delegate: Likeable?
     private var adKey: String?
     
-    // TODO: Use one data model
     func configure(_ advertisement: Advertisement) {
         likeButton.isSelected = advertisement.isLiked
         adKey = advertisement.key
@@ -34,7 +33,7 @@ final class AdvertisementCell: UICollectionViewCell {
         locationLabel.text = advertisement.location
         priceLabel.text = Int(advertisement.price).truncattedStyleString
         
-        priceLabelContainerView.roundCorners([.topRight], radius: 5)
+        priceLabelContainerView.roundCorner(radius: 5)
         
         if let posterURL = advertisement.posterURL {
             configureImage(withURL: posterURL)
@@ -52,18 +51,7 @@ final class AdvertisementCell: UICollectionViewCell {
     
     @IBAction func didTapLikeButton(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
-        
-        // TODO: Remove persistence logic from view layer
-        if let key = adKey {
-            UserDefaults.standard.set(sender.isSelected, forKey: "\(key)")
-        }
-        
         delegate?.didTapLikeButton(sender, on: self)
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        likeButton.isSelected = false
     }
     
 }

@@ -24,7 +24,7 @@
                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6yH-2o-KMW">
                         <rect key="frame" x="5" y="5" width="170" height="170"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HNm-VC-cD0">
+                            <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HNm-VC-cD0">
                                 <rect key="frame" x="0.0" y="0.0" width="170" height="170"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p5w-8c-stE">
@@ -37,7 +37,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="0.84694102112676062" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.25574133031726498" green="0.25574133031726498" blue="0.25574133031726498" alpha="0.84694102112676062" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="up9-Oe-hcT" firstAttribute="top" secondItem="p5w-8c-stE" secondAttribute="top" constant="5" id="Ysm-Bq-pez"/>
                                     <constraint firstAttribute="bottom" secondItem="up9-Oe-hcT" secondAttribute="bottom" constant="5" id="oSy-hw-Rvg"/>
