@@ -10,11 +10,7 @@ import Foundation
 
 protocol AdvertisementViewModelDelegate: class {
     func refresh()
-    func showError(message: ErrorResults)
-}
-
-enum ErrorResults {
-    case failedToFetchData
+    func showError(message: ErrorType)
 }
 
 final class AdvertisementViewModel {
