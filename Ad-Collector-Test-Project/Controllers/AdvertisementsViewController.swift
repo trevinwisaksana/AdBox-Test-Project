@@ -140,7 +140,6 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
             
             let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
             cell.delegate = self
-            
             cell.configure(favoriteAd)
             
             return cell
@@ -199,17 +198,31 @@ extension AdvertisementsViewController: Likeable {
             return
         }
         
-        let adLiked = dataSource.contentData(atIndex: indexPath.row)
+        var advertisementKey: String?
         
-        if let _ = CoreDataHelper.fetchSelectedFavoriteAd(withKey: adLiked.key) {
+        if dataSource.switchToggleIsOn {
+            advertisementKey = dataSource.favoriteAd(atIndex: indexPath.row).key
+        } else {
+            advertisementKey = dataSource.contentData(atIndex: indexPath.row).key
+        }
+        
+        guard let key = advertisementKey else {
+            return
+        }
+        
+        if let _ = CoreDataHelper.fetchSelectedFavoriteAd(withKey: key) {
             dataSource.unlikeAdvertisement(at: indexPath)
         } else {
             dataSource.likeAdvertisement(at: indexPath)
         }
         
-        refresh()
+        if dataSource.switchToggleIsOn {
+            refresh()
+        }
         
-        likeButton.isUserInteractionEnabled = true
+        defer {
+            likeButton.isUserInteractionEnabled = true
+        }
     }
     
 }

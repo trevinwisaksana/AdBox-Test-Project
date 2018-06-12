@@ -29,6 +29,7 @@ final class AdvertisementCell: UICollectionViewCell {
     weak var delegate: Likeable?
     private var adKey: String?
     
+    // TODO: Use one data model
     func configure(_ advertisement: Advertisement) {
         if let isFavorite = UserDefaults.standard.object(forKey: "\(advertisement.key)") as! Bool? {
             likeButton.isSelected = isFavorite
