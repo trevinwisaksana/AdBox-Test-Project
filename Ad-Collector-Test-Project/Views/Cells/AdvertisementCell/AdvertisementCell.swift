@@ -38,6 +38,8 @@ final class AdvertisementCell: UICollectionViewCell {
         if let posterURL = advertisement.posterURL {
             configureImage(withURL: posterURL)
         }
+        
+        configureDoubleTapGesture()
     }
     
     private func configureImage(withURL url: String) {
@@ -52,6 +54,18 @@ final class AdvertisementCell: UICollectionViewCell {
     @IBAction func didTapLikeButton(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
         delegate?.didTapLikeButton(sender, on: self)
+    }
+    
+    private func configureDoubleTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didDoubleTapPhotoImageView(_:)))
+        tapGesture.numberOfTapsRequired = 2
+        photoImageView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc
+    func didDoubleTapPhotoImageView(_ sender: UITapGestureRecognizer) {
+        likeButton.isSelected = !likeButton.isSelected
+        delegate?.didTapLikeButton(UIButton(), on: self)
     }
     
 }

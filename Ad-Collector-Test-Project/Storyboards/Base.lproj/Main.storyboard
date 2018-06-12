@@ -30,7 +30,7 @@
         <scene sceneID="LH3-99-ov3">
             <objects>
                 <viewController id="IIM-3j-dmY" customClass="AdvertisementsViewController" customModule="Ad_Collector_Test_Project" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="QbK-Ba-OgI">
+                    <view key="view" contentMode="scaleToFill" id="QbK-Ba-OgI" customClass="AdvertisementMainView" customModule="Ad_Collector_Test_Project" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>

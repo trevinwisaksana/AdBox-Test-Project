@@ -13,7 +13,7 @@ final class AdvertisementsViewController: UIViewController {
     
     //---- Properties ----//
     
-    let dataSource = AdvertisementViewModel(adService: AdvertisementService(), likeService: LikeService())
+    let viewModel = AdvertisementViewModel(adService: AdvertisementService(), likeService: LikeService())
     
     private let activityView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     private let reachabiltyHelper = ReachabilityHelper()
@@ -23,9 +23,7 @@ final class AdvertisementsViewController: UIViewController {
     //---- Subivews ----//
     
     @IBOutlet weak var collectionView: AdvertisementCollectionView!
-    
     @IBOutlet weak var favoriteSwitch: UISwitch!
-    
     
     //---- VC Lifecycle ----//
     
@@ -39,7 +37,7 @@ final class AdvertisementsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        dataSource.loadCachedAdvertisements()
+        viewModel.loadCachedAdvertisements()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -50,7 +48,7 @@ final class AdvertisementsViewController: UIViewController {
     //---- Data Source ----//
     
     private func configureDataSource() {
-        dataSource.delegate = self
+        viewModel.delegate = self
     }
     
     //---- Reachability ----//
@@ -70,10 +68,10 @@ final class AdvertisementsViewController: UIViewController {
     
     @objc
     private func reloadTimeline() {
-        if dataSource.isDisplayingFavorites {
-            dataSource.fetchFavoriteAdvertisements()
+        if viewModel.isDisplayingFavorites {
+            viewModel.fetchFavoriteAdvertisements()
         } else {
-            dataSource.loadAdvertisements()
+            viewModel.loadAdvertisements()
         }
     }
     
@@ -81,10 +79,10 @@ final class AdvertisementsViewController: UIViewController {
     
     @IBAction func didToggleSwitch(_ sender: UISwitch) {
         if sender.isOn {
-            dataSource.isDisplayingFavorites = true
-            dataSource.fetchFavoriteAdvertisements()
+            viewModel.isDisplayingFavorites = true
+            viewModel.fetchFavoriteAdvertisements()
         } else {
-            dataSource.isDisplayingFavorites = false
+            viewModel.isDisplayingFavorites = false
         }
         
         refresh()
@@ -109,16 +107,16 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if dataSource.isDisplayingFavorites && dataSource.likedAdvertisementIsEmpty {
+        if viewModel.isDisplayingFavorites && viewModel.likedAdvertisementIsEmpty {
             collectionView.setEmptyMessage()
         } else {
             collectionView.restore()
         }
         
-        if dataSource.isDisplayingFavorites {
-            return dataSource.favoriteAdvertisementCount
+        if viewModel.isDisplayingFavorites {
+            return viewModel.favoriteAdvertisementCount
         } else {
-            return dataSource.advertisementCount
+            return viewModel.advertisementCount
         }
         
     }
@@ -127,10 +125,10 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
         
         var advertisement: Advertisement
         
-        if dataSource.isDisplayingFavorites {
-            advertisement = dataSource.likedAdvertisement(atIndex: indexPath.row)
+        if viewModel.isDisplayingFavorites {
+            advertisement = viewModel.likedAdvertisement(atIndex: indexPath.row)
         } else {
-            advertisement = dataSource.advertisement(atIndex: indexPath.row)
+            advertisement = viewModel.advertisement(atIndex: indexPath.row)
         }
         
         let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
@@ -158,7 +156,7 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
 
 }
 
-extension AdvertisementsViewController: AdvertisementDataSourceDelegate {
+extension AdvertisementsViewController: AdvertisementViewModelDelegate {
     
     func refresh() {
         DispatchQueue.main.async {
@@ -174,6 +172,13 @@ extension AdvertisementsViewController: AdvertisementDataSourceDelegate {
         }
     }
     
+    func showError(message: ErrorResults) {
+        switch message {
+        case .failedToFetchData:
+            print("Failed to fetch data.")
+        }
+    }
+    
 }
 
 extension AdvertisementsViewController: Likeable {
@@ -183,7 +188,7 @@ extension AdvertisementsViewController: Likeable {
             return
         }
         
-        dataSource.updateLikeStatus(forItemAt: indexPath)
+        viewModel.updateLikeStatus(forItemAt: indexPath)
     }
     
 }
@@ -211,7 +216,7 @@ extension AdvertisementsViewController: NetworkStatusListener {
     private func addAlertControllerTapGesture() {
         let selector = #selector(alertControllerTapGestureHandler)
         let tapGesture = UITapGestureRecognizer(target: self, action: selector)
-        let alertControllerSubview = alertController.view.superview?.subviews[1]
+        let alertControllerSubview = alertController.view.superview?.subviews.first
         alertControllerSubview?.isUserInteractionEnabled = true
         alertControllerSubview?.addGestureRecognizer(tapGesture)
     }

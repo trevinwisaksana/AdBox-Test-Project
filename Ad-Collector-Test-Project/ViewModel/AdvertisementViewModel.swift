@@ -8,20 +8,27 @@
 
 import Foundation
 
-protocol AdvertisementDataSourceDelegate: class {
+protocol AdvertisementViewModelDelegate: class {
     func refresh()
+    func showError(message: ErrorResults)
+}
+
+enum ErrorResults {
+    case failedToFetchData
 }
 
 final class AdvertisementViewModel {
     
     //---- Properties ----//
     
-    weak var delegate: AdvertisementDataSourceDelegate?
+    weak var delegate: AdvertisementViewModelDelegate?
     
     var advertisementService: AdvertisementService
     var likeService: LikeService
     
     var isDisplayingFavorites = false
+    
+    var onErrorHandling: ((Error) -> Void)?
     
     //---- Initializer ----//
     
@@ -76,8 +83,8 @@ final class AdvertisementViewModel {
     
     func loadAdvertisements() {
         advertisementService.updateAdvertisements() { (advertisements, error) in
-            if let error = error {
-                // TODO: Error handle
+            if let _ = error {
+                self.delegate?.showError(message: .failedToFetchData)
                 return
             }
             
@@ -87,8 +94,8 @@ final class AdvertisementViewModel {
     
     func loadCachedAdvertisements() {
         advertisementService.retrieveCachedAds { (advertisements, error) in
-            if let error = error {
-                // TODO: Error handle
+            if let _ = error {
+                self.delegate?.showError(message: .failedToFetchData)
                 return
             }
             
@@ -118,9 +125,9 @@ final class AdvertisementViewModel {
     
     func fetchFavoriteAdvertisements() {
         advertisementService.retrieveFavoriteAdvertisements { (advertisements, error) in
-            if let error = error {
-                // TODO: Error handling
-                print("\(error.localizedDescription)")
+            if let _ = error {
+                self.delegate?.showError(message: .failedToFetchData)
+                return
             } else {
                 self.likedAdvertisements = advertisements
             }

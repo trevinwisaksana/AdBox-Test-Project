@@ -16,7 +16,6 @@ final class AdvertisementCollectionView: UICollectionView {
     
     //---- Animation ----//
     
-    // TODO: Fix bug, only animates one
     func animateCellEntry(for cell: UICollectionViewCell, at indexPath: IndexPath) {
         if !animatedCellIndexPath.contains(indexPath) {
             

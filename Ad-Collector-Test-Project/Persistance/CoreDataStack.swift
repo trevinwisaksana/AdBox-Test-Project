@@ -84,31 +84,6 @@ struct CoreDataStack {
     
     //---- Purge Data ----//
     
-    // TODO: Use this
-    func purgeOutdatedData(success: @escaping SuccessOperationClosure) {
-        let purgeDate = Date().addingTimeInterval(-60 * 60 * 24) // One day
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: Constants.Entity.advertisement)
-        
-        // Only purge outdated data that is not liked
-        let isLikedPredicate = NSPredicate(format: "isLiked == NO")
-        let datePredicate = NSPredicate(format: "timestamp < %@", purgeDate as NSDate)
-        fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [isLikedPredicate, datePredicate])
-        
-        fetchRequest.includesPropertyValues = false
-        
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        
-        privateContext.perform {
-            do {
-                try self.persistentStoreCoordinator.execute(deleteRequest, with: self.managedContext)
-                success(true)
-            } catch {
-                success(false)
-            }
-        }
-       
-    }
-    
     func purgeData(success: @escaping SuccessOperationClosure) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: Constants.Entity.advertisement)
         // Only purge data that is not liked
@@ -128,28 +103,6 @@ struct CoreDataStack {
     }
     
     //---- Fetch ----//
-    
-    func isDuplicate(advertisement: Advertisement) -> Bool {
-        guard let key = advertisement.key else {
-            fatalError("Advertisement key does not exist.")
-        }
-        
-        do {
-            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: Constants.Entity.advertisement)
-            fetchRequest.predicate = NSPredicate(format: "key == %@", key)
-            
-            let results = try managedContext.fetch(fetchRequest)
-            
-            if results.isEmpty {
-                return false
-            } else {
-                return true
-            }
-            
-        } catch let error {
-            fatalError("Could not fetch \(error.localizedDescription)")
-        }
-    }
     
     func retrieveAdvertisements(completion: @escaping AdvertisementOperationClosure) {
         privateContext.perform {
@@ -184,7 +137,7 @@ struct CoreDataStack {
         
     }
     
-    //---- Testing ----//
+    //---- User ----//
     
     static func createUser() {
         _ = NSEntityDescription.insertNewObject(forEntityName: "User", into: persistentContainer.viewContext) as! User
