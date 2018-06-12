@@ -32,116 +32,100 @@ final class AdvertisementViewModel {
     
     //---- Advertisements ----//
     
-    fileprivate var advertisements = [Advertisement]() {
+    private var advertisements = [Advertisement]() {
         didSet {
             delegate?.refresh()
         }
     }
     
-    var contentIsEmpty: Bool {
+    private var likedAdvertisements = [Advertisement]() {
+        didSet {
+            delegate?.refresh()
+        }
+    }
+    
+    var advertisementIsEmpty: Bool {
         return advertisements.isEmpty
     }
     
-    var favoriteAdsIsEmpty: Bool {
-        return favoriteAdvertisements.isEmpty
-    }
-    
-    //---- Liked advertisement ----//
-    
-    fileprivate var favoriteAdvertisements = [FavoriteAd]() {
-        didSet {
-            delegate?.refresh()
-        }
+    var likedAdvertisementIsEmpty: Bool {
+        return likedAdvertisements.isEmpty
     }
   
-    //---- Array Count ----//
+    //---- Data Count ----//
     
-    var numberOfContents: Int {
+    var advertisementCount: Int {
         return advertisements.count
     }
     
-    var numberOfFavoriteAds: Int {
-        return favoriteAdvertisements.count
+    var favoriteAdvertisementCount: Int {
+        return likedAdvertisements.count
     }
     
     //---- Indexing ----//
     
-    func contentData(atIndex index: Int) -> Advertisement {
+    func advertisement(atIndex index: Int) -> Advertisement {
         return advertisements[index]
     }
     
-    func favoriteAd(atIndex index: Int) -> FavoriteAd {
-        return favoriteAdvertisements[index]
+    func likedAdvertisement(atIndex index: Int) -> Advertisement {
+        return likedAdvertisements[index]
     }
     
     //---- Load Operation ----//
     
-    func loadAdvertisements() {
-        advertisementService.fetchAdvertisements() { (advertisements, error) in
+    func loadAdvertisements(completion: @escaping (Error?) -> Void) {
+        advertisementService.updateAdvertisements() { (advertisements, error) in
             if let error = error {
-                // TODO: Error handle
-                return
-            }
-            
-            if advertisements.isEmpty {
+                completion(error)
                 return
             }
             
             self.advertisements = advertisements
+            completion(nil)
         }
     }
     
     func loadCachedAdvertisements(completion: @escaping (Error?) -> Void) {
-        advertisementService.retrieveCachedAds { (advertisement, error) in
+        advertisementService.retrieveCachedAds { (advertisements, error) in
             if let error = error {
                 completion(error)
             }
             
-            self.advertisements = advertisement
+            self.advertisements = advertisements
             completion(nil)
         }
     }
     
     //---- Like Service ----//
     
-    func fetchLikedAdvertisements() {
-        likeService.retrieveFavoriteAds(completion: { (favoriteAds, error) in
-            if error == nil {
-                self.favoriteAdvertisements = favoriteAds
-            }
-        })
-    }
-    
-    func setLikeForAdvertisement(at indexPath: IndexPath) {
-        var advertisementKey: String?
+    func updateLikeStatus(forItemAt indexPath: IndexPath) {
+        
+        var adSelected: Advertisement
         
         if isDisplayingFavorites {
-            advertisementKey = favoriteAd(atIndex: indexPath.row).key
+            adSelected = likedAdvertisement(atIndex: indexPath.row)
         } else {
-            advertisementKey = contentData(atIndex: indexPath.row).key
+            adSelected = advertisement(atIndex: indexPath.row)
         }
         
-        guard let key = advertisementKey else {
-            return
-        }
-        
-        if let _ = CoreDataStack.shared.fetchSelectedFavoriteAd(withKey: key) {
-            unlikeAdvertisement(at: indexPath)
-        } else {
-            
-            likeAdvertisement(at: indexPath)
+        likeService.setLike(status: adSelected.isLiked, for: adSelected) { (success) in
+            if self.isDisplayingFavorites {
+                self.likedAdvertisements.remove(at: indexPath.row)
+                self.delegate?.refresh()
+            }
         }
     }
     
-    func unlikeAdvertisement(at indexPath: IndexPath) {
-        let ad = favoriteAdvertisements[indexPath.row]
-        likeService.unlike(ad)
-        favoriteAdvertisements.remove(at: indexPath.row)
-    }
-    
-    func likeAdvertisement(at indexPath: IndexPath) {
-        let ad = advertisements[indexPath.row]
-        likeService.like(ad)
+    func fetchFavoriteAdvertisements() {
+        advertisementService.retrieveFavoriteAdvertisements { (advertisements, error) in
+            if let error = error {
+                // TODO: Error handling
+                print("\(error.localizedDescription)")
+            } else {
+                self.likedAdvertisements = advertisements
+            }
+        }
     }
     
 }

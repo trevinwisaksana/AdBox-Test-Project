@@ -10,65 +10,100 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
-class AdvertisementService {
+protocol AdvertisementServiceProtocol: class {
+    func updateAdvertisements(completion: @escaping AdvertisementOperationClosure)
+    func fetchAdvertisements(completion: @escaping AdvertisementOperationClosure)
+    func retrieveCachedAds(completion: @escaping AdvertisementOperationClosure)
+    func retrieveFavoriteAdvertisements(completion: @escaping AdvertisementOperationClosure)
+    func removeOutdatedData(success: @escaping SuccessOperationClosure)
+}
+
+class AdvertisementService: AdvertisementServiceProtocol {
     
-    //---- Properties ----//
+    //---- Properties -----//
     
     private let baseURL = URL(string: "https://gist.githubusercontent.com/3lvis/3799feea005ed49942dcb56386ecec2b/raw/63249144485884d279d55f4f3907e37098f55c74/discover.json")
     
-    //---- Fetching ----//
+    var coreDataStack = CoreDataStack()
     
-    func fetchAdvertisements(completion: @escaping ([Advertisement], Error?) -> Void) {
+    //---- Fetching Advertisement ----//
+    
+    func fetchJSONData(completion: @escaping ([JSON], Error?) -> Void) {
+        guard let url = baseURL else {
+            return
+        }
         
-        guard let url = baseURL else { return }
-    
+        let manager = Alamofire.SessionManager.default
+        manager.session.configuration.timeoutIntervalForRequest = 60
+      
         Alamofire.request(url).validate().responseJSON { (response) in
             switch response.result {
             case .success(let data):
+                
                 guard let jsonArray = JSON(data)["items"].array else {
-                    completion([Advertisement](), nil)
+                    completion([JSON](), nil)
                     return
                 }
                 
-                let advertisements = jsonArray.compactMap { Advertisement(with: $0) }
-                
-                // Caching the parsed data
-                if  let request = response.request,
-                    let data = response.data, let response = response.response {
-                    let cachedResponse = CachedURLResponse(response: response, data: data)
-                    URLCache.shared.storeCachedResponse(cachedResponse, for: request)
-                }
- 
-                completion(advertisements, nil)
+                completion(jsonArray, nil)
                 
             case .failure(let error):
-                completion([Advertisement](), error)
+                completion([JSON](), error)
+            }
+        }
+        
+    }
+    
+    func fetchAdvertisements(completion: @escaping AdvertisementOperationClosure) {
+        var jsonData = [JSON]()
+        
+        let dispatchGroup = DispatchGroup()
+        
+        dispatchGroup.enter()
+        fetchJSONData { (data, error) in
+            jsonData = data
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.notify(queue: .global()) {
+            self.coreDataStack.saveJSON(data: jsonData) { (advertisements, error) in
+                completion(advertisements, error)
             }
         }
     }
     
-    func retrieveCachedAds(completion: @escaping ([Advertisement], Error?) -> Void) {
-        guard let url = baseURL else {
-            completion([Advertisement](), nil)
-            return
+    func updateAdvertisements(completion: @escaping AdvertisementOperationClosure) {
+        let dispatchGroup = DispatchGroup()
+        
+        dispatchGroup.enter()
+        coreDataStack.purgeData { (isSuccessful) in
+            if isSuccessful {
+                dispatchGroup.leave()
+            }
         }
         
-        // Checks if the response has already by cached
-        if  let request = Alamofire.request(url).request,
-            let data = URLCache.shared.cachedResponse(for: request)?.data {
-            DispatchQueue.main.async {
-                guard let jsonArray = JSON(data)["items"].array else {
-                    completion([Advertisement](), nil)
-                    return
-                }
-                
-                let advertisements = jsonArray.compactMap { Advertisement(with: $0) }
-                
-                completion(advertisements, nil)
-                return
+        dispatchGroup.notify(queue: .global()) {
+            self.fetchAdvertisements { (advertisements, error) in
+                completion(advertisements, error)
             }
-        } else {
-            fetchAdvertisements { (advertisement, error) in
+        }
+    }
+    
+    // Checks if the response has already by cached
+    func retrieveCachedAds(completion: @escaping AdvertisementOperationClosure) {
+        let dispatchGroup = DispatchGroup()
+        
+        dispatchGroup.enter()
+        coreDataStack.retrieveAdvertisements { (advertisements, error) in
+            if advertisements.isEmpty {
+                dispatchGroup.leave()
+            } else {
+                completion(advertisements, error)
+            }
+        }
+        
+        dispatchGroup.notify(queue: .global()) {
+            self.fetchAdvertisements { (advertisement, error) in
                 if let error = error {
                     completion([Advertisement](), error)
                     return
@@ -77,7 +112,14 @@ class AdvertisementService {
                 completion(advertisement, nil)
             }
         }
-        
+    }
+    
+    func retrieveFavoriteAdvertisements(completion: @escaping AdvertisementOperationClosure) {
+        coreDataStack.retrieveLikedAdvertisements(completion: completion)
+    }
+    
+    func removeOutdatedData(success: @escaping SuccessOperationClosure) {
+        coreDataStack.purgeData(success: success)
     }
     
 }

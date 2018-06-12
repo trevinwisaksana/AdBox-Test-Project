@@ -28,30 +28,15 @@ final class AdvertisementCell: UICollectionViewCell {
     
     // TODO: Use one data model
     func configure(_ advertisement: Advertisement) {
-        
-        // TODO: Remove persistence logic from view layer
-        if let isFavorite = UserDefaults.standard.object(forKey: "\(advertisement.key)") as! Bool? {
-            likeButton.isSelected = isFavorite
-        }
-        
+        likeButton.isSelected = advertisement.isLiked
         adKey = advertisement.key
         titleLabel.text = advertisement.title
         locationLabel.text = advertisement.location
         priceLabel.text = Int(advertisement.price).truncattedStyleString
         
-        configureImage(withURL: advertisement.photoURL)
-    }
-    
-    // TODO: Redundant because of two data models
-    func configure(_ favoriteAd: FavoriteAd) {  
-        adKey = favoriteAd.key
-        likeButton.isSelected = favoriteAd.isLiked
-        titleLabel.text = favoriteAd.title
-        locationLabel.text = favoriteAd.location
+        priceLabelContainerView.roundCorners([.topRight], radius: 5)
         
-        priceLabel.text = Int(favoriteAd.price).truncattedStyleString
-        
-        if let posterURL = favoriteAd.posterURL {
+        if let posterURL = advertisement.posterURL {
             configureImage(withURL: posterURL)
         }
     }
@@ -62,9 +47,7 @@ final class AdvertisementCell: UICollectionViewCell {
         let placeholderImage = UIImage(named: Constants.Image.placeholderImage)
         photoImageView.sd_setImage(with: imageURL, placeholderImage: placeholderImage, options: .scaleDownLargeImages, completed: nil)
         
-        photoImageView.layer.cornerRadius = 5
         photoContainerView.layer.cornerRadius = 5
-        priceLabelContainerView.layer.cornerRadius = 5
     }
     
     @IBAction func didTapLikeButton(_ sender: UIButton) {

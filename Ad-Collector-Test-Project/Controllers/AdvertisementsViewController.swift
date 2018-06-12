@@ -26,13 +26,6 @@ final class AdvertisementsViewController: UIViewController {
     
     @IBOutlet weak var favoriteSwitch: UISwitch!
     
-    private let emptyContentMessageLabel: UILabel = {
-        let label = UILabel()
-        label.text = "There are currently no favorites."
-        label.textColor = UIColor.black
-        label.textAlignment = .center
-        return label
-    }()
     
     //---- VC Lifecycle ----//
     
@@ -46,7 +39,14 @@ final class AdvertisementsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        dataSource.loadAdvertisements()
+        dataSource.loadCachedAdvertisements { [unowned self] (_) in
+            
+            DispatchQueue.main.async {
+                if self.activityView.isAnimating {
+                    self.activityView.stopAnimating()
+                }
+            }
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -78,9 +78,15 @@ final class AdvertisementsViewController: UIViewController {
     @objc
     private func reloadTimeline() {
         if dataSource.isDisplayingFavorites {
-            dataSource.fetchLikedAdvertisements()
+            dataSource.fetchFavoriteAdvertisements()
         } else {
-            dataSource.loadAdvertisements()
+            dataSource.loadAdvertisements { (error) in
+                DispatchQueue.main.async {
+                    if self.refreshControl.isRefreshing {
+                        self.refreshControl.endRefreshing()
+                    }
+                }
+            }
         }
     }
     
@@ -89,7 +95,7 @@ final class AdvertisementsViewController: UIViewController {
     @IBAction func didToggleSwitch(_ sender: UISwitch) {
         if sender.isOn {
             dataSource.isDisplayingFavorites = true
-            dataSource.fetchLikedAdvertisements()
+            dataSource.fetchFavoriteAdvertisements()
         } else {
             dataSource.isDisplayingFavorites = false
         }
@@ -115,45 +121,39 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
         if dataSource.isDisplayingFavorites {
             
-            if dataSource.favoriteAdsIsEmpty {
-                // TODO: This method is called many times, move this implementation
-                let frame = CGRect(x: 0, y: 0, width: collectionView.bounds.size.width, height: collectionView.bounds.size.height)
-                emptyContentMessageLabel.frame = frame
-                emptyContentMessageLabel.center = collectionView.center
-                collectionView.backgroundView = emptyContentMessageLabel
+            if dataSource.likedAdvertisementIsEmpty {
+                collectionView.setEmptyMessage()
             } else {
-                collectionView.backgroundView = nil
+                collectionView.restore()
             }
             
-            return dataSource.numberOfFavoriteAds
+            return dataSource.favoriteAdvertisementCount
             
         } else {
             collectionView.backgroundView = nil
-            return dataSource.numberOfContents
+            return dataSource.advertisementCount
         }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        var advertisement: Advertisement
+        
         if dataSource.isDisplayingFavorites {
-            let favoriteAd = dataSource.favoriteAd(atIndex: indexPath.row)
-            
-            let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.delegate = self
-            cell.configure(favoriteAd)
-            
-            return cell
-            
+            advertisement = dataSource.likedAdvertisement(atIndex: indexPath.row)
         } else {
-            let advertisement = dataSource.contentData(atIndex: indexPath.row)
-            
-            let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.delegate = self
-            cell.configure(advertisement)
-            
-            return cell
+            advertisement = dataSource.advertisement(atIndex: indexPath.row)
         }
+        
+        let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
+        cell.delegate = self
+        cell.configure(advertisement)
+        
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -165,6 +165,7 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        // TODO: Fix animation
         self.collectionView.animateCellEntry(for: cell, at: indexPath)
     }
     
@@ -177,15 +178,9 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
 extension AdvertisementsViewController: AdvertisementDataSourceDelegate {
     
     func refresh() {
-        if self.refreshControl.isRefreshing {
-            self.refreshControl.endRefreshing()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
         }
-        
-        if self.activityView.isAnimating {
-            self.activityView.stopAnimating()
-        }
-        
-        collectionView.reloadData()
     }
     
 }
@@ -194,21 +189,11 @@ extension AdvertisementsViewController: Likeable {
     
     func didTapLikeButton(_ likeButton: UIButton, on cell: AdvertisementCell) {
         // TODO: Show spinner if loading or cancel the fetch request
-//        likeButton.isUserInteractionEnabled = false
-        
         guard let indexPath = collectionView.indexPath(for: cell) else {
             return
         }
-    
-        dataSource.setLikeForAdvertisement(at: indexPath)
         
-        if dataSource.isDisplayingFavorites {
-            refresh()
-        }
-        
-//        defer {
-//            likeButton.isUserInteractionEnabled = true
-//        }
+        dataSource.updateLikeStatus(forItemAt: indexPath)
     }
     
 }

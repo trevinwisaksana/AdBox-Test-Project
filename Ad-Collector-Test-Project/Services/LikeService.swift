@@ -8,40 +8,30 @@
 
 import Foundation
 
-class LikeService {
+protocol LikeServiceProtocol: class {
+     func setLike(status isLiked: Bool, for advertisement: Advertisement, success: @escaping SuccessOperationClosure)
+    func like(_ advertisement: Advertisement, success: @escaping SuccessOperationClosure)
+    func unlike(_ advertisement: Advertisement, success: @escaping SuccessOperationClosure)
+}
+
+class LikeService: LikeServiceProtocol {
     
     var coreDataStack = CoreDataStack()
     
-    func like(_ advertisement: Advertisement?) {
-        guard let data = advertisement else {
-            return
-        }
-        
-        let newFavoriteAd = coreDataStack.newFavoriteAd()
-        
-        newFavoriteAd.isLiked = true
-        newFavoriteAd.location = data.location
-        newFavoriteAd.posterURL = data.photoURL
-        newFavoriteAd.title = data.title
-        
-        newFavoriteAd.price = Double(data.price)
-        newFavoriteAd.key = data.key
-        
-        coreDataStack.save()
-    }
-    
-    func unlike(_ advertisement: FavoriteAd) {
-        if let key = advertisement.key {
-            UserDefaults.standard.removeObject(forKey: "\(key)")
-            coreDataStack.delete(advertisement)
-            coreDataStack.save()
+    func setLike(status isLiked: Bool, for advertisement: Advertisement, success: @escaping SuccessOperationClosure) {
+        if isLiked {
+            unlike(advertisement, success: success)
+        } else {
+            like(advertisement, success: success)
         }
     }
     
-    func retrieveFavoriteAds(completion: @escaping ([FavoriteAd], Error?) -> Void) {
-        coreDataStack.retrieveFavoriteAds(completion: { (favoriteAds, error) in
-            completion(favoriteAds, error)
-        })
+    func like(_ advertisement: Advertisement, success: @escaping SuccessOperationClosure) {
+        coreDataStack.addLiked(advertisement, success: success)
+    }
+    
+    func unlike(_ advertisement: Advertisement, success: @escaping SuccessOperationClosure) {
+        coreDataStack.dislike(advertisement, success: success)
     }
     
 }
