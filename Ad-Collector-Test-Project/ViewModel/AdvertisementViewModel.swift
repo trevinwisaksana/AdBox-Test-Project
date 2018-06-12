@@ -24,8 +24,6 @@ final class AdvertisementViewModel {
     
     var isDisplayingFavorites = false
     
-    var onErrorHandling: ((Error) -> Void)?
-    
     //---- Initializer ----//
     
     init(adService: AdvertisementService, likeService: LikeService) {

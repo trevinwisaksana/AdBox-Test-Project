@@ -126,6 +126,7 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
         
         var advertisement: Advertisement
         
+        // TODO: Check if you need two arrays
         if viewModel.isDisplayingFavorites {
             advertisement = viewModel.likedAdvertisement(atIndex: indexPath.row)
         } else {
