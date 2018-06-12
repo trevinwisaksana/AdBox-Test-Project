@@ -36,8 +36,7 @@
 		DDE238F120CFB696009B70D7 /* AdvertisementService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE238F020CFB696009B70D7 /* AdvertisementService.swift */; };
 		DDE238F320CFBCC8009B70D7 /* UIView+RoundCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE238F220CFBCC8009B70D7 /* UIView+RoundCorners.swift */; };
 		DDE238F520CFC2B0009B70D7 /* UICollectionView+EmptyMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE238F420CFC2B0009B70D7 /* UICollectionView+EmptyMessage.swift */; };
-		DDE238FA20CFEC2A009B70D7 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE238F920CFEC2A009B70D7 /* ErrorView.swift */; };
-		DDE238FD20CFED97009B70D7 /* ErrorView+ErrorDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE238FC20CFED97009B70D7 /* ErrorView+ErrorDisplayable.swift */; };
+		DDE2390520CFF533009B70D7 /* UIAlertController+Displayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE2390420CFF533009B70D7 /* UIAlertController+Displayable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,8 +86,7 @@
 		DDE238F020CFB696009B70D7 /* AdvertisementService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdvertisementService.swift; sourceTree = "<group>"; };
 		DDE238F220CFBCC8009B70D7 /* UIView+RoundCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+RoundCorners.swift"; sourceTree = "<group>"; };
 		DDE238F420CFC2B0009B70D7 /* UICollectionView+EmptyMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+EmptyMessage.swift"; sourceTree = "<group>"; };
-		DDE238F920CFEC2A009B70D7 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
-		DDE238FC20CFED97009B70D7 /* ErrorView+ErrorDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ErrorView+ErrorDisplayable.swift"; sourceTree = "<group>"; };
+		DDE2390420CFF533009B70D7 /* UIAlertController+Displayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Displayable.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,7 +203,6 @@
 			isa = PBXGroup;
 			children = (
 				DD1473F4205D52E000FFFD3C /* AdvertisementCollectionView.swift */,
-				DDE238FB20CFED85009B70D7 /* ErrorView */,
 				DD0F7CD0205CB962000372E4 /* Cells */,
 			);
 			path = Views;
@@ -235,6 +232,7 @@
 				DD5A9867205F71BC005C00D1 /* Int+Commas.swift */,
 				DDE238F220CFBCC8009B70D7 /* UIView+RoundCorners.swift */,
 				DDE238F420CFC2B0009B70D7 /* UICollectionView+EmptyMessage.swift */,
+				DDE2390420CFF533009B70D7 /* UIAlertController+Displayable.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -271,15 +269,6 @@
 				DDE238EA20CFB5A5009B70D7 /* CoreDataStack.swift */,
 			);
 			path = Persistance;
-			sourceTree = "<group>";
-		};
-		DDE238FB20CFED85009B70D7 /* ErrorView */ = {
-			isa = PBXGroup;
-			children = (
-				DDE238F920CFEC2A009B70D7 /* ErrorView.swift */,
-				DDE238FC20CFED97009B70D7 /* ErrorView+ErrorDisplayable.swift */,
-			);
-			path = ErrorView;
 			sourceTree = "<group>";
 		};
 		E3F0042731FA9B97E6A6B5C4 /* Frameworks */ = {
@@ -505,14 +494,13 @@
 				DD5A9868205F71BC005C00D1 /* Int+Commas.swift in Sources */,
 				DDD3DB18205C8BAD000A29B3 /* AdvertisementsViewController.swift in Sources */,
 				DDD3DB20205C8FAB000A29B3 /* AdvertisementViewModel.swift in Sources */,
-				DDE238FD20CFED97009B70D7 /* ErrorView+ErrorDisplayable.swift in Sources */,
 				DD1473F5205D52E000FFFD3C /* AdvertisementCollectionView.swift in Sources */,
 				DDE238F120CFB696009B70D7 /* AdvertisementService.swift in Sources */,
+				DDE2390520CFF533009B70D7 /* UIAlertController+Displayable.swift in Sources */,
 				DDE238F520CFC2B0009B70D7 /* UICollectionView+EmptyMessage.swift in Sources */,
 				DDE238EF20CFB609009B70D7 /* Callbacks.swift in Sources */,
 				DDE238F320CFBCC8009B70D7 /* UIView+RoundCorners.swift in Sources */,
 				DDE238E920CFB572009B70D7 /* Advertisement+Initializer.swift in Sources */,
-				DDE238FA20CFEC2A009B70D7 /* ErrorView.swift in Sources */,
 				DD63B481205CD64800A7837E /* AdvertisementCell.swift in Sources */,
 				DD63B47F205CD4B800A7837E /* UICollectionView+Utility.swift in Sources */,
 			);

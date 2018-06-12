@@ -18,8 +18,7 @@ final class AdvertisementsViewController: UIViewController {
     private let activityView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     private let reachabiltyHelper = ReachabilityHelper()
     private let refreshControl = UIRefreshControl()
-    private lazy var alertController = UIAlertController()
-    
+
     //---- Subivews ----//
     
     @IBOutlet weak var collectionView: AdvertisementCollectionView!
@@ -33,6 +32,8 @@ final class AdvertisementsViewController: UIViewController {
         configureCollectionView()
         configureDataSource()
         configureReachability()
+        
+        UIAlertController.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -125,6 +126,7 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
         
         var advertisement: Advertisement
         
+        // TODO: Check if you need two arrays
         if viewModel.isDisplayingFavorites {
             advertisement = viewModel.likedAdvertisement(atIndex: indexPath.row)
         } else {
@@ -172,11 +174,8 @@ extension AdvertisementsViewController: AdvertisementViewModelDelegate {
         }
     }
     
-    func showError(message: ErrorResults) {
-        switch message {
-        case .failedToFetchData:
-            print("Failed to fetch data.")
-        }
+    func showError(message: ErrorType) {
+        UIAlertController.show(from: self, errorType: message)
     }
     
 }
@@ -198,30 +197,17 @@ extension AdvertisementsViewController: NetworkStatusListener {
     func networkStatusDidChange(status: Reachability.Connection) {
         switch status {
         case .none:
-            displayErrorMessage()
+            UIAlertController.show(from: self, errorType: .networkNotConnected)
         case .cellular, .wifi:
             break
         }
     }
     
-    private func displayErrorMessage() {
-        alertController.title = "Network Error"
-        alertController.message = "You are not connected to the internet."
-        
-        present(alertController, animated: true) {
-            self.addAlertControllerTapGesture()
-        }
-    }
+}
+
+extension AdvertisementsViewController: ErrorDisplayable {
     
-    private func addAlertControllerTapGesture() {
-        let selector = #selector(alertControllerTapGestureHandler)
-        let tapGesture = UITapGestureRecognizer(target: self, action: selector)
-        let alertControllerSubview = alertController.view.superview?.subviews.first
-        alertControllerSubview?.isUserInteractionEnabled = true
-        alertControllerSubview?.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc private func alertControllerTapGestureHandler() {
+    func hide() {
         dismiss(animated: true, completion: nil)
     }
     

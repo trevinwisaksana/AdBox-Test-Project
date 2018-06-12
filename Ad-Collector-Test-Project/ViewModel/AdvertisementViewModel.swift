@@ -10,11 +10,7 @@ import Foundation
 
 protocol AdvertisementViewModelDelegate: class {
     func refresh()
-    func showError(message: ErrorResults)
-}
-
-enum ErrorResults {
-    case failedToFetchData
+    func showError(message: ErrorType)
 }
 
 final class AdvertisementViewModel {
@@ -27,8 +23,6 @@ final class AdvertisementViewModel {
     var likeService: LikeService
     
     var isDisplayingFavorites = false
-    
-    var onErrorHandling: ((Error) -> Void)?
     
     //---- Initializer ----//
     
