@@ -10,31 +10,38 @@ import Foundation
 
 class LikeService {
     
-    func saveToFavorite(_ data: Advertisement?) {
-        
-        guard let data = data else {
+    var coreDataStack = CoreDataStack()
+    
+    func like(_ advertisement: Advertisement?) {
+        guard let data = advertisement else {
             return
         }
         
-        let newFavoriteAd = CoreDataHelper.newFavoriteAd()
+        let newFavoriteAd = coreDataStack.newFavoriteAd()
         
-        newFavoriteAd.isFavorite = true
+        newFavoriteAd.isLiked = true
         newFavoriteAd.location = data.location
-        newFavoriteAd.photoURL = data.photoURL
+        newFavoriteAd.posterURL = data.photoURL
         newFavoriteAd.title = data.title
         
         newFavoriteAd.price = Double(data.price)
         newFavoriteAd.key = data.key
         
-        CoreDataHelper.save()
+        coreDataStack.save()
     }
     
-    func remove(_ data: FavoriteAd) {
-        if let key = data.key {
+    func unlike(_ advertisement: FavoriteAd) {
+        if let key = advertisement.key {
             UserDefaults.standard.removeObject(forKey: "\(key)")
-            CoreDataHelper.delete(ad: data)
-            CoreDataHelper.save()
+            coreDataStack.delete(advertisement)
+            coreDataStack.save()
         }
+    }
+    
+    func retrieveFavoriteAds(completion: @escaping ([FavoriteAd], Error?) -> Void) {
+        coreDataStack.retrieveFavoriteAds(completion: { (favoriteAds, error) in
+            completion(favoriteAds, error)
+        })
     }
     
 }

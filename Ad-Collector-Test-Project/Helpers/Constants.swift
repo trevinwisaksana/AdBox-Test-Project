@@ -12,6 +12,11 @@ struct Constants {
     
     struct Storyboard {
         static let advertisements = "Advertisements"
+        static let favorites = "Favorites"
+    }
+    
+    struct Entity {
+        static let favoriteAd = "FavoriteAd"
     }
     
     struct Identifier {

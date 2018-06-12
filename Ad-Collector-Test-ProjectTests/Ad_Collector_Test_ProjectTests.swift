@@ -34,37 +34,42 @@ class Ad_Collector_Test_ProjectTests: XCTestCase {
         super.tearDown()
     }
     
-    func testFetchEmptyAdvertisement() {
-        dummyAdvertisementService = DummyAdvertisementService(data: [Advertisement]())
-        dummyLikeService = LikeService()
-        
-        advertisementViewModel = AdvertisementViewModel(adService: dummyAdvertisementService, likeService: dummyLikeService)
-        
-        XCTAssertTrue(advertisementViewModel.contentIsEmpty)
-    }
+    //---- Advertisement View Model ----//
     
-    func testFetchAdvertisementData() {
+    func test_fetch_advertisement_data_success() {
         dummyAdvertisementService = DummyAdvertisementService(data: dummyDataFactory.dummyAdvertisements())
         dummyLikeService = LikeService()
         
         advertisementViewModel = AdvertisementViewModel(adService: dummyAdvertisementService, likeService: dummyLikeService)
+        
+        let expectation = XCTestExpectation(description: "Successfully loaded advertisement data.")
         
         advertisementViewModel.loadAdvertisements { (_) in
             XCTAssertFalse(self.advertisementViewModel.contentIsEmpty)
-            XCTAssertEqual(self.advertisementViewModel.numberOfItems, 946)
+            XCTAssertEqual(self.advertisementViewModel.numberOfContents, 946)
+            
+            expectation.fulfill()
         }
+        
+        wait(for: [expectation], timeout: 10.0)
     }
     
-    func testFetchCachedAdvertisementData() {
+    func test_fetch_cached_advertisement_data_success() {
         dummyAdvertisementService = DummyAdvertisementService(data: dummyDataFactory.dummyAdvertisements())
         dummyLikeService = LikeService()
         
         advertisementViewModel = AdvertisementViewModel(adService: dummyAdvertisementService, likeService: dummyLikeService)
         
+        let expectation = XCTestExpectation(description: "Successfully loaded cached advertisement data.")
+        
         advertisementViewModel.loadCachedAdvertisements { (_) in
             XCTAssertFalse(self.advertisementViewModel.contentIsEmpty)
-            XCTAssertEqual(self.advertisementViewModel.numberOfItems, 946)
+            XCTAssertEqual(self.advertisementViewModel.numberOfContents, 946)
+            
+            expectation.fulfill()
         }
+        
+        wait(for: [expectation], timeout: 10.0)
     }
     
 }

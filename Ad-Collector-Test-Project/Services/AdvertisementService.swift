@@ -12,7 +12,11 @@ import SwiftyJSON
 
 class AdvertisementService {
     
+    //---- Properties ----//
+    
     private let baseURL = URL(string: "https://gist.githubusercontent.com/3lvis/3799feea005ed49942dcb56386ecec2b/raw/63249144485884d279d55f4f3907e37098f55c74/discover.json")
+    
+    //---- Fetching ----//
     
     func fetchAdvertisements(completion: @escaping ([Advertisement], Error?) -> Void) {
         
@@ -26,7 +30,7 @@ class AdvertisementService {
                     return
                 }
                 
-                let advertisements = jsonArray.flatMap { Advertisement(with: $0) }
+                let advertisements = jsonArray.compactMap { Advertisement(with: $0) }
                 
                 // Caching the parsed data
                 if  let request = response.request,
@@ -58,7 +62,7 @@ class AdvertisementService {
                     return
                 }
                 
-                let advertisements = jsonArray.flatMap { Advertisement(with: $0) }
+                let advertisements = jsonArray.compactMap { Advertisement(with: $0) }
                 
                 completion(advertisements, nil)
                 return

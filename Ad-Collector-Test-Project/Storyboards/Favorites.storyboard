@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="lgH-zr-GQP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="icc-iU-Nsq">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Favorites-->
+        <!--Navigation Controller-->
+        <scene sceneID="ijf-v0-6f3">
+            <objects>
+                <navigationController id="icc-iU-Nsq" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="7m1-1k-tHt">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="YeZ-Rm-PFR" kind="relationship" relationship="rootViewController" id="Kw0-RB-9Pz"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nds-Kx-rR3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-50" y="893"/>
+        </scene>
+        <!--Favorites View Controller-->
         <scene sceneID="Ti7-vO-fRL">
             <objects>
                 <viewController id="YeZ-Rm-PFR" customClass="FavoritesViewController" customModule="Ad_Collector_Test_Project" customModuleProvider="target" sceneMemberID="viewController">
@@ -36,38 +52,37 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PYj-dM-y5e"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Favorites" id="qck-j6-lpJ"/>
+                    <navigationItem key="navigationItem" id="qck-j6-lpJ">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="PCX-Um-wDT">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Tch-Xg-fBZ">
+                                <rect key="frame" x="16" y="5" width="113" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
+                                <state key="normal" title="Kun favoritter">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="gZh-Nb-UYY">
+                            <switch key="customView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="qsk-aq-8hq">
+                                <rect key="frame" x="308" y="6.5" width="51" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="didToggleSwitch:" destination="YeZ-Rm-PFR" eventType="valueChanged" id="x5f-ts-Xpn"/>
+                                    <segue destination="WEC-vJ-NeW" kind="unwind" animates="NO" unwindAction="unwindWithSegue:" id="2sp-ZD-aGU"/>
+                                </connections>
+                            </switch>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="tableView" destination="z3t-Et-P1k" id="ZCq-D2-KEC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="751-aq-iLu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="WEC-vJ-NeW" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="813.60000000000002" y="892.80359820089961"/>
         </scene>
-        <!--Favorites-->
-        <scene sceneID="lZ0-H7-7a5">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="lgH-zr-GQP" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Favorites" image="tab_favorite_icon" id="adE-XS-lRd"/>
-                    <toolbarItems/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="qrs-Ae-5Io">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="YeZ-Rm-PFR" kind="relationship" relationship="rootViewController" id="hOb-x6-x9m"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Vye-gd-Wex" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-9" y="893"/>
-        </scene>
     </scenes>
-    <resources>
-        <image name="tab_favorite_icon" width="16" height="25"/>
-    </resources>
 </document>

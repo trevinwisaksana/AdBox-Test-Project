@@ -24,6 +24,16 @@ final class AdvertisementsViewController: UIViewController {
     
     @IBOutlet weak var collectionView: AdvertisementCollectionView!
     
+    @IBOutlet weak var favoriteSwitch: UISwitch!
+    
+    private let emptyContentMessageLabel: UILabel = {
+        let label = UILabel()
+        label.text = "There are currently no favorites."
+        label.textColor = UIColor.black
+        label.textAlignment = .center
+        return label
+    }()
+    
     //---- VC Lifecycle ----//
     
     override func viewDidLoad() {
@@ -36,11 +46,7 @@ final class AdvertisementsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        dataSource.loadCachedAdvertisements { (_) in
-            if self.activityView.isAnimating {
-                self.activityView.stopAnimating()
-            }
-        }
+        dataSource.loadAdvertisements()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -65,26 +71,30 @@ final class AdvertisementsViewController: UIViewController {
     
     private func configureCollectionView() {
         collectionView.register(AdvertisementCell.self)
-        configureCollectionViewLayout()
         refreshControl.addTarget(self, action: #selector(reloadTimeline), for: .valueChanged)
         collectionView.addSubview(refreshControl)
     }
     
-    private func configureCollectionViewLayout() {
-        if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            flowLayout.estimatedItemSize = CGSize(width: 50, height: 100)
-            flowLayout.headerReferenceSize = CGSize(width: 50, height: 60)
-            flowLayout.footerReferenceSize = CGSize(width: 50, height: 50)
+    @objc
+    private func reloadTimeline() {
+        if dataSource.isDisplayingFavorites {
+            dataSource.fetchLikedAdvertisements()
+        } else {
+            dataSource.loadAdvertisements()
         }
     }
     
-    @objc
-    private func reloadTimeline() {
-        dataSource.loadAdvertisements { (error) in
-            if self.refreshControl.isRefreshing {
-                self.refreshControl.endRefreshing()
-            }
+    //---- Switch ----//
+    
+    @IBAction func didToggleSwitch(_ sender: UISwitch) {
+        if sender.isOn {
+            dataSource.isDisplayingFavorites = true
+            dataSource.fetchLikedAdvertisements()
+        } else {
+            dataSource.isDisplayingFavorites = false
         }
+        
+        refresh()
     }
     
     //---- Activity View ----//
@@ -101,157 +111,81 @@ final class AdvertisementsViewController: UIViewController {
 extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if dataSource.contentIsEmpty {
-            return 0
-        } else {
-            return 4
-        }
+        return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        if dataSource.contentIsEmpty {
-            return 0
-        }
-        
-        switch section {
-        case 0:
-            return dataSource.numberOfPopularContent
-        case 1:
-            return dataSource.numberOfCarContent
-        case 2:
-            return dataSource.numberOfBapContent
-        case 3:
-            return dataSource.numberOfRealEstateContent
-        default:
-            fatalError("Error: unexpected indexPath.")
+        if dataSource.isDisplayingFavorites {
+            
+            if dataSource.favoriteAdsIsEmpty {
+                // TODO: This method is called many times, move this implementation
+                let frame = CGRect(x: 0, y: 0, width: collectionView.bounds.size.width, height: collectionView.bounds.size.height)
+                emptyContentMessageLabel.frame = frame
+                emptyContentMessageLabel.center = collectionView.center
+                collectionView.backgroundView = emptyContentMessageLabel
+            } else {
+                collectionView.backgroundView = nil
+            }
+            
+            return dataSource.numberOfFavoriteAds
+            
+        } else {
+            collectionView.backgroundView = nil
+            return dataSource.numberOfContents
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let section = indexPath.section
-        
-        switch section {
-        case 0:
-            
-            let popularAd = dataSource.mostPopularContentData(atIndex: indexPath.row)
+        if dataSource.isDisplayingFavorites {
+            let favoriteAd = dataSource.favoriteAd(atIndex: indexPath.row)
             
             let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
             cell.delegate = self
-            cell.configure(popularAd)
+            cell.configure(favoriteAd)
             
             return cell
             
-        case 1:
-            
-            let carAd = dataSource.carsContentData(atIndex: indexPath.row)
-            
-            let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.delegate = self
-            cell.configure(carAd)
-            
-            return cell
-            
-        case 2:
-            
-            let bapAd = dataSource.bapContentData(atIndex: indexPath.row)
-            
-            let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.delegate = self
-            cell.configure(bapAd)
-            
-            return cell
-            
-        case 3:
-            
-            let realEstateAd = dataSource.realEstateContentData(atIndex: indexPath.row)
-            
-            let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
-            cell.delegate = self
-            cell.configure(realEstateAd)
-            
-            return cell
-            
-        default:
-            fatalError("Error: unexpected indexPath.")
-        }
-        
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
-        let section = indexPath.section
-        
-        switch kind {
-        case UICollectionElementKindSectionHeader:
-            
-            let sectionHeader: AdvertisementsSectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
-            
-            switch section {
-            case 0:
-                sectionHeader.titleLabel.text = "Trending"
-            case 1:
-                sectionHeader.titleLabel.text = "Cars"
-            case 2:
-                sectionHeader.titleLabel.text = "Books"
-            case 3:
-                sectionHeader.titleLabel.text = "Real Estate"
-            default:
-                fatalError("Error: unexpected indexPath.")
-            }
-            
-            return sectionHeader
-            
-        case UICollectionElementKindSectionFooter:
-            
-            let sectionFooter: AdvertisementsSectionFooter = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
-            sectionFooter.delegate = self
-            sectionFooter.section = section
-            
-            return sectionFooter
-            
-        default:
-            fatalError("Error: unexpected view kind.")
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        if section == 0 {
-            return CGSize(width: collectionView.bounds.width, height: 0.0)
         } else {
-            return CGSize(width: collectionView.bounds.width, height: 50)
+            let advertisement = dataSource.contentData(atIndex: indexPath.row)
+            
+            let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
+            cell.delegate = self
+            cell.configure(advertisement)
+            
+            return cell
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.bounds.width, height: 60)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.bounds.width * 0.45, height: collectionView.bounds.height * 0.36)
     }
-   
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
+    }
+    
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         self.collectionView.animateCellEntry(for: cell, at: indexPath)
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
+    }
+
 }
 
 extension AdvertisementsViewController: AdvertisementDataSourceDelegate {
     
-    func contentChange() {
+    func refresh() {
+        if self.refreshControl.isRefreshing {
+            self.refreshControl.endRefreshing()
+        }
+        
+        if self.activityView.isAnimating {
+            self.activityView.stopAnimating()
+        }
+        
         collectionView.reloadData()
-    }
-    
-}
-
-extension AdvertisementsViewController: DisplayMoreAdsDelegate {
-    
-    func pass(section: Int) {
-        let storyboard = UIStoryboard(name: Constants.Storyboard.advertisements, bundle: .main)
-        let displaySectionVC = storyboard.instantiateViewController(withIdentifier: Constants.Identifier.displayVC) as! DisplaySectionViewController
-        
-        let sectionData = dataSource.passData(fromSection: section)
-        displaySectionVC.dataSource.loadContent(sectionData)
-        
-        present(displaySectionVC, animated: true, completion: nil)
     }
     
 }
@@ -259,37 +193,22 @@ extension AdvertisementsViewController: DisplayMoreAdsDelegate {
 extension AdvertisementsViewController: Likeable {
     
     func didTapLikeButton(_ likeButton: UIButton, on cell: AdvertisementCell) {
-        
-        defer {
-            likeButton.isUserInteractionEnabled = true
-        }
-        
-        likeButton.isUserInteractionEnabled = false
+        // TODO: Show spinner if loading or cancel the fetch request
+//        likeButton.isUserInteractionEnabled = false
         
         guard let indexPath = collectionView.indexPath(for: cell) else {
             return
         }
+    
+        dataSource.setLikeForAdvertisement(at: indexPath)
         
-        var adLiked: Advertisement?
-        
-        switch indexPath.section {
-        case 0:
-            adLiked = dataSource.mostPopularContentData(atIndex: indexPath.row)
-        case 1:
-            adLiked = dataSource.carsContentData(atIndex: indexPath.row)
-        case 2:
-            adLiked = dataSource.bapContentData(atIndex: indexPath.row)
-        case 3:
-            adLiked = dataSource.realEstateContentData(atIndex: indexPath.row)
-        default:
-            break
+        if dataSource.isDisplayingFavorites {
+            refresh()
         }
         
-        if let key = adLiked?.key, let favoritedAd = CoreDataHelper.fetchSelectedFavoriteAd(withKey: key) {
-            dataSource.removeLike(for: favoritedAd)
-        } else {
-            dataSource.likeAdvertisement(for: adLiked)
-        }
+//        defer {
+//            likeButton.isUserInteractionEnabled = true
+//        }
     }
     
 }

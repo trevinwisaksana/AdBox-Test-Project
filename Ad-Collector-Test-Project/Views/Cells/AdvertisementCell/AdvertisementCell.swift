@@ -20,23 +20,40 @@ final class AdvertisementCell: UICollectionViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var likeButton: UIButton!
-    
-    @IBOutlet weak var widthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var photoContainerView: UIView!
+    @IBOutlet weak var priceLabelContainerView: UIView!
     
     weak var delegate: Likeable?
     private var adKey: String?
     
-    func configure(_ data: Advertisement) {
-        if let isFavorite = UserDefaults.standard.object(forKey: "\(data.key)") as! Bool? {
+    // TODO: Use one data model
+    func configure(_ advertisement: Advertisement) {
+        
+        // TODO: Remove persistence logic from view layer
+        if let isFavorite = UserDefaults.standard.object(forKey: "\(advertisement.key)") as! Bool? {
             likeButton.isSelected = isFavorite
         }
         
-        adKey = data.key
-        titleLabel.text = data.title
-        locationLabel.text = data.location
-        priceLabel.text = "kr " + Int(data.price).decimalStyleString
+        adKey = advertisement.key
+        titleLabel.text = advertisement.title
+        locationLabel.text = advertisement.location
+        priceLabel.text = Int(advertisement.price).truncattedStyleString
         
-        configureImage(withURL: data.photoURL)
+        configureImage(withURL: advertisement.photoURL)
+    }
+    
+    // TODO: Redundant because of two data models
+    func configure(_ favoriteAd: FavoriteAd) {  
+        adKey = favoriteAd.key
+        likeButton.isSelected = favoriteAd.isLiked
+        titleLabel.text = favoriteAd.title
+        locationLabel.text = favoriteAd.location
+        
+        priceLabel.text = Int(favoriteAd.price).truncattedStyleString
+        
+        if let posterURL = favoriteAd.posterURL {
+            configureImage(withURL: posterURL)
+        }
     }
     
     private func configureImage(withURL url: String) {
@@ -46,23 +63,19 @@ final class AdvertisementCell: UICollectionViewCell {
         photoImageView.sd_setImage(with: imageURL, placeholderImage: placeholderImage, options: .scaleDownLargeImages, completed: nil)
         
         photoImageView.layer.cornerRadius = 5
+        photoContainerView.layer.cornerRadius = 5
+        priceLabelContainerView.layer.cornerRadius = 5
     }
     
     @IBAction func didTapLikeButton(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
         
+        // TODO: Remove persistence logic from view layer
         if let key = adKey {
             UserDefaults.standard.set(sender.isSelected, forKey: "\(key)")
         }
         
         delegate?.didTapLikeButton(sender, on: self)
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        let screenWidth = UIScreen.main.bounds.size.width
-        widthConstraint.constant = screenWidth
     }
     
     override func prepareForReuse() {
