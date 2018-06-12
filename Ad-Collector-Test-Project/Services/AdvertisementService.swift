@@ -35,7 +35,7 @@ class AdvertisementService: AdvertisementServiceProtocol {
         
         let manager = Alamofire.SessionManager.default
         manager.session.configuration.timeoutIntervalForRequest = 60
-      
+        
         Alamofire.request(url).validate().responseJSON { (response) in
             switch response.result {
             case .success(let data):
