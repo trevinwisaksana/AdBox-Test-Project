@@ -52,7 +52,7 @@ struct CoreDataStack {
         return controller
     }()
     
-    //---- Save ----//
+    // MARK: Save
     
     func saveJSON(data: [JSON], completion: @escaping AdvertisementOperationClosure) {
         
