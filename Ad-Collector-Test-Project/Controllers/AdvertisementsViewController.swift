@@ -77,7 +77,7 @@ final class AdvertisementsViewController: UIViewController {
     
     @objc
     private func reloadTimeline() {
-        if dataSource.switchToggleIsOn {
+        if dataSource.isDisplayingFavorites {
             dataSource.fetchLikedAdvertisements()
         } else {
             dataSource.loadAdvertisements()
@@ -88,10 +88,10 @@ final class AdvertisementsViewController: UIViewController {
     
     @IBAction func didToggleSwitch(_ sender: UISwitch) {
         if sender.isOn {
-            dataSource.switchToggleIsOn = true
+            dataSource.isDisplayingFavorites = true
             dataSource.fetchLikedAdvertisements()
         } else {
-            dataSource.switchToggleIsOn = false
+            dataSource.isDisplayingFavorites = false
         }
         
         refresh()
@@ -115,9 +115,10 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if dataSource.switchToggleIsOn {
+        if dataSource.isDisplayingFavorites {
             
             if dataSource.favoriteAdsIsEmpty {
+                // TODO: This method is called many times, move this implementation
                 let frame = CGRect(x: 0, y: 0, width: collectionView.bounds.size.width, height: collectionView.bounds.size.height)
                 emptyContentMessageLabel.frame = frame
                 emptyContentMessageLabel.center = collectionView.center
@@ -135,7 +136,7 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if dataSource.switchToggleIsOn {
+        if dataSource.isDisplayingFavorites {
             let favoriteAd = dataSource.favoriteAd(atIndex: indexPath.row)
             
             let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
@@ -192,7 +193,8 @@ extension AdvertisementsViewController: AdvertisementDataSourceDelegate {
 extension AdvertisementsViewController: Likeable {
     
     func didTapLikeButton(_ likeButton: UIButton, on cell: AdvertisementCell) {
-        likeButton.isUserInteractionEnabled = false
+        // TODO: Show spinner if loading or cancel the fetch request
+//        likeButton.isUserInteractionEnabled = false
         
         guard let indexPath = collectionView.indexPath(for: cell) else {
             return
@@ -200,13 +202,13 @@ extension AdvertisementsViewController: Likeable {
     
         dataSource.setLikeForAdvertisement(at: indexPath)
         
-        if dataSource.switchToggleIsOn {
+        if dataSource.isDisplayingFavorites {
             refresh()
         }
         
-        defer {
-            likeButton.isUserInteractionEnabled = true
-        }
+//        defer {
+//            likeButton.isUserInteractionEnabled = true
+//        }
     }
     
 }

@@ -26,7 +26,6 @@ final class CoreDataStack {
     
     func newFavoriteAd() -> FavoriteAd {
         let favoriteAd = NSEntityDescription.insertNewObject(forEntityName: Constants.Entity.favoriteAd, into: context) as! FavoriteAd
-        
         return favoriteAd
     }
     

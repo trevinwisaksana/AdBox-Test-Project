@@ -23,14 +23,13 @@ final class AdvertisementCell: UICollectionViewCell {
     @IBOutlet weak var photoContainerView: UIView!
     @IBOutlet weak var priceLabelContainerView: UIView!
     
-    
-    @IBOutlet weak var widthConstraint: NSLayoutConstraint!
-    
     weak var delegate: Likeable?
     private var adKey: String?
     
     // TODO: Use one data model
     func configure(_ advertisement: Advertisement) {
+        
+        // TODO: Remove persistence logic from view layer
         if let isFavorite = UserDefaults.standard.object(forKey: "\(advertisement.key)") as! Bool? {
             likeButton.isSelected = isFavorite
         }
@@ -43,6 +42,7 @@ final class AdvertisementCell: UICollectionViewCell {
         configureImage(withURL: advertisement.photoURL)
     }
     
+    // TODO: Redundant because of two data models
     func configure(_ favoriteAd: FavoriteAd) {  
         adKey = favoriteAd.key
         likeButton.isSelected = favoriteAd.isLiked
@@ -70,6 +70,7 @@ final class AdvertisementCell: UICollectionViewCell {
     @IBAction func didTapLikeButton(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
         
+        // TODO: Remove persistence logic from view layer
         if let key = adKey {
             UserDefaults.standard.set(sender.isSelected, forKey: "\(key)")
         }

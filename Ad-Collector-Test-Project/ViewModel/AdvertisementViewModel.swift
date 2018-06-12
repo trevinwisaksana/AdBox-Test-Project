@@ -21,7 +21,7 @@ final class AdvertisementViewModel {
     var advertisementService: AdvertisementService
     var likeService: LikeService
     
-    var switchToggleIsOn = false
+    var isDisplayingFavorites = false
     
     //---- Initializer ----//
     
@@ -29,6 +29,8 @@ final class AdvertisementViewModel {
         self.advertisementService = adService
         self.likeService = likeService
     }
+    
+    //---- Advertisements ----//
     
     fileprivate var advertisements = [Advertisement]() {
         didSet {
@@ -111,10 +113,9 @@ final class AdvertisementViewModel {
     }
     
     func setLikeForAdvertisement(at indexPath: IndexPath) {
-        
         var advertisementKey: String?
         
-        if switchToggleIsOn {
+        if isDisplayingFavorites {
             advertisementKey = favoriteAd(atIndex: indexPath.row).key
         } else {
             advertisementKey = contentData(atIndex: indexPath.row).key
@@ -130,7 +131,6 @@ final class AdvertisementViewModel {
             
             likeAdvertisement(at: indexPath)
         }
-        
     }
     
     func unlikeAdvertisement(at indexPath: IndexPath) {
