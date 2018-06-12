@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 import Reachability
 
 final class AdvertisementsViewController: UIViewController {
@@ -177,6 +178,12 @@ extension AdvertisementsViewController: AdvertisementViewModelDelegate {
     func showError(message: ErrorType) {
         UIAlertController.show(from: self, errorType: message)
     }
+    
+}
+
+extension AdvertisementsViewController: NSFetchedResultsControllerDelegate {
+    
+    
     
 }
 

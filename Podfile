@@ -7,7 +7,6 @@ target 'Ad-Collector-Test-Project' do
 
   # Pods for Ad-Collector-Test-Project
   pod 'SwiftyJSON'
-  pod 'Alamofire', '~> 4.7'
   pod 'SDWebImage'
   pod 'ReachabilitySwift'
 
