@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Alamofire
 import SwiftyJSON
 
 protocol AdvertisementServiceProtocol: class {
@@ -18,40 +17,42 @@ protocol AdvertisementServiceProtocol: class {
     func removeOutdatedData(success: @escaping SuccessOperationClosure)
 }
 
-class AdvertisementService: AdvertisementServiceProtocol {
+final class AdvertisementService: NSObject, AdvertisementServiceProtocol {
     
     //---- Properties -----//
-    
-    private let baseURL = URL(string: "https://gist.githubusercontent.com/3lvis/3799feea005ed49942dcb56386ecec2b/raw/63249144485884d279d55f4f3907e37098f55c74/discover.json")
     
     var coreDataStack = CoreDataStack()
     
     //---- Fetching Advertisement ----//
     
     func fetchJSONData(completion: @escaping ([JSON], Error?) -> Void) {
+        
+        let baseURL = URL(string: "https://gist.githubusercontent.com/3lvis/3799feea005ed49942dcb56386ecec2b/raw/63249144485884d279d55f4f3907e37098f55c74/discover.json")
+        
         guard let url = baseURL else {
             return
         }
         
-        let manager = Alamofire.SessionManager.default
-        manager.session.configuration.timeoutIntervalForRequest = 60
+        let defaultSession = URLSession(configuration: .default)
+        var dataTask: URLSessionDataTask?
         
-        Alamofire.request(url).validate().responseJSON { (response) in
-            switch response.result {
-            case .success(let data):
+        dataTask = defaultSession.dataTask(with: url, completionHandler: { (data, urlResponse, error) in
+            
+            if let error = error {
+                completion([JSON](), error)
+            } else if let data = data, let response = urlResponse as? HTTPURLResponse, response.statusCode == 200 {
                 
-                guard let jsonArray = JSON(data)["items"].array else {
+                guard let jsonData = JSON(data)["items"].array else {
                     completion([JSON](), nil)
                     return
                 }
                 
-                completion(jsonArray, nil)
-                
-            case .failure(let error):
-                completion([JSON](), error)
+                completion(jsonData, nil)
             }
-        }
+            
+        })
         
+        dataTask?.resume()
     }
     
     func fetchAdvertisements(completion: @escaping AdvertisementOperationClosure) {

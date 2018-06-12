@@ -1,5 +1,4 @@
 PODS:
-  - Alamofire (4.7.0)
   - ReachabilitySwift (4.1.0)
   - SDWebImage (4.3.3):
     - SDWebImage/Core (= 4.3.3)
@@ -7,17 +6,15 @@ PODS:
   - SwiftyJSON (4.0.0)
 
 DEPENDENCIES:
-  - Alamofire (~> 4.7)
   - ReachabilitySwift
   - SDWebImage
   - SwiftyJSON
 
 SPEC CHECKSUMS:
-  Alamofire: 907e0a98eb68cdb7f9d1f541a563d6ac5dc77b25
   ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
   SDWebImage: de4d90b5bff3571eae7bd16202b1f43135409fa5
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: c2487ba2abed4c91b64f1b73b3da7151705b7968
+PODFILE CHECKSUM: 5d1649f2e34b099fde60046c2a983e5877de9d7e
 
 COCOAPODS: 1.2.1
