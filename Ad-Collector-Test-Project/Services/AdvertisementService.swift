@@ -9,21 +9,18 @@
 import Foundation
 import SwiftyJSON
 
-protocol AdvertisementServiceProtocol: class {
-    func updateAdvertisements(completion: @escaping AdvertisementOperationClosure)
-    func fetchAdvertisements(completion: @escaping AdvertisementOperationClosure)
-    func retrieveCachedAds(completion: @escaping AdvertisementOperationClosure)
-    func retrieveFavoriteAdvertisements(completion: @escaping AdvertisementOperationClosure)
-    func removeOutdatedData(success: @escaping SuccessOperationClosure)
+protocol AdvertisementServiceDelegate {
+    func fetchJSONData(completion: @escaping ([JSON], Error?) -> Void)
+    func fetchAdvertisements(success: @escaping SuccessOperationClosure)
 }
 
-final class AdvertisementService {
+struct AdvertisementService {
     
-    //---- Properties -----//
+    // MARK: - Properties
     
     var coreDataStack = CoreDataStack()
     
-    //---- Fetching Advertisement ----//
+    // MARK: - Fetching
     
     func fetchJSONData(completion: @escaping ([JSON], Error?) -> Void) {
         
@@ -37,7 +34,6 @@ final class AdvertisementService {
         var dataTask: URLSessionDataTask?
         
         dataTask = defaultSession.dataTask(with: url, completionHandler: { (data, urlResponse, error) in
-            
             if let error = error {
                 completion([JSON](), error)
             } else if let data = data, let response = urlResponse as? HTTPURLResponse, response.statusCode == 200 {
@@ -49,27 +45,28 @@ final class AdvertisementService {
                 
                 completion(jsonData, nil)
             }
-            
         })
         
         dataTask?.resume()
     }
     
-    func fetchAdvertisements(completion: @escaping AdvertisementOperationClosure) {
+    func fetchAdvertisements(success: @escaping SuccessOperationClosure) {
         var jsonData = [JSON]()
         
         let dispatchGroup = DispatchGroup()
         
         dispatchGroup.enter()
         fetchJSONData { (data, error) in
+            if let _ = error {
+                success(false)
+            }
+            
             jsonData = data
             dispatchGroup.leave()
         }
         
         dispatchGroup.notify(queue: .global()) {
-            self.coreDataStack.saveJSON(data: jsonData) { (advertisements, error) in
-                completion(advertisements, error)
-            }
+            self.coreDataStack.saveJSON(data: jsonData, success: success)
         }
     }
 

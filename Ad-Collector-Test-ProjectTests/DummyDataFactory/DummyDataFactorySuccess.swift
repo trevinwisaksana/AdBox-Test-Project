@@ -11,18 +11,18 @@ import SwiftyJSON
 
 @testable import Ad_Collector_Test_Project
 
-class DummyDataFactory {
+class DummyDataFactorySuccess {
     
-    let discoverJSONPath = Bundle.main.path(forResource: "discover", ofType: "json")
+    private let discoverJSONPath = Bundle.main.path(forResource: "discover", ofType: "json")
     
-    func dummyAdvertisements() -> [Advertisement] {
+    func advertisements() -> [Advertisement] {
         
         guard let path = discoverJSONPath else {
-            fatalError()
+            fatalError("Path is nil.")
         }
         
         guard let discoverJSON = NSData(contentsOfFile: path) else {
-            fatalError()
+            fatalError("Failed to retrieve JSON data.")
         }
         
         guard let jsonArray = JSON(discoverJSON)["items"].array else {

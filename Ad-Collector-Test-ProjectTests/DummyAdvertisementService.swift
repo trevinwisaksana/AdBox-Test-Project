@@ -7,23 +7,24 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 @testable import Ad_Collector_Test_Project
 
-class DummyAdvertisementService: AdvertisementService {
+struct DummyAdvertisementService: AdvertisementServiceDelegate {
     
-    var data: [Advertisement]
+    // MARK: - Properties
     
-    init(data: [Advertisement]) {
-        self.data = data
+    var coreDataStack = CoreDataStack()
+    
+    // MARK: - Fetching Data
+    
+    func fetchJSONData(completion: @escaping ([JSON], Error?) -> Void) {
+        
     }
     
-    override func retrieveCachedAds(completion: @escaping ([Advertisement], Error?) -> Void) {
-        completion(data, nil)
-    }
-    
-    override func fetchAdvertisements(completion: @escaping ([Advertisement], Error?) -> Void) {
-        completion(data, nil)
+    func fetchAdvertisements(success: @escaping SuccessOperationClosure) {
+        
     }
     
 }

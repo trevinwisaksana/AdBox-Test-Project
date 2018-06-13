@@ -14,7 +14,7 @@ final class AdvertisementsViewController: UIViewController {
     
     // MARK: - Properties
     
-    let viewModel = AdvertisementViewModel(adService: AdvertisementService(), likeService: LikeService())
+    private let viewModel = AdvertisementViewModel(adService: AdvertisementService())
     
     private let activityView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     private let reachabiltyHelper = ReachabilityHelper()
@@ -81,7 +81,12 @@ final class AdvertisementsViewController: UIViewController {
             refreshControl.isEnabled = false
         } else {
             refreshControl.isEnabled = true
-            viewModel.fetchAdvertisements(success: nil)
+            
+            viewModel.loadCache(success: { (_) in
+                if self.refreshControl.isRefreshing {
+                    self.refreshControl.endRefreshing()
+                }
+            })
         }
         
         refresh()

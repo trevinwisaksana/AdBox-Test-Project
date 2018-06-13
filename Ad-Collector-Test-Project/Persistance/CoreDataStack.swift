@@ -23,18 +23,6 @@ class CoreDataStack {
         return container
     }()
     
-    let persistentStoreCoordinator: NSPersistentStoreCoordinator = {
-        let coordinator = appDelegate.persistentContainer.persistentStoreCoordinator
-        return coordinator
-    }()
-    
-    let managedContext: NSManagedObjectContext = {
-        let persistentContainer = appDelegate.persistentContainer
-        let context = persistentContainer.viewContext
-        
-        return context
-    }()
-    
     private let privateContext: NSManagedObjectContext = {
         var privateContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         
@@ -46,30 +34,15 @@ class CoreDataStack {
     
     // MARK: - Save
     
-    func saveJSON(data: [JSON], completion: @escaping AdvertisementOperationClosure) {
+    func saveJSON(data: [JSON], success: @escaping SuccessOperationClosure) {
         
         if data.isEmpty {
             return
         }
         
         privateContext.perform {
-            let advertisements = data.compactMap { Advertisement(with: $0, isSaved: true) }
-            completion(advertisements, nil)
-        }
-    }
-    
-    // MARK: - Advertisement
-    
-    func retrieveAdvertisements(completion: @escaping AdvertisementOperationClosure) {
-        privateContext.perform {
-            do {
-                let fetchRequest = NSFetchRequest<Advertisement>(entityName: Constants.Entity.advertisement)
-                let results = try self.managedContext.fetch(fetchRequest)
-                completion(results, nil)
-            } catch let error {
-                print("Could not fetch \(error.localizedDescription)")
-                completion([Advertisement](), error)
-            }
+            _ = data.compactMap { Advertisement(with: $0, isSaved: true) }
+            success(true)
         }
     }
     
