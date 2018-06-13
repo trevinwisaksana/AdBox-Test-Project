@@ -15,6 +15,7 @@ protocol ErrorDisplayable: class {
 enum ErrorType {
     case failedToFetchData
     case networkNotConnected
+    case failedToPerformLike
 }
 
 extension UIAlertController {
@@ -32,6 +33,9 @@ extension UIAlertController {
         case .networkNotConnected:
             alertController.title = "Network Error"
             alertController.message = "You are not connected to the internet."
+        case .failedToPerformLike:
+            alertController.title = "Failed to perform operation"
+            alertController.message = "Please try again."
         }
         
         viewController.present(alertController, animated: true, completion: {

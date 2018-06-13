@@ -20,6 +20,10 @@ struct Constants {
         static let user = "User"
     }
     
+    struct Cache {
+        static let advertisement = "AdvertisementCache"
+    }
+    
     struct Identifier {
         static let displayVC = "DisplaySectionViewController"
     }

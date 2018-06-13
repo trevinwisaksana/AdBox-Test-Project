@@ -17,7 +17,7 @@ protocol AdvertisementServiceProtocol: class {
     func removeOutdatedData(success: @escaping SuccessOperationClosure)
 }
 
-final class AdvertisementService: NSObject, AdvertisementServiceProtocol {
+final class AdvertisementService {
     
     //---- Properties -----//
     
@@ -72,55 +72,5 @@ final class AdvertisementService: NSObject, AdvertisementServiceProtocol {
             }
         }
     }
-    
-    func updateAdvertisements(completion: @escaping AdvertisementOperationClosure) {
-        let dispatchGroup = DispatchGroup()
-        
-        dispatchGroup.enter()
-        coreDataStack.purgeData { (isSuccessful) in
-            if isSuccessful {
-                dispatchGroup.leave()
-            }
-        }
-        
-        dispatchGroup.notify(queue: .global()) {
-            self.fetchAdvertisements { (advertisements, error) in
-                completion(advertisements, error)
-            }
-        }
-    }
-    
-    // Checks if the response has already by cached
-    func retrieveCachedAds(completion: @escaping AdvertisementOperationClosure) {
-        let dispatchGroup = DispatchGroup()
-        
-        dispatchGroup.enter()
-        coreDataStack.retrieveAdvertisements { (advertisements, error) in
-            if advertisements.isEmpty {
-                dispatchGroup.leave()
-            } else {
-                completion(advertisements, error)
-            }
-        }
-        
-        dispatchGroup.notify(queue: .global()) {
-            self.fetchAdvertisements { (advertisement, error) in
-                if let error = error {
-                    completion([Advertisement](), error)
-                    return
-                }
-                
-                completion(advertisement, nil)
-            }
-        }
-    }
-    
-    func retrieveFavoriteAdvertisements(completion: @escaping AdvertisementOperationClosure) {
-        coreDataStack.retrieveLikedAdvertisements(completion: completion)
-    }
-    
-    func removeOutdatedData(success: @escaping SuccessOperationClosure) {
-        coreDataStack.purgeData(success: success)
-    }
-    
+
 }

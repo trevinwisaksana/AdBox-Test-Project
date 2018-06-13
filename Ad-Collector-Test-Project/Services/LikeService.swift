@@ -14,24 +14,7 @@ protocol LikeServiceProtocol: class {
     func unlike(_ advertisement: Advertisement, success: @escaping SuccessOperationClosure)
 }
 
-class LikeService: LikeServiceProtocol {
-    
-    var coreDataStack = CoreDataStack()
-    
-    func setLike(status isLiked: Bool, for advertisement: Advertisement, success: @escaping SuccessOperationClosure) {
-        if isLiked {
-            unlike(advertisement, success: success)
-        } else {
-            like(advertisement, success: success)
-        }
-    }
-    
-    func like(_ advertisement: Advertisement, success: @escaping SuccessOperationClosure) {
-        coreDataStack.addLiked(advertisement, success: success)
-    }
-    
-    func unlike(_ advertisement: Advertisement, success: @escaping SuccessOperationClosure) {
-        coreDataStack.dislike(advertisement, success: success)
-    }
+class LikeService {
+   
     
 }
