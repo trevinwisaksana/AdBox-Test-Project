@@ -9,21 +9,18 @@
 import Foundation
 import SwiftyJSON
 
-protocol AdvertisementServiceProtocol: class {
-    func updateAdvertisements(completion: @escaping AdvertisementOperationClosure)
-    func fetchAdvertisements(completion: @escaping AdvertisementOperationClosure)
-    func retrieveCachedAds(completion: @escaping AdvertisementOperationClosure)
-    func retrieveFavoriteAdvertisements(completion: @escaping AdvertisementOperationClosure)
-    func removeOutdatedData(success: @escaping SuccessOperationClosure)
+protocol AdvertisementServiceDelegate {
+    func fetchJSONData(completion: @escaping ([JSON], Error?) -> Void)
+    func fetchAdvertisements(success: @escaping SuccessOperationClosure)
 }
 
-final class AdvertisementService: NSObject, AdvertisementServiceProtocol {
+struct AdvertisementService {
     
-    //---- Properties -----//
+    // MARK: - Properties
     
     var coreDataStack = CoreDataStack()
     
-    //---- Fetching Advertisement ----//
+    // MARK: - Fetching
     
     func fetchJSONData(completion: @escaping ([JSON], Error?) -> Void) {
         
@@ -37,7 +34,6 @@ final class AdvertisementService: NSObject, AdvertisementServiceProtocol {
         var dataTask: URLSessionDataTask?
         
         dataTask = defaultSession.dataTask(with: url, completionHandler: { (data, urlResponse, error) in
-            
             if let error = error {
                 completion([JSON](), error)
             } else if let data = data, let response = urlResponse as? HTTPURLResponse, response.statusCode == 200 {
@@ -49,78 +45,29 @@ final class AdvertisementService: NSObject, AdvertisementServiceProtocol {
                 
                 completion(jsonData, nil)
             }
-            
         })
         
         dataTask?.resume()
     }
     
-    func fetchAdvertisements(completion: @escaping AdvertisementOperationClosure) {
+    func fetchAdvertisements(success: @escaping SuccessOperationClosure) {
         var jsonData = [JSON]()
         
         let dispatchGroup = DispatchGroup()
         
         dispatchGroup.enter()
         fetchJSONData { (data, error) in
+            if let _ = error {
+                success(false)
+            }
+            
             jsonData = data
             dispatchGroup.leave()
         }
         
         dispatchGroup.notify(queue: .global()) {
-            self.coreDataStack.saveJSON(data: jsonData) { (advertisements, error) in
-                completion(advertisements, error)
-            }
+            self.coreDataStack.saveJSON(data: jsonData, success: success)
         }
     }
-    
-    func updateAdvertisements(completion: @escaping AdvertisementOperationClosure) {
-        let dispatchGroup = DispatchGroup()
-        
-        dispatchGroup.enter()
-        coreDataStack.purgeData { (isSuccessful) in
-            if isSuccessful {
-                dispatchGroup.leave()
-            }
-        }
-        
-        dispatchGroup.notify(queue: .global()) {
-            self.fetchAdvertisements { (advertisements, error) in
-                completion(advertisements, error)
-            }
-        }
-    }
-    
-    // Checks if the response has already by cached
-    func retrieveCachedAds(completion: @escaping AdvertisementOperationClosure) {
-        let dispatchGroup = DispatchGroup()
-        
-        dispatchGroup.enter()
-        coreDataStack.retrieveAdvertisements { (advertisements, error) in
-            if advertisements.isEmpty {
-                dispatchGroup.leave()
-            } else {
-                completion(advertisements, error)
-            }
-        }
-        
-        dispatchGroup.notify(queue: .global()) {
-            self.fetchAdvertisements { (advertisement, error) in
-                if let error = error {
-                    completion([Advertisement](), error)
-                    return
-                }
-                
-                completion(advertisement, nil)
-            }
-        }
-    }
-    
-    func retrieveFavoriteAdvertisements(completion: @escaping AdvertisementOperationClosure) {
-        coreDataStack.retrieveLikedAdvertisements(completion: completion)
-    }
-    
-    func removeOutdatedData(success: @escaping SuccessOperationClosure) {
-        coreDataStack.purgeData(success: success)
-    }
-    
+
 }

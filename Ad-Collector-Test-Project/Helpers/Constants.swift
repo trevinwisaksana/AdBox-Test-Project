@@ -17,7 +17,6 @@ struct Constants {
     
     struct Entity {
         static let advertisement = "Advertisement"
-        static let user = "User"
     }
     
     struct Identifier {

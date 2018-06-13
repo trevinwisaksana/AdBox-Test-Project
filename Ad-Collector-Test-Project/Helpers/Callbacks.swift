@@ -8,6 +8,4 @@
 
 import Foundation
 
-typealias AdvertisementOperationClosure = ([Advertisement], Error?) -> Void
-typealias FetchAdvertisementOperationClosure = (Advertisement?, Error?) -> Void
 typealias SuccessOperationClosure = (Bool) -> Void

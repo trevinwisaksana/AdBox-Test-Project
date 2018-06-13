@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import CoreData
+import UIKit
 
 protocol AdvertisementViewModelDelegate: class {
     func refresh()
@@ -15,116 +17,105 @@ protocol AdvertisementViewModelDelegate: class {
 
 final class AdvertisementViewModel {
     
-    //---- Properties ----//
+    // MARK: - Properties
     
     weak var delegate: AdvertisementViewModelDelegate?
     
-    var advertisementService: AdvertisementService
-    var likeService: LikeService
+    private var advertisementService: AdvertisementService
     
     var isDisplayingFavorites = false
     
-    //---- Initializer ----//
+    // MARK: - Core Data Properties
     
-    init(adService: AdvertisementService, likeService: LikeService) {
-        self.advertisementService = adService
-        self.likeService = likeService
+    lazy var fetchResultsController: NSFetchedResultsController<Advertisement> = {
+        let fetchRequest = NSFetchRequest<Advertisement>(entityName: Constants.Entity.advertisement)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "score", ascending: false)]
+        fetchRequest.fetchBatchSize = 8
+
+        let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        return controller
+    }()
+    
+    func setFetchResultControllerDelegate(with controller: NSFetchedResultsControllerDelegate) {
+        self.fetchResultsController.delegate = controller
     }
     
-    //---- Advertisements ----//
-    
-    private var advertisements = [Advertisement]() {
-        didSet {
-            delegate?.refresh()
-        }
-    }
-    
-    private var likedAdvertisements = [Advertisement]() {
-        didSet {
-            delegate?.refresh()
-        }
-    }
-    
+    // MARK: - Advertisement Properties
+
     var advertisementIsEmpty: Bool {
-        return advertisements.isEmpty
+        let fetchedObjects = fetchResultsController.fetchedObjects ?? [Advertisement]()
+        return fetchedObjects.isEmpty
     }
     
-    var likedAdvertisementIsEmpty: Bool {
-        return likedAdvertisements.isEmpty
-    }
-  
-    //---- Data Count ----//
-    
-    var advertisementCount: Int {
-        return advertisements.count
+    var numberOfAdvertisements: Int {
+        return fetchResultsController.sections?.first?.numberOfObjects ?? 0
     }
     
-    var favoriteAdvertisementCount: Int {
-        return likedAdvertisements.count
+    // MARK: - Initializer
+    
+    init(adService: AdvertisementService) {
+        self.advertisementService = adService
     }
     
-    //---- Indexing ----//
+    // MARK: - Indexing
     
-    func advertisement(atIndex index: Int) -> Advertisement {
-        return advertisements[index]
+    func advertisement(atIndexPath indexPath: IndexPath) -> Advertisement {
+        return fetchResultsController.object(at: indexPath)
     }
     
-    func likedAdvertisement(atIndex index: Int) -> Advertisement {
-        return likedAdvertisements[index]
-    }
+    // MARK: - Load Operation
     
-    //---- Load Operation ----//
-    
-    func loadAdvertisements() {
-        advertisementService.updateAdvertisements() { (advertisements, error) in
-            if let _ = error {
+    func fetchAdvertisements(success: ((Bool) -> Void)?) {
+        advertisementService.fetchAdvertisements { [unowned self] (isSuccessful) in
+            if !isSuccessful {
                 self.delegate?.showError(message: .failedToFetchData)
-                return
+                success?(false)
             }
             
-            self.advertisements = advertisements
+            success?(true)
         }
     }
     
-    func loadCachedAdvertisements() {
-        advertisementService.retrieveCachedAds { (advertisements, error) in
-            if let _ = error {
-                self.delegate?.showError(message: .failedToFetchData)
-                return
-            }
-            
-            self.advertisements = advertisements
+    func loadCache(success: ((Bool) -> Void)?) {
+        fetchResultsController.fetchRequest.predicate = nil
+
+        do {
+            try self.fetchResultsController.performFetch()
+            success?(true)
+        } catch {
+            delegate?.showError(message: .failedToFetchData)
+            success?(false)
+        }
+        
+        let fetchedObjects = fetchResultsController.fetchedObjects ?? [Advertisement]()
+        
+        if fetchedObjects.isEmpty {
+            fetchAdvertisements(success: success)
         }
     }
     
-    //---- Like Service ----//
+    // MARK: - Like
     
     func updateLikeStatus(forItemAt indexPath: IndexPath) {
+        let adSelected = advertisement(atIndexPath: indexPath)
+        adSelected.isLiked = !adSelected.isLiked
         
-        var adSelected: Advertisement
-        
-        if isDisplayingFavorites {
-            adSelected = likedAdvertisement(atIndex: indexPath.row)
-        } else {
-            adSelected = advertisement(atIndex: indexPath.row)
-        }
-        
-        likeService.setLike(status: adSelected.isLiked, for: adSelected) { (success) in
-            if self.isDisplayingFavorites {
-                self.likedAdvertisements.remove(at: indexPath.row)
-                self.delegate?.refresh()
-            }
+        do {
+            try fetchResultsController.managedObjectContext.save()
+        } catch {
+            delegate?.showError(message: .failedToPerformLike)
         }
     }
     
     func fetchFavoriteAdvertisements() {
-        advertisementService.retrieveFavoriteAdvertisements { (advertisements, error) in
-            if let _ = error {
-                self.delegate?.showError(message: .failedToFetchData)
-                return
-            } else {
-                self.likedAdvertisements = advertisements
-            }
+        let predicate = NSPredicate(format: "isLiked == YES")
+        fetchResultsController.fetchRequest.predicate = predicate
+        
+        do {
+            try fetchResultsController.performFetch()
+        } catch {
+            delegate?.showError(message: .failedToFetchData)
         }
     }
     

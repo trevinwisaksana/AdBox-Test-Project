@@ -20,7 +20,6 @@ class Ad_Collector_Test_ProjectTests: XCTestCase {
     var dummyDataFactory = DummyDataFactory()
     
     var dummyAdvertisementService: DummyAdvertisementService!
-    var dummyLikeService: LikeService!
     
     // MARK: - Setup
     
@@ -37,15 +36,13 @@ class Ad_Collector_Test_ProjectTests: XCTestCase {
     //---- Advertisement View Model ----//
     
     func test_fetch_advertisement_data_success() {
-        dummyAdvertisementService = DummyAdvertisementService(data: dummyDataFactory.dummyAdvertisements())
-        dummyLikeService = LikeService()
-        
-        advertisementViewModel = AdvertisementViewModel(adService: dummyAdvertisementService, likeService: dummyLikeService)
+        advertisementViewModel = AdvertisementViewModel(adService: dummyAdvertisementService)
+        advertisementViewModel.fetchResultsController = DummyFetchResultsControllerSuccess()
         
         let expectation = XCTestExpectation(description: "Successfully loaded advertisement data.")
         
-        advertisementViewModel.loadAdvertisements { (_) in
-            XCTAssertFalse(self.advertisementViewModel.contentIsEmpty)
+        advertisementViewModel.fetchAdvertisements { (isSuccessful) in
+            XCTAssertFalse(self.advertisementViewModel.advertisementIsEmpty)
             XCTAssertEqual(self.advertisementViewModel.numberOfContents, 946)
             
             expectation.fulfill()
@@ -55,14 +52,11 @@ class Ad_Collector_Test_ProjectTests: XCTestCase {
     }
     
     func test_fetch_cached_advertisement_data_success() {
-        dummyAdvertisementService = DummyAdvertisementService(data: dummyDataFactory.dummyAdvertisements())
-        dummyLikeService = LikeService()
-        
-        advertisementViewModel = AdvertisementViewModel(adService: dummyAdvertisementService, likeService: dummyLikeService)
+        advertisementViewModel = AdvertisementViewModel(adService: dummyAdvertisementService)
         
         let expectation = XCTestExpectation(description: "Successfully loaded cached advertisement data.")
         
-        advertisementViewModel.loadCachedAdvertisements { (_) in
+        advertisementViewModel.loadCache { (isSuccessful) in
             XCTAssertFalse(self.advertisementViewModel.contentIsEmpty)
             XCTAssertEqual(self.advertisementViewModel.numberOfContents, 946)
             

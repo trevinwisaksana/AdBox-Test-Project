@@ -12,15 +12,17 @@ import Reachability
 
 final class AdvertisementsViewController: UIViewController {
     
-    //---- Properties ----//
+    // MARK: - Properties
     
-    let viewModel = AdvertisementViewModel(adService: AdvertisementService(), likeService: LikeService())
+    private let viewModel = AdvertisementViewModel(adService: AdvertisementService())
     
     private let activityView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     private let reachabiltyHelper = ReachabilityHelper()
     private let refreshControl = UIRefreshControl()
 
-    //---- Subivews ----//
+    private var blockOperations = [BlockOperation]()
+    
+    // MARK: - Subviews
     
     @IBOutlet weak var collectionView: AdvertisementCollectionView!
     @IBOutlet weak var favoriteSwitch: UISwitch!
@@ -29,17 +31,21 @@ final class AdvertisementsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         configureActivityView()
         configureCollectionView()
         configureDataSource()
         configureReachability()
         
         UIAlertController.delegate = self
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        viewModel.loadCachedAdvertisements()
+        
+        viewModel.loadCache(success: { (_) in
+            DispatchQueue.main.async {
+                if self.activityView.isAnimating {
+                    self.activityView.stopAnimating()
+                }
+            }
+        })
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -47,20 +53,21 @@ final class AdvertisementsViewController: UIViewController {
         reachabiltyHelper.stopMonitoring()
     }
     
-    //---- Data Source ----//
+    // MARK: - Data Source
     
     private func configureDataSource() {
         viewModel.delegate = self
+        viewModel.setFetchResultControllerDelegate(with: self)
     }
     
-    //---- Reachability ----//
+    // MARK: - Reachability
     
     private func configureReachability() {
         reachabiltyHelper.startMonitoring()
         reachabiltyHelper.add(listener: self)
     }
     
-    //---- Collection View ----//
+    // MARK: - Collection View Configuration
     
     private func configureCollectionView() {
         collectionView.register(AdvertisementCell.self)
@@ -71,13 +78,21 @@ final class AdvertisementsViewController: UIViewController {
     @objc
     private func reloadTimeline() {
         if viewModel.isDisplayingFavorites {
-            viewModel.fetchFavoriteAdvertisements()
+            refreshControl.isEnabled = false
         } else {
-            viewModel.loadAdvertisements()
+            refreshControl.isEnabled = true
+            
+            viewModel.loadCache(success: { (_) in
+                if self.refreshControl.isRefreshing {
+                    self.refreshControl.endRefreshing()
+                }
+            })
         }
+        
+        refresh()
     }
     
-    //---- Switch ----//
+    // MARK: - Switch
     
     @IBAction func didToggleSwitch(_ sender: UISwitch) {
         if sender.isOn {
@@ -85,12 +100,13 @@ final class AdvertisementsViewController: UIViewController {
             viewModel.fetchFavoriteAdvertisements()
         } else {
             viewModel.isDisplayingFavorites = false
+            viewModel.loadCache(success: nil)
         }
         
         refresh()
     }
     
-    //---- Activity View ----//
+    // MARK: - Activity View
     
     func configureActivityView() {
         view.addSubview(activityView)
@@ -101,6 +117,8 @@ final class AdvertisementsViewController: UIViewController {
     
 }
 
+// MARK: - UICollectionView
+
 extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -109,30 +127,18 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if viewModel.isDisplayingFavorites && viewModel.likedAdvertisementIsEmpty {
-            collectionView.setEmptyMessage()
+        if viewModel.isDisplayingFavorites && viewModel.advertisementIsEmpty {
+            collectionView.setBackground(message: "There are currently no favorites.")
         } else {
             collectionView.restore()
         }
         
-        if viewModel.isDisplayingFavorites {
-            return viewModel.favoriteAdvertisementCount
-        } else {
-            return viewModel.advertisementCount
-        }
-        
+        return viewModel.numberOfAdvertisements
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        var advertisement: Advertisement
-        
-        // TODO: Check if you need two arrays
-        if viewModel.isDisplayingFavorites {
-            advertisement = viewModel.likedAdvertisement(atIndex: indexPath.row)
-        } else {
-            advertisement = viewModel.advertisement(atIndex: indexPath.row)
-        }
+        let advertisement = viewModel.advertisement(atIndexPath: indexPath)
         
         let cell: AdvertisementCell = collectionView.dequeueReusableCell(for: indexPath)
         cell.delegate = self
@@ -159,20 +165,12 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
 
 }
 
+// MARK: - AdvertisementViewModelDelegate
+
 extension AdvertisementsViewController: AdvertisementViewModelDelegate {
     
     func refresh() {
-        DispatchQueue.main.async {
-            if self.refreshControl.isRefreshing {
-                self.refreshControl.endRefreshing()
-            }
-            
-            if self.activityView.isAnimating {
-                self.activityView.stopAnimating()
-            }
-            
-            self.collectionView.reloadData()
-        }
+        collectionView.reloadData()
     }
     
     func showError(message: ErrorType) {
@@ -181,11 +179,60 @@ extension AdvertisementsViewController: AdvertisementViewModelDelegate {
     
 }
 
+// MARK: - NSFetchedResultsControllerDelegate
+
 extension AdvertisementsViewController: NSFetchedResultsControllerDelegate {
     
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        
+        switch type {
+        case .insert:
+            guard let newIndexPath = newIndexPath else { return }
+            
+            let operation = BlockOperation {
+                self.collectionView.insertItems(at: [newIndexPath])
+            }
+            
+            blockOperations.append(operation)
+            
+        case .delete:
+            guard let indexPath = indexPath else { return }
+            
+            let operation = BlockOperation {
+                self.collectionView.deleteItems(at: [indexPath])
+            }
+            
+            blockOperations.append(operation)
+            
+        default:
+            break
+        }
+        
+    }
     
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        collectionView.performBatchUpdates({
+            
+            for operation in blockOperations {
+                operation.start()
+            }
+            
+        }, completion: { (_) in
+            DispatchQueue.main.async {
+                if self.refreshControl.isRefreshing {
+                    self.refreshControl.endRefreshing()
+                }
+                
+                if self.activityView.isAnimating {
+                    self.activityView.stopAnimating()
+                }
+            }
+        })
+    }
     
 }
+
+// MARK: - Likable
 
 extension AdvertisementsViewController: Likeable {
     
@@ -199,6 +246,8 @@ extension AdvertisementsViewController: Likeable {
     
 }
 
+// MARK: - Network Status Listener
+
 extension AdvertisementsViewController: NetworkStatusListener {
     
     func networkStatusDidChange(status: Reachability.Connection) {
@@ -211,6 +260,8 @@ extension AdvertisementsViewController: NetworkStatusListener {
     }
     
 }
+
+// MARK: - Error Displayable
 
 extension AdvertisementsViewController: ErrorDisplayable {
     
