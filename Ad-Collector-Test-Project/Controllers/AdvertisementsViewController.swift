@@ -128,7 +128,7 @@ extension AdvertisementsViewController: UICollectionViewDelegate, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if viewModel.isDisplayingFavorites && viewModel.advertisementIsEmpty {
-            collectionView.setEmptyMessage()
+            collectionView.setBackground(message: "There are currently no favorites.")
         } else {
             collectionView.restore()
         }
@@ -187,10 +187,7 @@ extension AdvertisementsViewController: NSFetchedResultsControllerDelegate {
         
         switch type {
         case .insert:
-            
-            guard let newIndexPath = newIndexPath else {
-                return
-            }
+            guard let newIndexPath = newIndexPath else { return }
             
             let operation = BlockOperation {
                 self.collectionView.insertItems(at: [newIndexPath])
@@ -199,10 +196,7 @@ extension AdvertisementsViewController: NSFetchedResultsControllerDelegate {
             blockOperations.append(operation)
             
         case .delete:
-            
-            guard let indexPath = indexPath else {
-                return
-            }
+            guard let indexPath = indexPath else { return }
             
             let operation = BlockOperation {
                 self.collectionView.deleteItems(at: [indexPath])
